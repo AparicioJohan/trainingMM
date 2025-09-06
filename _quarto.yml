@@ -41,6 +41,14 @@ website:
         contents:
           - href: pages/00_start_lm.html
             text: Mixed model equations
+          - href: pages/00_start_lm.html
+            text: Heritability
+          - href: pages/00_start_lm.html
+            text: Fully efficient two stage analysis
+          - href: pages/00_start_lm.html
+            text: Factor analytics
+          - href: pages/00_start_lm.html
+            text: Outliers LMM
 
 format:
   html:
