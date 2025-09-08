@@ -6,7 +6,7 @@ warning: false
 message: false
 ---
 
-> How to compute ANOVA for a randomized complete block design (RCBD) by hand, verify with `lm()`, and extract genotype means and pairwise comparisons with **emmeans**.
+> With this article we want to analyze a randomized complete block design (RCBD) to show how a traditional full fixed effects model and ANOVA work. 
 
 ## 1) Setup & data
 
@@ -62,12 +62,16 @@ data |>
 
 We will progressively build the RCBD model using `model.frame()` and `model.matrix()` to see the design matrices explicitly, then solve normal equations. We use:
 
+-   $y = X\beta + \epsilon$: linear model
 -   $y$: response vector (yield)
 -   $X$: model matrix
+-   $\epsilon \sim N(0, I\sigma^2)$
+-   $E(y) = X\beta; \; V(y) = I\sigma^2$
 -   $\hat\beta = (X^\top X)^{-1} X^\top y$
+-   $V(\hat{\beta}) = (X^\top X)^{-1} \sigma^2$
 -   Fitted values $\hat y = X\hat\beta$
--   Errors $e = y - \hat y$
--   Sum of squared errors $\text{SSE} = e^\top e$
+-   Errors $\epsilon = y - \hat y$
+-   Sum of squared errors $\text{SSE} = \epsilon^\top \epsilon$
 
 Let `n = 12` observations, `n_blks = 3` blocks, `n_gens = 4` genotypes.
 

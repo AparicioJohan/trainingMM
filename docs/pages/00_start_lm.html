@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-09-06">
+<meta name="dcterms.date" content="2025-09-08">
 
 <title>Understanding a linear model – trainingMM</title>
 <style>
@@ -70,10 +70,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -102,7 +102,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
+
 <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -303,7 +305,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 6, 2025</p>
+      <p class="date">September 8, 2025</p>
     </div>
   </div>
   
@@ -316,7 +318,7 @@ window.Quarto = {
 
 
 <blockquote class="blockquote">
-<p>How to compute ANOVA for a randomized complete block design (RCBD) by hand, verify with <code>lm()</code>, and extract genotype means and pairwise comparisons with <strong>emmeans</strong>.</p>
+<p>With this article we want to analyze a randomized complete block design (RCBD) to show how a traditional full fixed effects model and ANOVA work.</p>
 </blockquote>
 <section id="setup-data" class="level2">
 <h2 class="anchored" data-anchor-id="setup-data">1) Setup &amp; data</h2>
@@ -387,12 +389,16 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="linear-model-building-blocks">2) Linear model building blocks</h2>
 <p>We will progressively build the RCBD model using <code>model.frame()</code> and <code>model.matrix()</code> to see the design matrices explicitly, then solve normal equations. We use:</p>
 <ul>
+<li><span class="math inline">\(y = X\beta + \epsilon\)</span>: linear model</li>
 <li><span class="math inline">\(y\)</span>: response vector (yield)</li>
 <li><span class="math inline">\(X\)</span>: model matrix</li>
+<li><span class="math inline">\(\epsilon \sim N(0, I\sigma^2)\)</span></li>
+<li><span class="math inline">\(E(y) = X\beta; \; V(y) = I\sigma^2\)</span></li>
 <li><span class="math inline">\(\hat\beta = (X^\top X)^{-1} X^\top y\)</span></li>
+<li><span class="math inline">\(V(\hat{\beta}) = (X^\top X)^{-1} \sigma^2\)</span></li>
 <li>Fitted values <span class="math inline">\(\hat y = X\hat\beta\)</span></li>
-<li>Errors <span class="math inline">\(e = y - \hat y\)</span></li>
-<li>Sum of squared errors <span class="math inline">\(\text{SSE} = e^\top e\)</span></li>
+<li>Errors <span class="math inline">\(\epsilon = y - \hat y\)</span></li>
+<li>Sum of squared errors <span class="math inline">\(\text{SSE} = \epsilon^\top \epsilon\)</span></li>
 </ul>
 <p>Let <code>n = 12</code> observations, <code>n_blks = 3</code> blocks, <code>n_gens = 4</code> genotypes.</p>
 <div class="cell">
@@ -1274,7 +1280,7 @@ geng4          -0.13333    0.0    0.0  0.13333  0.13333  0.26667</code></pre>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare with the intercept-only estimate</span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>mu_recon <span class="sc">-</span> beta_mu[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 6.217249e-15</code></pre>
+<pre><code>[1] 7.993606e-15</code></pre>
 </div>
 </div>
 <section id="genotype-means-including-the-missing-reference-level" class="level3">
@@ -1468,6 +1474,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1578,6 +1586,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
