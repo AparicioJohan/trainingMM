@@ -100,11 +100,12 @@ L_diff
 BLUEs_diff <- L_diff %*% beta_mod
 rownames(BLUEs_diff) <- diff_mm$contrasts@levels$contrast
 
+rownames(L_diff) <- rownames(BLUEs_diff)
 var_diff <- L_diff %*% C_11_emm %*% t(L_diff)
 var_diff |> round(4)
-sqrt(diag(var_diff))
+SE <- sqrt(diag(var_diff))
 
-avg_diff <- mean(sqrt(diag(var_diff)))
+avg_diff <- mean(SE)
 avg_diff
 
 # -------------------------------------------------------------------------
@@ -128,3 +129,4 @@ data |>
   as.data.frame() |>
   pull("SE") |>
   mean()
+

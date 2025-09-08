@@ -162,6 +162,10 @@ anova(mod)
 vcov(mod)
 XtX_inv * sigma_2
 
+mod <- lm(formula = yield ~ 1 + block, data = data)
+mod
+
+
 # -------------------------------------------------------------------------
 
 # Number of effects
