@@ -32,7 +32,7 @@ website:
           - href: pages/00_start_lm.html
             text: ANOVA and fixed effects
           - href: pages/00_start_lm.qmd
-            text: Linear combinations (SE)
+            text: Marginal means (SE)
           - href: pages/00_start_lm.qmd
             text: Likelihood
           - href: pages/00_start_lm.qmd

@@ -62,16 +62,16 @@ data |>
 
 We will progressively build the RCBD model using `model.frame()` and `model.matrix()` to see the design matrices explicitly, then solve normal equations. We use:
 
--   $y = X\beta + \epsilon$: linear model
--   $y$: response vector (yield)
--   $X$: model matrix
--   $\epsilon \sim N(0, I\sigma^2)$
--   $E(y) = X\beta; \; V(y) = I\sigma^2$
--   $\hat\beta = (X^\top X)^{-1} X^\top y$
--   $V(\hat{\beta}) = (X^\top X)^{-1} \sigma^2$
--   Fitted values $\hat y = X\hat\beta$
--   Errors $\epsilon = y - \hat y$
--   Sum of squared errors $\text{SSE} = \epsilon^\top \epsilon$
+-   $\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon}$: linear model
+-   $\boldsymbol{y}$: response vector (yield)
+-   $\boldsymbol{X}$: model matrix
+-   $\boldsymbol{\varepsilon} \sim MVN(0, \boldsymbol{I}\sigma^2)$
+-   $E(\boldsymbol{y}) = \boldsymbol{X\beta}; \; V(\boldsymbol{y}) = \boldsymbol{I}\sigma^2$
+-   $\boldsymbol{\hat\beta} = (\boldsymbol{X^\top X})^{-1} \boldsymbol{X^\top} \boldsymbol{y}$
+-   $V(\boldsymbol{\hat{\beta}}) = (\boldsymbol{X^\top X})^{-1} \sigma^2$
+-   Fitted values $\boldsymbol{\hat y} = \boldsymbol{X\hat\beta}$
+-   Errors $\boldsymbol{\varepsilon} = \boldsymbol{y} - \boldsymbol{\hat y}$
+-   Sum of squared errors $\text{SSE} = \boldsymbol{\varepsilon^\top \varepsilon}$
 
 Let `n = 12` observations, `n_blks = 3` blocks, `n_gens = 4` genotypes.
 
@@ -88,8 +88,10 @@ n_gens <- 4
 # Matrices
 
 -   Model:
+
 $$
-y = X\beta + \epsilon => 
+\small
+\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon} => 
 \begin{bmatrix}
 7.4 \\
 6.5 \\
@@ -119,13 +121,14 @@ y = X\beta + \epsilon =>
 1 \\
 1
 \end{bmatrix}}
-\beta + \epsilon 
+\mu + \boldsymbol{\varepsilon}
 $$
 
 -   BLUE(s): 
 
 $$
-\beta = 
+\small
+\boldsymbol{\beta} = 
 \underbrace{\left(\begin{bmatrix}
 1 \
 1 \
@@ -153,7 +156,7 @@ $$
 1 \\
 1 \\
 1 \\
-\end{bmatrix}\right)^{-1}}_{(X'X)^{-1}} 
+\end{bmatrix}\right)^{-1}}_{(\boldsymbol{X'X})^{-1}} 
 \underbrace{\begin{bmatrix}
 1 \
 1 \
@@ -181,14 +184,14 @@ $$
 9.5 \\
 8.0 \\
 7.4 \\
-\end{bmatrix}}_{X'y} = 
-\underbrace{\frac{1}{12}}_{(X'X)^{-1}}*\underbrace{87}_{X'y} = 7.25
+\end{bmatrix}}_{\boldsymbol{X'y}} = 
+\underbrace{\frac{1}{12}}_{(\boldsymbol{X'X})^{-1}}\cdot \underbrace{87}_{\boldsymbol{X'y}} = 7.25
 $$
 
 ::: callout-note
-Notice that the first term, $\left(X'X\right)^{-1}$, corresponds to the
-number of observations per level, while the second term, $X'y$, 
-gives the sum of phenotypic values within each level. 
+Notice that the first term, $\left(\boldsymbol{X'X}\right)^{-1}$, corresponds to the inverse of
+number of observations, while the second term, $\boldsymbol{X'y}$, 
+gives the sum of phenotypic values. 
 :::
 
 In this example, there is only a single level, $\mu$. 
@@ -196,10 +199,8 @@ Therefore, the entire expression simplifies to the sum of the phenotypic
 values divided by the number of observations, which is simply the mean, as shown below:
 
 ```{r}
-data.frame(mean = 'mean', 
-           beta = mean(data$yield)) |>
-  kbl(caption = 'Overall Mean') |> 
-  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+data.frame(mean = "mean", beta = mean(data$yield)) |>
+  gt()
 ```
 
 
@@ -230,7 +231,7 @@ list(rank = rank_X, beta_mu = drop(beta_mu), SSE_mu = SSE_mu)
 
 ### 2.2 Add blocks
 
-We will now remove the mean and compute the BLUEs for each block level.
+We will now illustrate what happens if we only include the block factor.
 
 ::: {.panel-tabset}
 
@@ -238,7 +239,8 @@ We will now remove the mean and compute the BLUEs for each block level.
 
 -   Model: 
 $$
-y = X\beta + \epsilon => 
+\small
+\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon} => 
 \begin{bmatrix}
 7.4 \\
 6.5 \\
@@ -267,12 +269,17 @@ y = X\beta + \epsilon =>
 0 & 1 & 0 \\
 0 & 0 & 1
 \end{bmatrix}
-\beta + \epsilon 
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+b_3 \\
+\end{bmatrix} + \boldsymbol{\varepsilon}
 $$
 
 - BLUE(s): 
 $$
-\beta = 
+\small
+\boldsymbol{\beta} = 
 \underbrace{\left(\begin{bmatrix}
 1 \ 0 \ 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 0 \\
 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 1 \ 0 \ 0 \\
@@ -291,7 +298,7 @@ $$
 1 \ 0 \ 0 \\
 0 \ 1 \ 0 \\
 0 \ 0 \ 1 \\
-\end{bmatrix}\right)^{-1}}_{(X'X)^{-1}} 
+\end{bmatrix}\right)^{-1}}_{(\boldsymbol{X'X})^{-1}} 
 \underbrace{\begin{bmatrix}
 1 \ 0 \ 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 0 \\
 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 0 \ 1 \ 0 \ 1 \ 0 \ 0 \\
@@ -310,17 +317,17 @@ $$
 9.5 \\
 8.0 \\
 7.4 \\
-\end{bmatrix}}_{X'y} = 
+\end{bmatrix}}_{\boldsymbol{X'y}} = 
 \underbrace{\begin{bmatrix}
 \frac{1}{4} \ 0 \ 0 \\
 0 \ \frac{1}{4} \ 0 \\
 0 \ 0 \ \frac{1}{4} \\
-\end{bmatrix}}_{(X'X)^{-1}}
+\end{bmatrix}}_{(\boldsymbol{X'X})^{-1}}
 \underbrace{\begin{bmatrix}
 34 \\
 27.4 \\
 25.6 \\
-\end{bmatrix}}_{X'y} = 
+\end{bmatrix}}_{\boldsymbol{X'y}} = 
 \begin{bmatrix}
 8.50 \\
 6.85 \\
@@ -330,14 +337,13 @@ $$
 
 In this model, there are 3 levels ($Block1$, $Block2$ and $Block3$). 
 Therefore, the entire expression simplifies to the sum of the phenotypic 
-values divided by the number of observations, which is simply the mean per treatment
+values divided by the number of observations, which is simply the mean per block.
 
 ```{r}
 data |>
   group_by(block) |>
-  summarise(beta = mean(yield, na.rm = TRUE)) |> 
-  kbl(caption = 'Phenotypic Means per Block') |> 
-  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+  summarise(beta = mean(yield, na.rm = TRUE)) |>
+  gt()
 ```
 
 
@@ -372,7 +378,8 @@ list(rank = rank_X, beta_blk = drop(beta_blk), SSE_blk = SSE_blk)
 -   Model: 
 
 $$
-y = X\beta + \epsilon => 
+\small
+\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon} => 
 \begin{bmatrix}
 7.4 \\
 6.5 \\
@@ -388,7 +395,7 @@ y = X\beta + \epsilon =>
 7.4 \\
 \end{bmatrix} = 
 \begin{bmatrix}
-\overset{g1}{1} & \overset{g2}{0} & \overset{g3}{0} & \overset{g4}{0} \\
+\overset{gen1}{1} & \overset{gen2}{0} & \overset{gen3}{0} & \overset{gen4}{0} \\
 1 & 0 & 0 & 0 \\
 1 & 0 & 0 & 0 \\
 0 & 1 & 0 & 0 \\
@@ -401,14 +408,20 @@ y = X\beta + \epsilon =>
 0 & 0 & 0 & 1 \\
 0 & 0 & 0 & 1
 \end{bmatrix}
-\beta + \epsilon 
+\begin{bmatrix}
+g_1 \\
+g_2 \\
+g_3 \\
+g_4 \\
+\end{bmatrix} + \boldsymbol{\varepsilon}
 $$
 
 -   BLUE(s):
 
 
 $$
-\beta = 
+\small
+\boldsymbol{\beta} = 
 \underbrace{
 \left(\begin{bmatrix}
 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
@@ -429,7 +442,7 @@ $$
 0 \ 0 \ 0 \ 1 \\
 0 \ 0 \ 0 \ 1 \\
 0 \ 0 \ 0 \ 1 \\
-\end{bmatrix}\right)^{-1}}_{(X'X)^{-1}}
+\end{bmatrix}\right)^{-1}}_{(\boldsymbol{X'X})^{-1}}
 \underbrace{
 \begin{bmatrix}
 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
@@ -450,7 +463,7 @@ $$
 9.5 \\
 8.0 \\
 7.4 \\
-\end{bmatrix}}_{X'y} = 
+\end{bmatrix}}_{\boldsymbol{X'y}} = 
 \underbrace{\begin{bmatrix}
 \frac{1}{3}\ 0 \ 0 \ 0 \\ 
 0 \ \frac{1}{3} \ 0 \ 0 \\
@@ -464,12 +477,12 @@ $$
 19.8 \\
 24.9 \\
 \end{bmatrix}
-}_{X'y} = 
+}_{\boldsymbol{X'y}} = 
 \begin{bmatrix}
-19.5 \\
-22.8 \\
-19.8 \\
-24.9 \\
+6.5 \\
+7.6 \\
+6.6 \\
+8.3 \\
 \end{bmatrix}
 $$
 
@@ -480,9 +493,8 @@ values divided by the number of observations, which is simply the mean per genot
 ```{r}
 data |>
   group_by(gen) |>
-  summarise(beta = mean(yield, na.rm = TRUE)) |> 
-  kbl(caption = 'Phenotypic Means per Genotype') |> 
-  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+  summarise(beta = mean(yield, na.rm = TRUE)) |>
+  gt()
 ```
 
 # Code
@@ -516,7 +528,8 @@ m2 <- list(rank = rank_X, beta_gen = drop(beta_gen), SSE_gen = SSE_gen)
 -   Model: 
 
 $$
-y = X\beta + \epsilon \;\;\;\Rightarrow\;\;\;
+\small
+\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon} \;\;\;\Rightarrow\;\;\;
 \begin{bmatrix}
 7.4 \\
 6.5 \\
@@ -551,14 +564,22 @@ y = X\beta + \epsilon \;\;\;\Rightarrow\;\;\;
 1 & 1 & 0 & 0 & 0 & 1 \\
 1 & 0 & 1 & 0 & 0 & 1 \\
 \end{bmatrix}
-\beta + \epsilon
+\begin{bmatrix}
+\mu \\
+b_2 \\
+b_3 \\
+g_2 \\
+g_3 \\
+g_4 \\
+\end{bmatrix} + \boldsymbol{\varepsilon}
 $$
 
 -   BLUE(s):
 
 $$
+\small
 \begin{align*}
-\beta &= 
+\boldsymbol{\beta} &= 
 \underbrace{
 \left(
 \begin{bmatrix}
@@ -584,7 +605,7 @@ $$
 1 & 0 & 1 & 0 & 0 & 1
 \end{bmatrix}
 \right)^{-1}
-}_{(X'X)^{-1}}
+}_{(\boldsymbol{X'X})^{-1}}
 \underbrace{
 \begin{bmatrix}
 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\
@@ -608,7 +629,7 @@ $$
 8.0 \\
 7.4
 \end{bmatrix}
-}_{X'y} \\
+}_{\boldsymbol{X'y}} \\
 &= 
 \underbrace{
 \begin{bmatrix}
@@ -618,8 +639,8 @@ $$
 \frac{-1}{3}  & 0 & 0 & \frac{2}{3} & \frac{1}{3} & \frac{1}{3} \\
 \frac{-1}{3}  & 0 & 0 & \frac{1}{3} & \frac{2}{3} & \frac{1}{3} \\
 \frac{-1}{3}  & 0 & 0 & \frac{1}{3} & \frac{1}{3} & \frac{2}{3}
-\end{bmatrix})
-}_{(X'X)^{-1}}
+\end{bmatrix}
+}_{(\boldsymbol{X'X})^{-1}}
 \underbrace{
 \begin{bmatrix}
 87.0 \\
@@ -629,7 +650,7 @@ $$
 19.8 \\
 24.9
 \end{bmatrix}
-}_{X'y}
+}_{\boldsymbol{X'y}}
 = 
 \begin{bmatrix}
 7.75 \\
@@ -669,19 +690,19 @@ list(rank = rank_X, betas = drop(beta), SSE = SSE)
 
 Partial Sum of Squares (SS) measures the unique contribution of a predictor variable to a model, accounting for all other variables. It is calculated by comparing the error sum of squares (SSE) of the model without the variable to the SSE of the model with it. A larger reduction in SSE indicates a greater unique contribution of that variable.     
 
-```{r}
-
+```{r, fig.width=7, fig.height=5}
 sse_df <- data.frame(
   Model = factor(
-    c('Intercept', 'Add Blocks', 'Add Genotypes', 'Full'), 
-    levels = c('Intercept', 'Add Blocks', 'Add Genotypes', 'Full')  # nivel ordenado explícitamente
+    c("Intercept", "Add Blocks", "Add Genotypes", "Full"),
+    levels = c("Intercept", "Add Blocks", "Add Genotypes", "Full")
   ),
   SS = c(SSE_mu, SSE_mu - SSE_blk, SSE_mu - SSE_gen, SSE)
 )
 
-ggplot(sse_df) + 
-  geom_point(aes(x = Model, y = SS), size = 3, color = '#00BFC4') + 
-  theme_minimal()
+ggplot(sse_df, mapping = aes(x = Model, y = SS, group = 0)) +
+  geom_line() +
+  geom_point(size = 3, color = "#00BFC4") +
+  theme_minimal(base_size = 14)
 ```
 
 We now assemble an ANOVA table. Residual df is 
@@ -689,7 +710,7 @@ We now assemble an ANOVA table. Residual df is
 ```{r}
 anova_dt <- data.frame(
   Source = c("block", "gen", "residuals"), # factors included in the model
-  Df     = c(n_blks - 1, n_gens - 1, n - length(beta)), # `n - p`, where `p` is the number of coefficients in the full model
+  Df     = c(n_blks - 1, n_gens - 1, n - length(beta)), # `n - p`, where `p` is the number of coefficients
   SSq    = c(SSE_mu - SSE_blk, SSE_mu - SSE_gen, SSE) # differences between baseline model and nested models
 ) |>
   mutate(
@@ -700,9 +721,8 @@ anova_dt <- data.frame(
     `Pr(>F)` = ifelse(Source == "residuals", NA, `Pr(>F)`)
   )
 
-anova_dt |> 
-  kbl(caption = 'ANOVA') |> 
-  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+anova_dt |>
+  gt()
 ```
 
 ::: callout-note
@@ -721,14 +741,15 @@ round(vcov(mod), 5)
 # Check that (X'X)^{-1} * sigma^2 matches vcov
 # Sigma^2 estimate using the full model (p = length(beta))
 sigma_2 <- SSE / (n - length(beta))
-round(XtX_inv * sigma_2, 5)
+vcov_betas <- XtX_inv * sigma_2
+round(vcov_betas, 5)
 ```
 
 ## 5) Interpreting coefficients under treatment coding
 
 With `block` and `gen` as factors and an intercept present, R uses treatment (reference-cell) coding by default. The printed `beta` therefore contains:
 
--   `beta[1]`: the intercept (mean for the reference levels `block1` and `gen1` reference)
+-   `beta[1]`: the intercept (no longer overall mean)
 -   `beta[2:3]`: effects for non-reference blocks
 -   `beta[4:6]`: effects for non-reference genotypes
 
@@ -739,7 +760,7 @@ You can reconstruct **overall mean**, **genotype cell means**, and **block means
 n_coef <- length(beta)
 
 # Overall mean reconstructed from coefficients
-mu_recon <- beta[1] + sum(c(0, beta[2:3])) / n_blks + sum(c(0, beta[4:6])) / n_gens
+mu_recon <- beta[1] + sum(beta[2:3]) / n_blks + sum(beta[4:6]) / n_gens
 
 # Compare with the intercept-only estimate
 mu_recon - beta_mu[1]
@@ -775,8 +796,8 @@ blks
 emm_gen <- emmeans(mod, ~gen)
 emm_gen
 
-# Standard errors of genotype via (X'X)^{-1}
-sqrt(diag(XtX_inv)[4:6] * sigma_2) 
+# Standard errors of genotype via (X'X)^{-1} * sigma2
+sqrt(diag(vcov_betas)[4:6])
 
 # Pairwise genotype comparisons
 pairs(emm_gen)
@@ -786,5 +807,5 @@ sqrt(sigma_2 / 3 + sigma_2 / 3)
 ```
 
 ::: callout-important
-Notice that the standard errors via $(X' X)^{-1}\sigma^2$ are different to the ones return by `emmeans`. Interestingly those from $(X' X)^{-1}\sigma^2$ look exactly like the pairwise genotype comparison Standard Errors. Why? We will see why in the next article.
+Notice that the standard errors via $(\boldsymbol{X' X})^{-1}\sigma^2$ are different to the ones return by `emmeans`. Interestingly those from $(\boldsymbol{X' X})^{-1}\sigma^2$ look exactly like the pairwise genotype comparison Standard Errors. Why? We will see why in the next article.
 :::
