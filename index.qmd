@@ -12,7 +12,7 @@ We will begin with the basics of **linear models**, and progressively extend tow
 
 ## What to Expect
 
-- 📊 **Hands-on examples**: R scripts that you can run and adapt.  
-- 🧮 **Step-by-step math**: showing how model equations connect to code.  
-- 🧑 **Conceptual explanations**: to make sense of sums of squares, design matrices, likelihood, variance components, mixed models equations, heritability, and more in the context of plant breeding.  
+- **Hands-on examples**: R scripts that you can run and adapt.  
+- **Step-by-step math**: showing how model equations connect to code.  
+- **Conceptual explanations**: to make sense of sums of squares, design matrices, likelihood, variance components, mixed models equations, heritability, and more in the context of plant breeding.  
 

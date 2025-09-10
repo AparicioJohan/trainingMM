@@ -519,7 +519,150 @@ m2 <- list(rank = rank_X, beta_gen = drop(beta_gen), SSE_gen = SSE_gen)
 
 :::
 
-### 2.4 Full model: intercept + blocks + genotypes
+
+### 2.4 Genotype main effects (Intercept)
+
+::: {.panel-tabset}
+
+# Matrices
+
+-   Model: 
+
+$$
+\small
+\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon} => 
+\begin{bmatrix}
+7.4 \\
+6.5 \\
+5.6 \\
+9.8 \\
+6.8 \\
+6.2 \\
+7.3 \\
+6.1 \\
+6.4 \\
+9.5 \\
+8.0 \\
+7.4 \\
+\end{bmatrix} = 
+\begin{bmatrix}
+\overset{intercept}{1} & \overset{gen2}{0} & \overset{gen3}{0} & \overset{gen4}{0} \\
+1 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+\mu \\
+g_2 \\
+g_3 \\
+g_4 \\
+\end{bmatrix} + \boldsymbol{\varepsilon}
+$$
+
+-   BLUE(s):
+
+
+$$
+\small
+\boldsymbol{\beta} = 
+\underbrace{
+\left(\begin{bmatrix}
+1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \\
+0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+1 \ 0 \ 0 \ 0 \\
+1 \ 0 \ 0 \ 0 \\
+1 \ 0 \ 0 \ 0 \\
+1 \ 1 \ 0 \ 0 \\
+1 \ 1 \ 0 \ 0 \\
+1 \ 1 \ 0 \ 0 \\
+1 \ 0 \ 1 \ 0 \\
+1 \ 0 \ 1 \ 0 \\
+1 \ 0 \ 1 \ 0 \\
+1 \ 0 \ 0 \ 1 \\
+1 \ 0 \ 0 \ 1 \\
+1 \ 0 \ 0 \ 1 \\
+\end{bmatrix}\right)^{-1}}_{(\boldsymbol{X'X})^{-1}}
+\underbrace{
+\begin{bmatrix}
+1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \\
+0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+7.4 \\
+6.5 \\
+5.6 \\
+9.8 \\
+6.8 \\
+6.2 \\
+7.3 \\
+6.1 \\
+6.4 \\
+9.5 \\
+8.0 \\
+7.4 \\
+\end{bmatrix}}_{\boldsymbol{X'y}} = 
+\underbrace{\begin{bmatrix}
+\frac{1}{3}\ 0 \ 0 \ 0 \\ 
+0 \ \frac{1}{3} \ 0 \ 0 \\
+0 \ 0 \ \frac{1}{3} \ 0 \\
+0 \ 0 \ 0 \ \frac{1}{3} \\
+\end{bmatrix}}_{(X'X)^{-1}}
+\underbrace{
+\begin{bmatrix}
+19.5 \\
+22.8 \\
+19.8 \\
+24.9 \\
+\end{bmatrix}
+}_{\boldsymbol{X'y}} = 
+\begin{bmatrix}
+6.5 \\
+7.6 \\
+6.6 \\
+8.3 \\
+\end{bmatrix}
+$$
+
+# Code
+
+```{r}
+ff <- yield ~ 1 + gen
+m <- model.frame(ff, data)
+X <- model.matrix(ff, m)
+y <- matrix(data$yield)
+
+Xty <- t(X) %*% y
+XtX <- t(X) %*% X
+rank_X <- qr(XtX)$rank
+XtX_inv <- solve(XtX)
+
+beta_gen <- XtX_inv %*% Xty
+SSE_gen <- t(y - X %*% beta_gen) %*% (y - X %*% beta_gen)
+SSE_gen <- as.numeric(SSE_gen)
+
+m2 <- list(rank = rank_X, beta_gen = drop(beta_gen), SSE_gen = SSE_gen)
+```
+
+In progress ...
+
+:::
+
+
+### 2.5 Full model: intercept + blocks + genotypes
 
 ::: {.panel-tabset}
 
@@ -690,7 +833,7 @@ list(rank = rank_X, betas = drop(beta), SSE = SSE)
 
 Partial Sum of Squares (SS) measures the unique contribution of a predictor variable to a model, accounting for all other variables. It is calculated by comparing the error sum of squares (SSE) of the model without the variable to the SSE of the model with it. A larger reduction in SSE indicates a greater unique contribution of that variable.     
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width=8, fig.height=4}
 sse_df <- data.frame(
   Model = factor(
     c("Intercept", "Add Blocks", "Add Genotypes", "Full"),
