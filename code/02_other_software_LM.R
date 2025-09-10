@@ -15,6 +15,14 @@ head(data)
 str(data)
 
 # -------------------------------------------------------------------------
+# LM ----------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
+mod_lm <- lm(formula = yield ~ block + gen, data = data)
+anova(mod_lm)
+coef(mod_lm)
+
+# -------------------------------------------------------------------------
 # asreml ------------------------------------------------------------------
 # -------------------------------------------------------------------------
 
@@ -45,9 +53,35 @@ displayMME(mod_lmm)
 C <- mod_lmm$C
 solve(C)
 predict(mod_lmm, newdata = data.frame(block = "1", gen = "g1"))
+LMMsolver:::predictTest(object = mod_lmm, classify = "gen")
+LMMsolver:::predictTest(object = mod_lmm, classify = "block")
 
 # -------------------------------------------------------------------------
 # sommer ------------------------------------------------------------------
 # -------------------------------------------------------------------------
+
+library(sommer)
+
+model_sommer <- mmes(yield ~ block + gen,
+                     data = data)
+summary(model_sommer)
+model_sommer$b
+model_sommer$Ci
+model_sommer$residuals
+
+Dt <- model_sommer$Dtable
+Dt[1, "average"] = TRUE
+Dt[2, "include"] = TRUE
+predict.mmes(model_sommer,Dtable = Dt, D = "gen")
+
+
+# -------------------------------------------------------------------------
+# lme4breeding ------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
+library(lme4breeding)
+
+model_lme4breeding <- lmebreed(yield ~ block + gen,
+                               data = data)
 
 

@@ -616,14 +616,14 @@ $$
 7.4 \\
 \end{bmatrix}}_{\boldsymbol{X'y}} = 
 \underbrace{\begin{bmatrix}
-\frac{1}{3}\ 0 \ 0 \ 0 \\ 
-0 \ \frac{1}{3} \ 0 \ 0 \\
-0 \ 0 \ \frac{1}{3} \ 0 \\
-0 \ 0 \ 0 \ \frac{1}{3} \\
+\frac{1}{3}\ \frac{-1}{3} \ \frac{-1}{3} \ \frac{-1}{3} \\ 
+\frac{-1}{3} \ \frac{2}{3} \ \frac{1}{3} \ \frac{1}{3} \\
+\frac{-1}{3} \ \frac{1}{3} \ \frac{2}{3} \ \frac{1}{3} \\
+\frac{-1}{3} \ \frac{1}{3} \ \frac{1}{3} \ \frac{2}{3} \\
 \end{bmatrix}}_{(X'X)^{-1}}
 \underbrace{
 \begin{bmatrix}
-19.5 \\
+87.0 \\
 22.8 \\
 19.8 \\
 24.9 \\
@@ -631,9 +631,9 @@ $$
 }_{\boldsymbol{X'y}} = 
 \begin{bmatrix}
 6.5 \\
-7.6 \\
-6.6 \\
-8.3 \\
+1.1 \\
+0.1 \\
+1.8 \\
 \end{bmatrix}
 $$
 
@@ -654,7 +654,7 @@ beta_gen <- XtX_inv %*% Xty
 SSE_gen <- t(y - X %*% beta_gen) %*% (y - X %*% beta_gen)
 SSE_gen <- as.numeric(SSE_gen)
 
-m2 <- list(rank = rank_X, beta_gen = drop(beta_gen), SSE_gen = SSE_gen)
+m3 <- list(rank = rank_X, beta_gen = drop(beta_gen), SSE_gen = SSE_gen)
 ```
 
 In progress ...
