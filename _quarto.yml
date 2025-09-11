@@ -23,7 +23,7 @@ website:
 
     style: "docked"
     search: true
-    collapse-level: 1
+    collapse-level: 2
     contents:
       - href: index.qmd
         text: Welcome
@@ -33,6 +33,8 @@ website:
             text: ANOVA and fixed effects
           - href: pages/00_start_lm.qmd
             text: Marginal means (SE)
+          - href: pages/00_start_lm.qmd
+            text: QR decomposition in LM
           - href: pages/00_start_lm.qmd
             text: Likelihood
           - href: pages/00_start_lm.qmd
@@ -44,11 +46,15 @@ website:
           - href: pages/00_start_lm.html
             text: Heritability
           - href: pages/00_start_lm.html
-            text: Fully efficient two stage analysis
-          - href: pages/00_start_lm.html
-            text: Factor analytics
-          - href: pages/00_start_lm.html
             text: Outliers LMM
+      - section: "Advanced LMM"
+        contents:
+          - href: pages/00_start_lm.html
+            text: Genotype-by-environment
+          - href: pages/00_start_lm.html
+            text: Factor analytic models
+          - href: pages/00_start_lm.html
+            text: Two-stage analysis
 
 format:
   html:
