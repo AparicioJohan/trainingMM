@@ -1,0 +1,268 @@
+---
+title: "Understanding a linear model"
+date: "last-modified"
+echo: true 
+warning: false 
+message: false
+---
+
+
+```{r}
+#| echo: FALSE
+library(tidyverse)
+library(emmeans)
+library(gt)
+library(kableExtra)
+```
+
+In the previous chapter, we showed how the mean captures the effects of the first levels of each factor included in the model. As illustrated below, block1 and geng1 are missing from the model matrix. The reason for this omission is to avoid linearly dependent columns—columns that can be expressed as linear combinations of others. If the design matrix $X$ were not full rank, it would not be invertible, and the system would have no unique solution.
+
+```{r}
+data <- read.csv("../data/example_1.csv") |>
+  mutate(gen = as.factor(gen), block = as.factor(block))
+
+n <- 12
+n_b <- 3
+n_g <- 4
+
+X <- model.matrix(yield ~ 1 + block + gen, data = data)
+y <- matrix(data[, "yield"])
+print(X)
+```
+
+
+Thus, we do not obtain any coefficient regarding these two levels
+
+```{r}
+Xty <- t(X) %*% y
+XtX <- t(X) %*% X
+XtX_inv <- solve(XtX)
+beta <- XtX_inv %*% Xty
+beta
+```
+
+We also covered how to obtain these values 'manually' by adding to the estimated mean 
+the proportioinal effect of the other factors
+
+```{r}
+# Betas
+beta_geng1 <- beta[1] + sum(beta[2:3])/3
+beta_block1 <- beta[1] + sum(beta[4:6])/4 
+```
+
+Which mathematically represent the following operations
+
+$$BLUE(geng1) = \mu + \frac{1}{3}\hat\beta_{block2} + \frac{1}{3}\hat\beta_{block3} = 7.75 - \frac{1.65}{3} - \frac{2.10}{3} = 6.5$$
+
+$$BLUE(block1) = \mu + \frac{1}{4}\hat\beta_{geng2} + \frac{1}{4}\hat\beta_{geng3} + \frac{1}{4}\hat\beta_{geng4} = 7.75 + \frac{1.10}{4} + \frac{0.10}{4} + \frac{1.80}{4} = 8.5$$
+
+Additionally, we can also express the estimated coefficients in the desired units rather than based
+on the intercept. So, $BLUE(geng2)$ would be
+
+```{r}
+beta_block2 <- beta[1] + sum(beta[4:6])/4 + beta[2]
+```
+
+Which equals
+
+$$BLUE(geng2) = \mu + \frac{1}{3}\hat\beta_{block2} + \frac{1}{3}\hat\beta_{block3} + \hat\beta_{geng2}$$
+Then, for the remaining levels
+
+```{r}
+beta_block3 <- beta[1] + sum(beta[4:6])/4 + beta[3]
+
+beta_geng2 <- beta[1] + sum(beta[2:3])/3  + beta[4]
+beta_geng3 <- beta[1] + sum(beta[2:3])/3  + beta[5]
+beta_geng4 <- beta[1] + sum(beta[2:3])/3  + beta[6]
+
+blues <- matrix(c(beta_block1, beta_block2, beta_block3, beta_geng1, beta_geng2, beta_geng3, beta_geng4), ncol = 1)
+rownames(blues) <- c('block1', 'block2', 'block3', 'geng1', 'geng2', 'geng3', 'geng4')
+blues
+```
+
+Now, imagine we have multiple factors with tens of levels each one. Doing this manually would be
+tedious. So let's explore an easier way to solve this. Specifically, we will make use of 
+the $L$ matrix to compute all desired values simultaneously, so that
+
+$$BLUE(g) = L\hat\beta$$
+
+The $L$ matrix represents the levels we want to compute. For example, if we want to 
+extract the BLUEs of the genotypes, we should include the intercept, the fraction 
+of each block level that we have to add to the mean, and the levels that we want to 
+compute from the genotypes. Notice how L has as many rows as levels are in the factor to be solved.
+
+```{r}
+L <- cbind(
+  matrix(1, nrow = n_g, ncol = 1), # Intercept
+  matrix(1 / n_b, nrow = n_g, ncol = n_b - 1), # Average block
+  matrix(rbind(0, diag(nrow = n_g - 1)), nrow = n_g, ncol = n_g - 1)
+)
+L
+```
+
+Now we can simply multiply this matrix times the estimated coefficients
+
+```{r}
+BLUEs <- L %*% beta
+BLUEs
+```
+
+The way the BLUEs are calculated equals the operations shown above, where
+
+$$
+\small
+\boldsymbol{BLUEs(gen)} = \boldsymbol{L}\,\boldsymbol{\hat\beta} =
+\begin{bmatrix}
+\overset{\text{Intercept}}{1} & 
+\overset{\text{block2}}{0.33} & 
+\overset{\text{block3}}{0.33} & 
+\overset{\text{geng2}}{0} & 
+\overset{\text{geng3}}{0} & 
+\overset{\text{geng4}}{0} \\
+1 & 0.33 & 0.33 & 1 & 0 & 0 \\ 
+1 & 0.33 & 0.33 & 0 & 1 & 0 \\ 
+1 & 0.33 & 0.33 & 0 & 0 & 1 \\ 
+\end{bmatrix}
+\,
+\overset{\text{mean}}{
+\begin{bmatrix}
+7.75 \\
+-1.65 \\
+-2.10 \\
+1.10 \\
+0.10 \\
+1.80
+\end{bmatrix}} = 
+\begin{bmatrix}
+6.5 \\
+7.6 \\
+6.6 \\
+8.3
+\end{bmatrix}
+$$
+
+So that
+
+$$
+BLUE(gen)[1,1] = BLUE(geng1) = 1*7.75 + \frac{1}{3}*-1.65 + \frac{1}{3}*-2.10 = 6.5
+$$
+
+
+
+Similarly, to obtain the BLUEs of each block we would do
+
+```{r}
+L2 <- cbind(
+  matrix(1, nrow = n_b, ncol = 1), # Intercept
+  matrix(rbind(0, diag(nrow = n_b - 1)), nrow = n_b, ncol = n_b - 1), # Average block
+  matrix(1 / n_g, nrow = n_b, ncol = n_g - 1)
+)
+L2
+```
+
+```{r}
+BLUEs2 <- L2 %*% beta
+BLUEs2
+```
+
+You can check that the results are the same as computing them manually
+
+```{r}
+cbind(blues, rbind(BLUEs2, BLUEs))
+```
+
+Now let's compute the variance and the SE of the BLUEs. Now we now that $BLUEs = L\hat\beta$, 
+thus
+
+$$Var(L\hat\beta) = LVar(\hat\beta) L^T = LC_{11} L^T$$
+
+We will discuss more in detail
+about the Coefficient Matrix once we start digging into Linear Mix Models. 
+For now, we will just say that $C_{ii}$ corresponds to $Var(\hat\beta)$, so 
+
+```{r}
+# Compute the errors to compute sigma^2 
+y_hat <- X %*% beta
+errors <- y - y_hat
+SSE <- sum(errors^2)
+sigma_2 <- SSE / (n - 6)
+C_11 <- solve(t(X)%*%X) * sigma_2
+
+C_11
+```
+
+Then the Variance and the SE of the BLUEs are
+
+```{r}
+var_BLUEs <- L %*% C_11 %*% t(L)
+var_BLUEs |> round(4)
+
+# SE BLUEs
+se_BLUEs <- sqrt(diag(var_BLUEs))
+se_BLUEs
+
+data.frame(
+  gen = levels(data$gen),
+  BLUEs = BLUEs,
+  var_BLUEs = diag(var_BLUEs),
+  se_BLUEs = se_BLUEs
+)
+```
+
+
+We can also use `lme` package to fit the model and extract the coefficients 
+and `emmeans` to retrieve the BLUEs. This is useful since emmeans returns 
+the $1$ and $C_{11}$ matrices, so you don't have to build them yourself. 
+
+```{r}
+mod <- lm(formula = yield ~ 1 + block + gen, data = data)
+beta_mod <- coef(mod)
+mod
+
+mm <- emmeans(mod, ~gen)
+mm
+L_emm <- mm@linfct
+C_11_emm <- mm@V
+
+BLUE_mod <- L_emm %*% beta_mod
+var_BLUEs_emm <- L_emm %*% C_11_emm %*% t(L_emm)
+sqrt(diag(var_BLUEs_emm))
+```
+
+
+Besides that, it allows us to compute the estimates and the variances of the differences
+between levels, such as genotypes. 
+
+```{r}
+diff_mm <- emmeans(mod, pairwise ~ gen)
+diff_mm$contrasts
+
+L_diff <- diff_mm$contrasts@linfct
+L_diff # See how L now links more than 1 genotype per row
+
+BLUEs_diff <- L_diff %*% beta_mod
+rownames(BLUEs_diff) <- diff_mm$contrasts@levels$contrast
+
+rownames(L_diff) <- rownames(BLUEs_diff)
+var_diff <- L_diff %*% C_11_emm %*% t(L_diff)
+var_diff |> round(4) # Notice how now there are covariances between the levels, since they share one of the genotypes in common
+SE <- sqrt(diag(var_diff))
+
+avg_diff <- mean(SE)
+avg_diff
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
