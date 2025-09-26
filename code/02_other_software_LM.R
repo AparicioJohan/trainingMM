@@ -29,6 +29,7 @@ coef(mod_lm)
 asreml.options(Cfixed = TRUE)
 mod_asr <- asreml(fixed = yield ~ block + gen, data = data)
 summary(mod_asr)
+wald.asreml(mod_asr)
 
 # Coefficients
 mod_asr$coefficients$fixed

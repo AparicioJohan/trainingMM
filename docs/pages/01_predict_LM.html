@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-09-19">
+<meta name="dcterms.date" content="2025-09-26">
 
 <title>Understanding a linear model – trainingMM</title>
 <style>
@@ -64,15 +64,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../pages/00_start_lm.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -142,9 +143,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      trainingMM
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/00_start_lm.html">Starting LM</a></li><li class="breadcrumb-item"><a href="../pages/01_predict_LM.html">Marginal means (SE)</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -195,7 +194,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/01_predict_LM.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Marginal means (SE)</span></a>
   </div>
 </li>
@@ -288,7 +287,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/00_start_lm.html">Starting LM</a></li><li class="breadcrumb-item"><a href="../pages/01_predict_LM.html">Marginal means (SE)</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Understanding a linear model</h1>
 </div>
@@ -301,7 +300,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 19, 2025</p>
+      <p class="date">September 26, 2025</p>
     </div>
   </div>
   
@@ -520,13 +519,13 @@ geng4  8.30 8.30</code></pre>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>C_11</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            (Intercept) block2 block3         geng2         geng3         geng4
-(Intercept)   0.2000000   -0.1   -0.1 -1.333333e-01 -1.333333e-01 -1.333333e-01
-block2       -0.1000000    0.2    0.1 -2.220446e-17 -2.220446e-17 -2.220446e-17
-block3       -0.1000000    0.1    0.2 -2.220446e-17 -2.220446e-17 -2.220446e-17
-geng2        -0.1333333    0.0    0.0  2.666667e-01  1.333333e-01  1.333333e-01
-geng3        -0.1333333    0.0    0.0  1.333333e-01  2.666667e-01  1.333333e-01
-geng4        -0.1333333    0.0    0.0  1.333333e-01  1.333333e-01  2.666667e-01</code></pre>
+<pre><code>            (Intercept) block2 block3      geng2      geng3      geng4
+(Intercept)   0.2000000   -0.1   -0.1 -0.1333333 -0.1333333 -0.1333333
+block2       -0.1000000    0.2    0.1  0.0000000  0.0000000  0.0000000
+block3       -0.1000000    0.1    0.2  0.0000000  0.0000000  0.0000000
+geng2        -0.1333333    0.0    0.0  0.2666667  0.1333333  0.1333333
+geng3        -0.1333333    0.0    0.0  0.1333333  0.2666667  0.1333333
+geng4        -0.1333333    0.0    0.0  0.1333333  0.1333333  0.2666667</code></pre>
 </div>
 </div>
 <p>Then the Variance and the SE of the BLUEs are</p>
@@ -732,6 +731,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -842,6 +843,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
@@ -1067,6 +1069,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../pages/00_start_lm.html" class="pagination-link" aria-label="ANOVA and fixed effects">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">ANOVA and fixed effects</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

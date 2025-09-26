@@ -4,6 +4,8 @@ library(lme4)
 library(MASS)
 library(asreml)
 library(LMMsolver)
+library(agriutilities)
+library(ggpubr)
 
 # RCBD
 # 4 gens
@@ -69,97 +71,133 @@ ans <- C_inv %*% rhs
 ans
 
 # Betas
-betas <- solve(t(X) %*% solve(V) %*% X) %*% t(X) %*% solve(V) %*% y
-u <- G %*% t(Z) %*% solve(V) %*% (y - X %*% betas)
+V_inv <- solve(V)
+betas <- solve(t(X) %*% V_inv %*% X) %*% t(X) %*% V_inv %*% y
+u <- G %*% t(Z) %*% V_inv %*% (y - X %*% betas)
 rownames(u) <- colnames(Z)
 
-# Subset genotype
-gen_levels <- colnames(Z)
-C22_g <- C_inv[gen_levels, gen_levels]
-C22_g
+# Visualization -----------------------------------------------------------
 
-# PEV
-pev <- diag(C22_g)
-pev
+mm_1 <- lmer(formula = yield ~ 1 + (1 | gen), data = data)
+mm_2 <- lmer(formula = yield ~ 1 + block + (1 | gen), data = data)
+mm_3 <- lmer(formula = yield ~ 1 + (1 | block) + (1 | gen), data = data)
 
-# var(g) = G - C22
-var_blup <- G - C22_g
-var_blup
-sqrt(diag(var_blup))
+ans_1 <- h_cullis(model = mm_1, genotype = "gen", re_MME = TRUE)
+ans_2 <- h_cullis(model = mm_2, genotype = "gen", re_MME = TRUE)
+ans_3 <- h_cullis(model = mm_3, genotype = "gen", re_MME = TRUE)
 
-# Reliability var(u_hat) / var(u) = "(G - C22) / G"
-reliability <- 1 - pev / var_g
-reliability
-
-# Standard heritability
-H2stand <- var_g / (var_g + var_e / n_blks)
-H2stand
-
-# Cullis heritability
-vdBLUP_sum <- n_gens * sum(diag(C22_g)) - sum(C22_g)
-vdBLUP_avg <- vdBLUP_sum * (2 / (n_gens * (n_gens - 1)))
-H2Cullis <- 1 - (vdBLUP_avg / 2 / var_g)
-H2Cullis # 0.8190045
-
-# Oakey heritability
-D <- diag(n_gens) - (solve(G) %*% C22_g)
-eD <- eigen(D)
-round(eD$values, 4)
-H2Oakey <- sum(eD$values) / (n_gens - 1)
-H2Oakey # 0.8190045
-
-# Effective dimensions trace(D) / (ng - 1)
-sum(diag(D)) / (n_gens - 1)
-
-# Piepho heritability
-avg_diff <- emmeans(mod, pairwise ~ gen)$contrasts |>
-  as.data.frame() |>
-  pull(SE) |>
-  mean()
-H2Piepho <- var_g / (var_g + avg_diff^2 / 2)
-H2Piepho
-
-# BLUE/BLUP heritability
-blues <- mod %>%
-  emmeans("gen") %>%
-  as_tibble() %>%
-  dplyr::select(gen, emmean)
-blups <- data.frame(gen = levels(data$gen), blup = u, row.names = NULL)
-
-blp_ble <- full_join(blups, blues)
-blp_ble
-
-H2reg <- lm(formula = blup ~ 1 + emmean, data = blp_ble) %>%
-  pluck("coefficients") %>%
-  .[2]
-H2reg # 0.8190045
+col_pallete <- c("#440154", "#21908C", "#FDE725")
 
 # -------------------------------------------------------------------------
-# Linear combinations -----------------------------------------------------
+# Exploring the V ---------------------------------------------------------
 # -------------------------------------------------------------------------
 
-c11_inv <- C_inv[1:3, 1:3]
-fix <- c(1, 0, 0)             # Block 1
-fix <- c(1, 1 / 3, 1 / 3)     # Block average
-K <- t(matrix(fix, nrow = 3, ncol = 4))
-M <- diag(4)
-L <- cbind(K, M)
+# Variances
+v_1 <- as.matrix(ans_1$Z %*% ans_1$G %*% t(ans_1$Z) + ans_1$R)
+v_2 <- as.matrix(ans_2$Z %*% ans_2$G %*% t(ans_2$Z) + ans_2$R)
+v_3 <- as.matrix(ans_3$Z %*% ans_3$G %*% t(ans_3$Z) + ans_3$R)
 
-# predicted.value
-pv <- L %*% rbind(betas, u)
-pv
+# Only Gen
+a <- covcor_heat(v_1, corr = FALSE, size = 3) +
+  scale_fill_gradient2(
+    low = col_pallete[1],
+    high = col_pallete[3],
+    mid = col_pallete[2],
+    midpoint = median(c(v_1, v_2, v_3)),
+    limit = c(0, max(c(v_1, v_2, v_3)) + 0.02),
+    space = "Lab"
+  ) +
+  theme(legend.position = "top") +
+  labs(title = "Only Gen")
+a
 
-# std.error
-sse2 <- L %*% C_inv %*% t(L)
-std <- sqrt(diag(sse2))
-std
+b <- covcor_heat(v_2, corr = FALSE, size = 3) +
+  scale_fill_gradient2(
+    low = col_pallete[1],
+    high = col_pallete[3],
+    mid = col_pallete[2],
+    midpoint = median(c(v_1, v_2, v_3)),
+    limit = c(0, max(c(v_1, v_2, v_3)) + 0.02),
+    space = "Lab"
+  ) +
+  theme(legend.position = "top") +
+  labs(title = "Block fixed and Gen random")
+b
 
-cbind(pv, std)
+c <- covcor_heat(v_3, corr = FALSE, size = 3) +
+  scale_fill_gradient2(
+    low = col_pallete[1],
+    high = col_pallete[3],
+    mid = col_pallete[2],
+    midpoint = median(c(v_1, v_2, v_3)),
+    limit = c(0, max(c(v_1, v_2, v_3)) + 0.02),
+    space = "Lab"
+  ) +
+  theme(legend.position = "top") +
+  labs(title = "Random fixed and Gen random")
+c
+
+ggarrange(a, b, c, common.legend = TRUE, ncol = 3)
 
 # -------------------------------------------------------------------------
-# lme4 --------------------------------------------------------------------
+# Exploring C22.g ---------------------------------------------------------
 # -------------------------------------------------------------------------
 
-mm <- lmer(formula = yield ~ 1 + block + (1 | gen), data = data)
-as.data.frame(VarCorr(mm))
-summary(mm)
+m_1 <- ans_1$C22.g
+m_2 <- ans_2$C22.g
+m_3 <- ans_3$C22.g
+
+# Only Gen
+a <- covcor_heat(m_1, corr = FALSE, size = 3) +
+  scale_fill_gradient2(
+    low = col_pallete[1],
+    high = col_pallete[3],
+    mid = col_pallete[2],
+    midpoint = median(c(m_1, m_2, m_3)),
+    limit = c(0, max(c(m_1, m_2, m_3)) + 0.01),
+    space = "Lab"
+  ) +
+  theme(legend.position = "top") +
+  labs(title = "Only Gen")
+a
+
+b <- covcor_heat(m_2, corr = FALSE, size = 3) +
+  scale_fill_gradient2(
+    low = col_pallete[1],
+    high = col_pallete[3],
+    mid = col_pallete[2],
+    midpoint = median(c(m_1, m_2, m_3)),
+    limit = c(0, max(c(m_1, m_2, m_3)) + 0.01),
+    space = "Lab"
+  ) +
+  theme(legend.position = "top") +
+  labs(title = "Block fixed and Gen random")
+b
+
+c <- covcor_heat(m_3, corr = FALSE, size = 3) +
+  scale_fill_gradient2(
+    low = col_pallete[1],
+    high = col_pallete[3],
+    mid = col_pallete[2],
+    midpoint = median(c(m_1, m_2, m_3)),
+    limit = c(0, max(c(m_1, m_2, m_3)) + 0.01),
+    space = "Lab"
+  ) +
+  theme(legend.position = "top") +
+  labs(title = "Random fixed and Gen random")
+c
+
+ggarrange(a, b, c, common.legend = TRUE, ncol = 3)
+
+# BLUEs -------------------------------------------------------------------
+
+mm_4 <- asreml(fixed = y ~ 1 + gen + block, data = data)
+mm_5 <- asreml(fixed = y ~ 1 + gen, random = ~block, data = data)
+
+pv_asr_4 <- predict(mm_4, classify = "gen", vcov = TRUE)
+pv_asr_4$vcov
+pv_asr_5 <- predict(mm_5, classify = "gen", vcov = TRUE)
+pv_asr_5$vcov
+
+
+
