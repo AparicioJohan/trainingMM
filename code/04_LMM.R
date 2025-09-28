@@ -189,6 +189,11 @@ c
 
 ggarrange(a, b, c, common.legend = TRUE, ncol = 3)
 
+
+# Stop --------------------------------------------------------------------
+
+
+
 # BLUEs -------------------------------------------------------------------
 
 mm_4 <- asreml(fixed = y ~ 1 + gen + block, data = data)
@@ -199,5 +204,16 @@ pv_asr_4$vcov
 pv_asr_5 <- predict(mm_5, classify = "gen", vcov = TRUE)
 pv_asr_5$vcov
 
+# lme4
+mod <- lmer(formula = y ~ 1 + (1|block) + gen, data = data)
+mod
+mm <- emmeans(mod, ~gen)
+mm
+L_emm <- mm@linfct
+C_11_emm <- mm@V
+BLUE_mod <- L_emm %*% mm@bhat
+var_BLUEs_emm <- L_emm %*% C_11_emm %*% t(L_emm)
+sqrt(diag(var_BLUEs_emm))
 
-
+mm_6 <- lmer(formula = yield ~ 1 + (1 | block) + gen, data = data)
+h_cullis(model = mm_6, genotype = "block", re_MME = TRUE)
