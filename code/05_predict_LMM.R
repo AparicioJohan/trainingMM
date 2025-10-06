@@ -71,7 +71,7 @@ ans <- C_inv %*% rhs
 ans
 
 # -------------------------------------------------------------------------
-# Linear combination
+# Linear combination of Fixed and Random Effects
 # -------------------------------------------------------------------------
 
 # L
@@ -88,15 +88,48 @@ pv
 
 # std.error
 sse2 <- L %*% C_inv %*% t(L)
+sse2
 std <- sqrt(diag(sse2))
 std
 data.frame("predicted.values" = pv, std)
 
+# -------------------------------------------------------------------------
+# EMM block ---------------------------------------------------------------
+# -------------------------------------------------------------------------
+
+# L
+L <- cbind(
+  matrix(1, nrow = n_blks, ncol = 1),                   # Intercept
+  matrix(rbind(0, diag(nrow = n_blks - 1)), nrow = n_blks, ncol = n_blks - 1)                           # Identity for gens
+)
+L
+
+# predicted.value
+pv_b <- L %*% ans[1:3]
+pv_b
+
+# std.error
+sse2_b <- L %*% C_inv[1:3, 1:3] %*% t(L)
+sse2_b
+std_b <- sqrt(diag(sse2_b))
+std_b
+data.frame("predicted.values" = pv_b, std_b)
 
 # Check -------------------------------------------------------------------
 
+asreml.options(Cfixed = TRUE)
 mod_asr <- asreml(fixed = y ~ 1 + block, random = ~gen, data = data)
+
+# EMM blocks
+pv_b_asrml <- predict(mod_asr, classify = "block", vcov = TRUE)$pval
+pv_b_asrml
+
+# BLUPs genotype
 pv_asrml <- predict(mod_asr, classify = "gen", vcov = TRUE)$pval
 pv_asrml
 predict(mod_asr, classify = "gen", only = "gen")
+C_inv[4:7, 4:7] |> diag() |> sqrt()
 
+# C11
+C_inv[1:3, 1:3]
+mod_asr$Cfixed

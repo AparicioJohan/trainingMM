@@ -76,11 +76,17 @@ betas <- solve(t(X) %*% V_inv %*% X) %*% t(X) %*% V_inv %*% y
 u <- G %*% t(Z) %*% V_inv %*% (y - X %*% betas)
 rownames(u) <- colnames(Z)
 
+# -------------------------------------------------------------------------
 # Visualization -----------------------------------------------------------
+# -------------------------------------------------------------------------
 
-mm_1 <- lmer(formula = yield ~ 1 + (1 | gen), data = data)
-mm_2 <- lmer(formula = yield ~ 1 + block + (1 | gen), data = data)
-mm_3 <- lmer(formula = yield ~ 1 + (1 | block) + (1 | gen), data = data)
+# Contamination
+data_2 <- data
+data_2[1, ] <- NA
+
+mm_1 <- lmer(formula = yield ~ 1 + (1 | gen), data = data_2)
+mm_2 <- lmer(formula = yield ~ 1 + block + (1 | gen), data = data_2)
+mm_3 <- lmer(formula = yield ~ 1 + (1 | block) + (1 | gen), data = data_2)
 
 ans_1 <- h_cullis(model = mm_1, genotype = "gen", re_MME = TRUE)
 ans_2 <- h_cullis(model = mm_2, genotype = "gen", re_MME = TRUE)
@@ -108,7 +114,7 @@ a <- covcor_heat(v_1, corr = FALSE, size = 3) +
     space = "Lab"
   ) +
   theme(legend.position = "top") +
-  labs(title = "Only Gen")
+  labs(title = "Only Gen as Randm")
 a
 
 b <- covcor_heat(v_2, corr = FALSE, size = 3) +
@@ -136,7 +142,6 @@ c <- covcor_heat(v_3, corr = FALSE, size = 3) +
   theme(legend.position = "top") +
   labs(title = "Random fixed and Gen random")
 c
-
 ggarrange(a, b, c, common.legend = TRUE, ncol = 3)
 
 # -------------------------------------------------------------------------
@@ -186,13 +191,27 @@ c <- covcor_heat(m_3, corr = FALSE, size = 3) +
   theme(legend.position = "top") +
   labs(title = "Random fixed and Gen random")
 c
-
 ggarrange(a, b, c, common.legend = TRUE, ncol = 3)
 
+# -------------------------------------------------------------------------
+# Reliability -------------------------------------------------------------
+# -------------------------------------------------------------------------
 
-# Stop --------------------------------------------------------------------
+PEV_1 <- diag(m_1)
+PEV_2 <- diag(m_2)
+PEV_3 <- diag(m_3)
 
+reliability_1 <- 1 - PEV_1 / agriutilities:::VarG(mm_1, comp = "gen")
+reliability_2 <- 1 - PEV_2 / agriutilities:::VarG(mm_2, comp = "gen")
+reliability_3 <- 1 - PEV_3 / agriutilities:::VarG(mm_3, comp = "gen")
 
+data.frame(
+  gen = levels(data_2$gen),
+  r_1 = reliability_1,
+  r_2 = reliability_2,
+  r_3 = reliability_3
+) |>
+  mutate_if(is.numeric, round, 3)
 
 # BLUEs -------------------------------------------------------------------
 
@@ -205,15 +224,16 @@ pv_asr_5 <- predict(mm_5, classify = "gen", vcov = TRUE)
 pv_asr_5$vcov
 
 # lme4
-mod <- lmer(formula = y ~ 1 + (1|block) + gen, data = data)
-mod
-mm <- emmeans(mod, ~gen)
-mm
-L_emm <- mm@linfct
-C_11_emm <- mm@V
-BLUE_mod <- L_emm %*% mm@bhat
-var_BLUEs_emm <- L_emm %*% C_11_emm %*% t(L_emm)
-sqrt(diag(var_BLUEs_emm))
-
-mm_6 <- lmer(formula = yield ~ 1 + (1 | block) + gen, data = data)
-h_cullis(model = mm_6, genotype = "block", re_MME = TRUE)
+# mod <- lmer(formula = y ~ 1 + (1 | block) + gen, data = data)
+# mod
+# mm <- emmeans(mod, ~gen)
+# mm
+# L_emm <- mm@linfct
+# C_11_emm <- mm@V
+# BLUE_mod <- L_emm %*% mm@bhat
+# var_BLUEs_emm <- L_emm %*% C_11_emm %*% t(L_emm)
+# var_BLUEs_emm
+# sqrt(diag(var_BLUEs_emm))
+#
+# mm_6 <- lmer(formula = yield ~ 1 + (1 | block) + gen, data = data)
+# h_cullis(model = mm_6, genotype = "block", re_MME = TRUE)
