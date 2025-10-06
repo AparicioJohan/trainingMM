@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-09-28">
+<meta name="dcterms.date" content="2025-10-06">
 
-<title>Understanding a Linear Model — Marginal Means – trainingMM</title>
+<title>Marginal means – trainingMM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../pages/02_QR_decomp.html" rel="next">
 <link href="../pages/00_start_lm.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -200,19 +201,19 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/02_QR_decomp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">QR decomposition in LM</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Likelihood</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other software</span></a>
   </div>
 </li>
@@ -229,19 +230,19 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Mixed model equations</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Heritability</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Outliers LMM</span></a>
   </div>
 </li>
@@ -258,24 +259,30 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Genotype-by-environment</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Factor analytic models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Two-stage analysis</span></a>
   </div>
 </li>
       </ul>
   </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -300,7 +307,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/00_start_lm.html">Starting LM</a></li><li class="breadcrumb-item"><a href="../pages/01_predict_LM.html">Marginal means (SE)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Understanding a Linear Model — Marginal Means</h1>
+<h1 class="title">Marginal means</h1>
 </div>
 
 
@@ -311,7 +318,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 28, 2025</p>
+      <p class="date">October 6, 2025</p>
     </div>
   </div>
   
@@ -552,7 +559,7 @@ geng4        -0.1333333    0.0    0.0  0.1333333  0.1333333  0.2666667</code></p
 [3,] 0.0000 0.0000 0.1333 0.0000
 [4,] 0.0000 0.0000 0.0000 0.1333</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SE BLUEs</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SE MMEs</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>se_EMMs <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(var_EMMs))</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>se_EMMs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1096,6 +1103,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../pages/02_QR_decomp.html" class="pagination-link" aria-label="QR decomposition in LM">
+        <span class="nav-page-text">QR decomposition in LM</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

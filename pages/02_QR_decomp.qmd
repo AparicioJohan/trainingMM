@@ -1,0 +1,89 @@
+---
+title: "OLS via QR decomposition"
+date: "last-modified"
+echo: true 
+warning: false 
+message: false
+---
+
+## Data
+
+We analyze the same randomized complete block design (RCBD) with 4 genotypes and 3 blocks (12 observations total).
+
+```{r}
+library(dplyr)
+library(Matrix)
+data <- read.csv("../data/example_1.csv") |>
+  mutate(gen = as.factor(gen),
+         block = as.factor(block))
+head(data)
+str(data)
+```
+
+## Model Matrix
+
+We fit the additive model
+
+$$\texttt{yield} \sim 1 + \texttt{block} + \texttt{gen}$$
+
+```{r}
+X <- model.matrix(yield ~ 1 + block + gen, data = data)
+y <- data[["yield"]]
+dim(X)
+X[1:6, ]
+y
+```
+## Coefficients via Normal Equations
+
+The OLS solution solves $(X^\top X)\beta = X^\top y$.
+
+```{r}
+XtX <- crossprod(X)      # X'X
+Xty <- crossprod(X, y)   # X'y
+qr(XtX)$rank             # check rank of X'X
+beta_normal <- solve(XtX, Xty)
+beta_normal
+```
+
+## Coefficients via QR Decomposition
+
+We factor $X = QR$ with $Q^\top Q = I$ and upper-triangular $R$.
+Then $R \beta = Q^\top y$ and we solve by back substitution.
+
+```{r}
+qrX <- qr(X)
+Q   <- qr.Q(qrX)
+R   <- qr.R(qrX)
+beta_qr <- backsolve(R, t(Q) %*% y)
+beta_qr
+```
+
+::: columns
+::: {.column width="49%"}
+```{r}
+round(Q, 3)
+```
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+```{r}
+round(R, 3)
+```
+:::
+:::
+
+
+## Check: Same Fit Either Way
+
+```{r}
+all.equal(as.vector(beta_normal), as.vector(beta_qr))
+```
+
+## Notes
+
+* The **normal-equations** method uses an explicit $(X^\top X)^{-1}$; it’s concise but can be numerically less stable if $X^\top X$ is ill-conditioned.
+* The **QR** method avoids forming $(X^\top X)^{-1}$ directly and is typically more stable; most linear model software uses QR (or related decompositions) under the hood.
+

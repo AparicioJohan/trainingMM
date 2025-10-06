@@ -1,5 +1,5 @@
 ---
-title: "Understanding a Linear Model — Marginal Means"
+title: "Marginal means"
 date: "last-modified"
 echo: true 
 warning: false 

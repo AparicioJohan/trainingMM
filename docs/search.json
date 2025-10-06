@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Home",
     "section": "",
-    "text": "This webpage is under development.\nOur goal is to build a collection of resources that use R code and mathematical explanations to make concepts in statistical modeling easier to understand.\nWe will begin with the basics of linear models, and progressively extend toward more advanced mixed models, which are widely applied in plant breeding, animal breeding, and many other fields.\n\n\n\nHands-on examples: R scripts that you can run and adapt.\n\nStep-by-step math: showing how model equations connect to code.\n\nConceptual explanations: to make sense of sums of squares, design matrices, likelihood, variance components, mixed models equations, heritability, and more in the context of plant breeding.",
+    "text": "This webpage is under development.\nOur goal is to build a collection of resources that use R code and mathematical explanations to make concepts in statistical modeling easier to understand.\nWe will begin with the basics of linear models, and progressively extend toward more advanced mixed models, which are widely applied in plant breeding, animal breeding, and many other fields.\n\n\n\nHands-on examples: R scripts that you can run and adapt.\n\nStep-by-step math: showing how model equations connect to code.\n\nConceptual explanations: to make sense of linear models and linear mixed models.",
     "crumbs": [
       "Welcome"
     ]
@@ -12,9 +12,12 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "Authors",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "Welcome! We’re building resources to make mixed models and linear models easier to learn—code, math, and practical examples.\n\n\n\n\nJohan Steven Aparicio\n\n\nGraduate Student\n\n\nUniversity of Wisconsin–Madison\n\n\n   GitHub \n\n\n\n\n\nAlejandro Domínguez Rondón\n\n\nGraduate Student\n\n\nUniversidad Politécnica de Madrid\n\n\n   GitHub",
+    "crumbs": [
+      "About"
+    ]
   },
   {
     "objectID": "pages/00_start_lm.html",
@@ -153,7 +156,7 @@
     "href": "index.html#what-to-expect",
     "title": "Home",
     "section": "",
-    "text": "Hands-on examples: R scripts that you can run and adapt.\n\nStep-by-step math: showing how model equations connect to code.\n\nConceptual explanations: to make sense of sums of squares, design matrices, likelihood, variance components, mixed models equations, heritability, and more in the context of plant breeding.",
+    "text": "Hands-on examples: R scripts that you can run and adapt.\n\nStep-by-step math: showing how model equations connect to code.\n\nConceptual explanations: to make sense of linear models and linear mixed models.",
     "crumbs": [
       "Welcome"
     ]
@@ -161,7 +164,7 @@
   {
     "objectID": "pages/01_predict_LM.html",
     "href": "pages/01_predict_LM.html",
-    "title": "Understanding a Linear Model — Marginal Means",
+    "title": "Marginal means",
     "section": "",
     "text": "In the previous chapter, we introduced how linear models are fitted and how coefficients are estimated. However, these coefficients depend on how categorical factors are encoded in the design matrix (for example, using the first level as a reference). As a result, they are not directly expressed in the units of the response variable. In this section, we show how to recover estimated marginal means (EMMs)—also known as least-squares means—from the model coefficients, along with their variances.",
     "crumbs": [
@@ -183,7 +186,7 @@
   {
     "objectID": "pages/01_predict_LM.html#marginal-means-scalar-form",
     "href": "pages/01_predict_LM.html#marginal-means-scalar-form",
-    "title": "Understanding a Linear Model — Marginal Means",
+    "title": "Marginal means",
     "section": "2) Marginal means (scalar form)",
     "text": "2) Marginal means (scalar form)\nLet’s start by using a scalar form to derive the estimated marginal means:\n\nEMM_g1 &lt;- beta[1] + sum(beta[2:3])/3\nEMM_b1 &lt;- beta[1] + sum(beta[4:6])/4 \n\nWhich mathematically represent the following operations\n\\[EMM(g_1) = \\mu + \\frac{1}{3}\\hat\\beta_{block_1} + \\frac{1}{3}\\hat\\beta_{block_2} + \\frac{1}{3}\\hat\\beta_{block_3} = 7.75 + 0 - \\frac{1.65}{3} - \\frac{2.10}{3} = 6.5\\]\n\\[EMM(b_1) = \\mu + \\frac{1}{4}\\hat\\beta_{g_1} + \\frac{1}{4}\\hat\\beta_{g_2} + \\frac{1}{4}\\hat\\beta_{g_3} + \\frac{1}{4}\\hat\\beta_{g_4} = 7.75 + 0 + \\frac{1.10}{4} + \\frac{0.10}{4} + \\frac{1.80}{4} = 8.5\\]\nThen, for the remaining levels\n\nEMM_b2 &lt;- beta[1] + sum(beta[4:6])/4 + beta[2]\nEMM_b3 &lt;- beta[1] + sum(beta[4:6])/4 + beta[3]\n\nEMM_g2 &lt;- beta[1] + sum(beta[2:3])/3  + beta[4]\nEMM_g3 &lt;- beta[1] + sum(beta[2:3])/3  + beta[5]\nEMM_g4 &lt;- beta[1] + sum(beta[2:3])/3  + beta[6]\n\nEMM &lt;- matrix(c(EMM_b1, EMM_b2, EMM_b3, EMM_g1, EMM_g2, EMM_g3, EMM_g4), ncol = 1)\nrownames(EMM) &lt;- c('b1', 'b2', 'b3', 'g1', 'g2', 'g3', 'g4')\nEMM\n\n   [,1]\nb1 8.50\nb2 6.85\nb3 6.40\ng1 6.50\ng2 7.60\ng3 6.60\ng4 8.30",
     "crumbs": [
@@ -194,7 +197,7 @@
   {
     "objectID": "pages/01_predict_LM.html#marginal-means-matrix-form",
     "href": "pages/01_predict_LM.html#marginal-means-matrix-form",
-    "title": "Understanding a Linear Model — Marginal Means",
+    "title": "Marginal means",
     "section": "3) Marginal means (matrix form)",
     "text": "3) Marginal means (matrix form)\nNow let’s explore the matrix form. Specifically, we will make use of the \\(L\\) matrix to compute all desired values simultaneously, so that:\n\\[EMM(\\boldsymbol{g}) = L\\hat{\\boldsymbol{\\beta}}\\]\nThe \\(L\\) matrix represents the levels we want to compute. For example, if we want to extract the EMMs of the genotypes, we should include the intercept, the fraction of each block level that we have to add to the mean, and the levels that we want to compute from the genotypes. Notice how L has as many rows as levels are in the factor to be solved.\n\nL &lt;- cbind(\n  matrix(1, nrow = n_g, ncol = 1), # Intercept\n  matrix(1 / n_b, nrow = n_g, ncol = n_b - 1), # Average block\n  matrix(rbind(0, diag(nrow = n_g - 1)), nrow = n_g, ncol = n_g - 1)\n)\nL\n\n     [,1]      [,2]      [,3] [,4] [,5] [,6]\n[1,]    1 0.3333333 0.3333333    0    0    0\n[2,]    1 0.3333333 0.3333333    1    0    0\n[3,]    1 0.3333333 0.3333333    0    1    0\n[4,]    1 0.3333333 0.3333333    0    0    1\n\n\nNow we can simply multiply this matrix times the estimated coefficients\n\nEMM_g &lt;- L %*% beta\nEMM_g\n\n     [,1]\n[1,]  6.5\n[2,]  7.6\n[3,]  6.6\n[4,]  8.3\n\n\nThe way the EMM are calculated equals the operations shown above, where\n\\[\n\\small\nEMM(\\boldsymbol{g}) = \\boldsymbol{L}\\,\\boldsymbol{\\hat\\beta} =\n\\begin{bmatrix}\n\\overset{\\text{Intercept}}{1} &\n\\overset{\\text{block2}}{0.33} &\n\\overset{\\text{block3}}{0.33} &\n\\overset{\\text{geng2}}{0} &\n\\overset{\\text{geng3}}{0} &\n\\overset{\\text{geng4}}{0} \\\\\n1 & 0.33 & 0.33 & 1 & 0 & 0 \\\\\n1 & 0.33 & 0.33 & 0 & 1 & 0 \\\\\n1 & 0.33 & 0.33 & 0 & 0 & 1 \\\\\n\\end{bmatrix}\n\\,\n\\overset{\\hat\\beta}{\n\\begin{bmatrix}\n7.75 \\\\\n-1.65 \\\\\n-2.10 \\\\\n1.10 \\\\\n0.10 \\\\\n1.80\n\\end{bmatrix}} =\n\\begin{bmatrix}\n6.5 \\\\\n7.6 \\\\\n6.6 \\\\\n8.3\n\\end{bmatrix}\n\\]\nSo that\n\\[\nEMM(\\boldsymbol{g})_{[1]} = 1*7.75 + \\frac{1}{3}*-1.65 + \\frac{1}{3}*-2.10 = 6.5\n\\]\nSimilarly, to obtain the EMM of each block we would do\n\nL2 &lt;- cbind(\n  matrix(1, nrow = n_b, ncol = 1), # Intercept\n  matrix(rbind(0, diag(nrow = n_b - 1)), nrow = n_b, ncol = n_b - 1), # Average block\n  matrix(1 / n_g, nrow = n_b, ncol = n_g - 1)\n)\nL2\n\n     [,1] [,2] [,3] [,4] [,5] [,6]\n[1,]    1    0    0 0.25 0.25 0.25\n[2,]    1    1    0 0.25 0.25 0.25\n[3,]    1    0    1 0.25 0.25 0.25\n\n\n\nEMM_b &lt;- L2 %*% beta\nEMM_b\n\n     [,1]\n[1,] 8.50\n[2,] 6.85\n[3,] 6.40\n\n\nYou can check that the results are the same as the ones computed before:\n\ncbind(EMM, rbind(EMM_b, EMM_g))\n\n   [,1] [,2]\nb1 8.50 8.50\nb2 6.85 6.85\nb3 6.40 6.40\ng1 6.50 6.50\ng2 7.60 7.60\ng3 6.60 6.60\ng4 8.30 8.30",
     "crumbs": [
@@ -205,7 +208,7 @@
   {
     "objectID": "pages/01_predict_LM.html#variance-of-the-differences",
     "href": "pages/01_predict_LM.html#variance-of-the-differences",
-    "title": "Understanding a Linear Model — Marginal Means",
+    "title": "Marginal means",
     "section": "6) Variance of the differences",
     "text": "6) Variance of the differences\nBesides that, it allows us to compute the estimates and the variances of the differences between levels, such as genotypes.\n\ndiff_mm &lt;- emmeans(mod, pairwise ~ gen)\ndiff_mm$contrasts\n\n contrast estimate    SE df t.ratio p.value\n g1 - g2      -1.1 0.516  6  -2.130  0.2447\n g1 - g3      -0.1 0.516  6  -0.194  0.9971\n g1 - g4      -1.8 0.516  6  -3.486  0.0486\n g2 - g3       1.0 0.516  6   1.936  0.3066\n g2 - g4      -0.7 0.516  6  -1.356  0.5656\n g3 - g4      -1.7 0.516  6  -3.292  0.0609\n\nResults are averaged over the levels of: block \nP value adjustment: tukey method for comparing a family of 4 estimates \n\nL_diff &lt;- diff_mm$contrasts@linfct\nL_diff # See how L now links more than 1 genotype per row\n\n     (Intercept) block2 block3 geng2 geng3 geng4\n[1,]           0      0      0    -1     0     0\n[2,]           0      0      0     0    -1     0\n[3,]           0      0      0     0     0    -1\n[4,]           0      0      0     1    -1     0\n[5,]           0      0      0     1     0    -1\n[6,]           0      0      0     0     1    -1\n\nBLUEs_diff &lt;- L_diff %*% beta_mod\nrownames(BLUEs_diff) &lt;- diff_mm$contrasts@levels$contrast\n\nrownames(L_diff) &lt;- rownames(BLUEs_diff)\nvar_diff &lt;- L_diff %*% C_11_emm %*% t(L_diff)\nvar_diff |&gt; round(4) # Notice how now there are covariances between the levels, since they have one of the genotypes in common\n\n        g1 - g2 g1 - g3 g1 - g4 g2 - g3 g2 - g4 g3 - g4\ng1 - g2  0.2667  0.1333  0.1333 -0.1333 -0.1333  0.0000\ng1 - g3  0.1333  0.2667  0.1333  0.1333  0.0000 -0.1333\ng1 - g4  0.1333  0.1333  0.2667  0.0000  0.1333  0.1333\ng2 - g3 -0.1333  0.1333  0.0000  0.2667  0.1333 -0.1333\ng2 - g4 -0.1333  0.0000  0.1333  0.1333  0.2667  0.1333\ng3 - g4  0.0000 -0.1333  0.1333 -0.1333  0.1333  0.2667\n\nSE &lt;- sqrt(diag(var_diff))\n\navg_diff &lt;- mean(SE)\navg_diff\n\n[1] 0.5163978",
     "crumbs": [
@@ -216,9 +219,9 @@
   {
     "objectID": "pages/01_predict_LM.html#variance-covariance-se",
     "href": "pages/01_predict_LM.html#variance-covariance-se",
-    "title": "Understanding a Linear Model — Marginal Means",
+    "title": "Marginal means",
     "section": "4) Variance-covariance (SE)",
-    "text": "4) Variance-covariance (SE)\nNow let’s compute the variance and the SE of the EMMS. We know that \\(EMMs = L\\hat\\beta\\), thus\n\\[Var(L\\hat\\beta) = LVar(\\hat\\beta) L^T = LC_{11} L^T\\]\nWe will discuss more in detail about the Coefficient Matrix once we start digging into Linear Mixed Models. For now, we will just say that \\(C_{ii}\\) corresponds to \\(Var(\\hat\\beta)\\), so\n\n# Compute the errors to compute sigma^2 \ny_hat &lt;- X %*% beta\nerrors &lt;- y - y_hat\nSSE &lt;- sum(errors^2)\nsigma_2 &lt;- SSE / (n - 6)\nC_11 &lt;- solve(t(X)%*%X) * sigma_2\nC_11\n\n            (Intercept) block2 block3      geng2      geng3      geng4\n(Intercept)   0.2000000   -0.1   -0.1 -0.1333333 -0.1333333 -0.1333333\nblock2       -0.1000000    0.2    0.1  0.0000000  0.0000000  0.0000000\nblock3       -0.1000000    0.1    0.2  0.0000000  0.0000000  0.0000000\ngeng2        -0.1333333    0.0    0.0  0.2666667  0.1333333  0.1333333\ngeng3        -0.1333333    0.0    0.0  0.1333333  0.2666667  0.1333333\ngeng4        -0.1333333    0.0    0.0  0.1333333  0.1333333  0.2666667\n\n\nThen the Variance and the SE of the EMMs are\n\nvar_EMMs &lt;- L %*% C_11 %*% t(L)\nvar_EMMs |&gt; round(4)\n\n       [,1]   [,2]   [,3]   [,4]\n[1,] 0.1333 0.0000 0.0000 0.0000\n[2,] 0.0000 0.1333 0.0000 0.0000\n[3,] 0.0000 0.0000 0.1333 0.0000\n[4,] 0.0000 0.0000 0.0000 0.1333\n\n# SE BLUEs\nse_EMMs &lt;- sqrt(diag(var_EMMs))\nse_EMMs\n\n[1] 0.3651484 0.3651484 0.3651484 0.3651484\n\ndata.frame(\n  gen = levels(data$gen),\n  EMMs_g = EMM_g,\n  var_EMMs = diag(var_EMMs),\n  se_EMMs = se_EMMs\n)\n\n  gen EMMs_g  var_EMMs   se_EMMs\n1  g1    6.5 0.1333333 0.3651484\n2  g2    7.6 0.1333333 0.3651484\n3  g3    6.6 0.1333333 0.3651484\n4  g4    8.3 0.1333333 0.3651484",
+    "text": "4) Variance-covariance (SE)\nNow let’s compute the variance and the SE of the EMMS. We know that \\(EMMs = L\\hat\\beta\\), thus\n\\[Var(L\\hat\\beta) = LVar(\\hat\\beta) L^T = LC_{11} L^T\\]\nWe will discuss more in detail about the Coefficient Matrix once we start digging into Linear Mixed Models. For now, we will just say that \\(C_{ii}\\) corresponds to \\(Var(\\hat\\beta)\\), so\n\n# Compute the errors to compute sigma^2 \ny_hat &lt;- X %*% beta\nerrors &lt;- y - y_hat\nSSE &lt;- sum(errors^2)\nsigma_2 &lt;- SSE / (n - 6)\nC_11 &lt;- solve(t(X)%*%X) * sigma_2\nC_11\n\n            (Intercept) block2 block3      geng2      geng3      geng4\n(Intercept)   0.2000000   -0.1   -0.1 -0.1333333 -0.1333333 -0.1333333\nblock2       -0.1000000    0.2    0.1  0.0000000  0.0000000  0.0000000\nblock3       -0.1000000    0.1    0.2  0.0000000  0.0000000  0.0000000\ngeng2        -0.1333333    0.0    0.0  0.2666667  0.1333333  0.1333333\ngeng3        -0.1333333    0.0    0.0  0.1333333  0.2666667  0.1333333\ngeng4        -0.1333333    0.0    0.0  0.1333333  0.1333333  0.2666667\n\n\nThen the Variance and the SE of the EMMs are\n\nvar_EMMs &lt;- L %*% C_11 %*% t(L)\nvar_EMMs |&gt; round(4)\n\n       [,1]   [,2]   [,3]   [,4]\n[1,] 0.1333 0.0000 0.0000 0.0000\n[2,] 0.0000 0.1333 0.0000 0.0000\n[3,] 0.0000 0.0000 0.1333 0.0000\n[4,] 0.0000 0.0000 0.0000 0.1333\n\n# SE MMEs\nse_EMMs &lt;- sqrt(diag(var_EMMs))\nse_EMMs\n\n[1] 0.3651484 0.3651484 0.3651484 0.3651484\n\ndata.frame(\n  gen = levels(data$gen),\n  EMMs_g = EMM_g,\n  var_EMMs = diag(var_EMMs),\n  se_EMMs = se_EMMs\n)\n\n  gen EMMs_g  var_EMMs   se_EMMs\n1  g1    6.5 0.1333333 0.3651484\n2  g2    7.6 0.1333333 0.3651484\n3  g3    6.6 0.1333333 0.3651484\n4  g4    8.3 0.1333333 0.3651484",
     "crumbs": [
       "Starting LM",
       "Marginal means (SE)"
@@ -227,7 +230,7 @@
   {
     "objectID": "pages/01_predict_LM.html#estimating-coefficients",
     "href": "pages/01_predict_LM.html#estimating-coefficients",
-    "title": "Understanding a Linear Model — Marginal Means",
+    "title": "Marginal means",
     "section": "1) Estimating coefficients",
     "text": "1) Estimating coefficients\n\ndata &lt;- read.csv(\"../data/example_1.csv\") |&gt;\n  mutate(gen = as.factor(gen), block = as.factor(block))\nn &lt;- 12\nn_b &lt;- 3\nn_g &lt;- 4\nX &lt;- model.matrix(yield ~ 1 + block + gen, data = data)\ny &lt;- matrix(data[, \"yield\"])\nprint(X)\n\n   (Intercept) block2 block3 geng2 geng3 geng4\n1            1      0      0     0     0     0\n2            1      1      0     0     0     0\n3            1      0      1     0     0     0\n4            1      0      0     1     0     0\n5            1      1      0     1     0     0\n6            1      0      1     1     0     0\n7            1      0      0     0     1     0\n8            1      1      0     0     1     0\n9            1      0      1     0     1     0\n10           1      0      0     0     0     1\n11           1      1      0     0     0     1\n12           1      0      1     0     0     1\nattr(,\"assign\")\n[1] 0 1 1 2 2 2\nattr(,\"contrasts\")\nattr(,\"contrasts\")$block\n[1] \"contr.treatment\"\n\nattr(,\"contrasts\")$gen\n[1] \"contr.treatment\"\n\n\n\nXty &lt;- t(X) %*% y\nXtX &lt;- t(X) %*% X\nXtX_inv &lt;- solve(XtX)\nbeta &lt;- XtX_inv %*% Xty\nbeta\n\n             [,1]\n(Intercept)  7.75\nblock2      -1.65\nblock3      -2.10\ngeng2        1.10\ngeng3        0.10\ngeng4        1.80",
     "crumbs": [
@@ -238,12 +241,125 @@
   {
     "objectID": "pages/01_predict_LM.html#using-lm-and-emmeans",
     "href": "pages/01_predict_LM.html#using-lm-and-emmeans",
-    "title": "Understanding a Linear Model — Marginal Means",
+    "title": "Marginal means",
     "section": "5) Using lm and emmeans",
     "text": "5) Using lm and emmeans\nWe can also use lm to fit the model and extract the coefficients and emmeans to retrieve the estimated marginal means. The function emmeans does the job automatically but it also returns the \\(L\\) and \\(C_{11}\\) matrices used, so we can explore them.\n\nmod &lt;- lm(formula = yield ~ 1 + block + gen, data = data)\nbeta_mod &lt;- coef(mod)\nmod\n\n\nCall:\nlm(formula = yield ~ 1 + block + gen, data = data)\n\nCoefficients:\n(Intercept)       block2       block3        geng2        geng3        geng4  \n       7.75        -1.65        -2.10         1.10         0.10         1.80  \n\nmm &lt;- emmeans(mod, ~gen)\nmm\n\n gen emmean    SE df lower.CL upper.CL\n g1     6.5 0.365  6     5.61     7.39\n g2     7.6 0.365  6     6.71     8.49\n g3     6.6 0.365  6     5.71     7.49\n g4     8.3 0.365  6     7.41     9.19\n\nResults are averaged over the levels of: block \nConfidence level used: 0.95 \n\nL_emm &lt;- mm@linfct\nC_11_emm &lt;- mm@V\n\nBLUE_mod &lt;- L_emm %*% beta_mod\nvar_BLUEs_emm &lt;- L_emm %*% C_11_emm %*% t(L_emm)\nsqrt(diag(var_BLUEs_emm))\n\n[1] 0.3651484 0.3651484 0.3651484 0.3651484",
     "crumbs": [
       "Starting LM",
       "Marginal means (SE)"
+    ]
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html",
+    "href": "pages/02_QR_decomp.html",
+    "title": "OLS via QR decomposition",
+    "section": "",
+    "text": "We analyze the same randomized complete block design (RCBD) with 4 genotypes and 3 blocks (12 observations total).\n\nlibrary(dplyr)\nlibrary(Matrix)\ndata &lt;- read.csv(\"../data/example_1.csv\") |&gt;\n  mutate(gen = as.factor(gen),\n         block = as.factor(block))\nhead(data)\n\n  block gen yield\n1     1  g1   7.4\n2     2  g1   6.5\n3     3  g1   5.6\n4     1  g2   9.8\n5     2  g2   6.8\n6     3  g2   6.2\n\nstr(data)\n\n'data.frame':   12 obs. of  3 variables:\n $ block: Factor w/ 3 levels \"1\",\"2\",\"3\": 1 2 3 1 2 3 1 2 3 1 ...\n $ gen  : Factor w/ 4 levels \"g1\",\"g2\",\"g3\",..: 1 1 1 2 2 2 3 3 3 4 ...\n $ yield: num  7.4 6.5 5.6 9.8 6.8 6.2 7.3 6.1 6.4 9.5 ...",
+    "crumbs": [
+      "Starting LM",
+      "QR decomposition in LM"
+    ]
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html#setup",
+    "href": "pages/02_QR_decomp.html#setup",
+    "title": "OLS via QR decomposition",
+    "section": "",
+    "text": "library(dplyr)\nlibrary(Matrix)"
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html#data",
+    "href": "pages/02_QR_decomp.html#data",
+    "title": "OLS via QR decomposition",
+    "section": "",
+    "text": "We analyze the same randomized complete block design (RCBD) with 4 genotypes and 3 blocks (12 observations total).\n\nlibrary(dplyr)\nlibrary(Matrix)\ndata &lt;- read.csv(\"../data/example_1.csv\") |&gt;\n  mutate(gen = as.factor(gen),\n         block = as.factor(block))\nhead(data)\n\n  block gen yield\n1     1  g1   7.4\n2     2  g1   6.5\n3     3  g1   5.6\n4     1  g2   9.8\n5     2  g2   6.8\n6     3  g2   6.2\n\nstr(data)\n\n'data.frame':   12 obs. of  3 variables:\n $ block: Factor w/ 3 levels \"1\",\"2\",\"3\": 1 2 3 1 2 3 1 2 3 1 ...\n $ gen  : Factor w/ 4 levels \"g1\",\"g2\",\"g3\",..: 1 1 1 2 2 2 3 3 3 4 ...\n $ yield: num  7.4 6.5 5.6 9.8 6.8 6.2 7.3 6.1 6.4 9.5 ...",
+    "crumbs": [
+      "Starting LM",
+      "QR decomposition in LM"
+    ]
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html#model-matrix",
+    "href": "pages/02_QR_decomp.html#model-matrix",
+    "title": "OLS via QR decomposition",
+    "section": "Model Matrix",
+    "text": "Model Matrix\nWe fit the additive model\n\\[\\texttt{yield} \\sim 1 + \\texttt{block} + \\texttt{gen}\\]\n\nX &lt;- model.matrix(yield ~ 1 + block + gen, data = data)\ny &lt;- data[[\"yield\"]]\ndim(X)\n\n[1] 12  6\n\nX[1:6, ]\n\n  (Intercept) block2 block3 geng2 geng3 geng4\n1           1      0      0     0     0     0\n2           1      1      0     0     0     0\n3           1      0      1     0     0     0\n4           1      0      0     1     0     0\n5           1      1      0     1     0     0\n6           1      0      1     1     0     0\n\ny\n\n [1] 7.4 6.5 5.6 9.8 6.8 6.2 7.3 6.1 6.4 9.5 8.0 7.4",
+    "crumbs": [
+      "Starting LM",
+      "QR decomposition in LM"
+    ]
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html#coefficients-via-normal-equations",
+    "href": "pages/02_QR_decomp.html#coefficients-via-normal-equations",
+    "title": "OLS via QR decomposition",
+    "section": "Coefficients via Normal Equations",
+    "text": "Coefficients via Normal Equations\nThe OLS solution solves \\((X^\\top X)\\beta = X^\\top y\\).\n\nXtX &lt;- crossprod(X)      # X'X\nXty &lt;- crossprod(X, y)   # X'y\nqr(XtX)$rank             # check rank of X'X\n\n[1] 6\n\nbeta_normal &lt;- solve(XtX, Xty)\nbeta_normal\n\n             [,1]\n(Intercept)  7.75\nblock2      -1.65\nblock3      -2.10\ngeng2        1.10\ngeng3        0.10\ngeng4        1.80",
+    "crumbs": [
+      "Starting LM",
+      "QR decomposition in LM"
+    ]
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html#coefficients-via-qr-decomposition",
+    "href": "pages/02_QR_decomp.html#coefficients-via-qr-decomposition",
+    "title": "OLS via QR decomposition",
+    "section": "Coefficients via QR Decomposition",
+    "text": "Coefficients via QR Decomposition\nWe factor \\(X = QR\\) with \\(Q^\\top Q = I\\) and upper-triangular \\(R\\). Then \\(R \\beta = Q^\\top y\\) and we solve by back substitution.\n\nqrX &lt;- qr(X)\nQ   &lt;- qr.Q(qrX)\nR   &lt;- qr.R(qrX)\nbeta_qr &lt;- backsolve(R, t(Q) %*% y)\nbeta_qr\n\n      [,1]\n[1,]  7.75\n[2,] -1.65\n[3,] -2.10\n[4,]  1.10\n[5,]  0.10\n[6,]  1.80\n\n\n\n\n\nround(Q, 3)\n\n        [,1]   [,2]   [,3]   [,4]   [,5]   [,6]\n [1,] -0.289  0.204  0.354  0.167  0.236  0.408\n [2,] -0.289 -0.408  0.000  0.167  0.236  0.408\n [3,] -0.289  0.204 -0.354  0.167  0.236  0.408\n [4,] -0.289  0.204  0.354 -0.500  0.000  0.000\n [5,] -0.289 -0.408  0.000 -0.500  0.000  0.000\n [6,] -0.289  0.204 -0.354 -0.500  0.000  0.000\n [7,] -0.289  0.204  0.354  0.167 -0.471  0.000\n [8,] -0.289 -0.408  0.000  0.167 -0.471  0.000\n [9,] -0.289  0.204 -0.354  0.167 -0.471  0.000\n[10,] -0.289  0.204  0.354  0.167  0.236 -0.408\n[11,] -0.289 -0.408  0.000  0.167  0.236 -0.408\n[12,] -0.289  0.204 -0.354  0.167  0.236 -0.408\n\n\n\n\n\n\nround(R, 3)\n\n  (Intercept) block2 block3  geng2  geng3  geng4\n1      -3.464 -1.155 -1.155 -0.866 -0.866 -0.866\n2       0.000 -1.633  0.816  0.000  0.000  0.000\n3       0.000  0.000 -1.414  0.000  0.000  0.000\n4       0.000  0.000  0.000 -1.500  0.500  0.500\n5       0.000  0.000  0.000  0.000 -1.414  0.707\n6       0.000  0.000  0.000  0.000  0.000 -1.225",
+    "crumbs": [
+      "Starting LM",
+      "QR decomposition in LM"
+    ]
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html#check-same-fit-either-way",
+    "href": "pages/02_QR_decomp.html#check-same-fit-either-way",
+    "title": "OLS via QR decomposition",
+    "section": "Check: Same Fit Either Way",
+    "text": "Check: Same Fit Either Way\n\nall.equal(as.vector(beta_normal), as.vector(beta_qr))\n\n[1] TRUE",
+    "crumbs": [
+      "Starting LM",
+      "QR decomposition in LM"
+    ]
+  },
+  {
+    "objectID": "pages/02_QR_decomp.html#notes",
+    "href": "pages/02_QR_decomp.html#notes",
+    "title": "OLS via QR decomposition",
+    "section": "Notes",
+    "text": "Notes\n\nThe normal-equations method uses an explicit \\((X^\\top X)^{-1}\\); it’s concise but can be numerically less stable if \\(X^\\top X\\) is ill-conditioned.\nThe QR method avoids forming \\((X^\\top X)^{-1}\\) directly and is typically more stable; most linear model software uses QR (or related decompositions) under the hood.",
+    "crumbs": [
+      "Starting LM",
+      "QR decomposition in LM"
+    ]
+  },
+  {
+    "objectID": "pages/99_404.html",
+    "href": "pages/99_404.html",
+    "title": "Error 404",
+    "section": "",
+    "text": "Under construction!",
+    "crumbs": [
+      "Starting LM",
+      "Likelihood"
+    ]
+  },
+  {
+    "objectID": "about.html#authors",
+    "href": "about.html#authors",
+    "title": "About",
+    "section": "",
+    "text": "Johan Steven Aparicio\nAlejandro Dominguez",
+    "crumbs": []
+  },
+  {
+    "objectID": "about.html#how-to-add-another-author",
+    "href": "about.html#how-to-add-another-author",
+    "title": "Authors",
+    "section": "How to add another author",
+    "text": "How to add another author\nCopy an author-card block, update the image path (place your photo in images/), name, role, and affiliation. Photos look best as square images (at least 300×300 px) so the circle crops nicely.\n```\nJohan Steven Aparicio Graduate Student UW - Madison\nAlejandro Dominguez Rondon Graduate Student Universidad Politecnica de Madrid",
+    "crumbs": [
+      "About"
     ]
   }
 ]

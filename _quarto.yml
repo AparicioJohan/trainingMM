@@ -33,28 +33,30 @@ website:
             text: ANOVA and fixed effects
           - href: pages/01_predict_LM.qmd
             text: Marginal means (SE)
-          - href: pages/00_start_lm.qmd
+          - href: pages/02_QR_decomp.html
             text: QR decomposition in LM
-          - href: pages/00_start_lm.qmd
+          - href: pages/99_404.html
             text: Likelihood
-          - href: pages/00_start_lm.qmd
+          - href: pages/99_404.html
             text: Other software
       - section: "Starting LMM"
         contents:
-          - href: pages/00_start_lm.html
+          - href: pages/99_404.html
             text: Mixed model equations
-          - href: pages/00_start_lm.html
+          - href: pages/99_404.html
             text: Heritability
-          - href: pages/00_start_lm.html
+          - href: pages/99_404.html
             text: Outliers LMM
       - section: "Advanced LMM"
         contents:
-          - href: pages/00_start_lm.html
+          - href: pages/99_404.html
             text: Genotype-by-environment
-          - href: pages/00_start_lm.html
+          - href: pages/99_404.html
             text: Factor analytic models
-          - href: pages/00_start_lm.html
+          - href: pages/99_404.html
             text: Two-stage analysis
+      - href: about.html
+        text: About
 
 format:
   html:
