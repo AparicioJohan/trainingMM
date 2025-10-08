@@ -11,45 +11,33 @@ data <- read.csv("data/example_1.csv") |>
 head(data)
 str(data)
 
-data$block_cov <- scale(as.numeric(data$block), scale = FALSE)
+data$covariate <- as.numeric(data$block)
+data$covariate_s <- scale(data$covariate, scale = FALSE)
 
-n <- 12
-n_blks <- 3
-n_gens <- 4
+mod_1 <- lm(formula = yield ~ 1 + covariate + gen, data = data)
+mod_2 <- lm(formula = yield ~ 1 + covariate_s + gen, data = data)
 
-ff <- yield ~ -1 + gen + block_cov
-m <- model.frame(ff, data)
-X <- model.matrix(ff, m)
-y <- matrix(data[, "yield"])
-print(X)
-print(y)
+data.frame(
+  Coefficient = names(coef(mod_1)),
+  Mod_1 = coef(mod_1),
+  Mod_2 = coef(mod_2),
+  row.names = NULL
+)
 
-# Betas
-Xty <- t(X) %*% y
-XtX <- t(X) %*% X
-XtX_inv <- solve(XtX)
-beta <- XtX_inv %*% Xty
-beta
-y_hat <- X %*% beta
-errors <- y - y_hat
-SSE <- sum(errors^2)
-SSE
+# Marginal Means model 1
+mm_1 <- emmeans(mod_1, ~gen)
+L_1 <- mm_1@linfct
+C_1 <- mm_1@V
+EMM_1 <- L_1 %*% mm_1@bhat
+var_EMM_1 <- L_1 %*% C_1 %*% t(L_1)
+se_EMM_1 <- sqrt(diag(var_EMM_1))
+data.frame(EMM_1, var_EMM_1 = diag(var_EMM_1), se_EMM_1)
 
-sigma_2 <- SSE / (n - length(beta))
-vcov_betas <- XtX_inv * sigma_2
-round(vcov_betas, 5)
-
-# -------------------------------------------------------------------------
-# LM ----------------------------------------------------------------------
-# -------------------------------------------------------------------------
-
-mod <- lm(formula = yield ~ -1 + block_cov + gen, data = data)
-mm <- emmeans(mod, ~gen)
-mm
-L_emm <- mm@linfct
-C_11_emm <- mm@V
-BLUE_mod <- L_emm %*% mm@bhat
-var_BLUEs_emm <- L_emm %*% C_11_emm %*% t(L_emm)
-var_BLUEs_emm
-sqrt(diag(var_BLUEs_emm))
-
+# Marginal Means model
+mm_2 <- emmeans(mod_2, ~gen)
+L_2 <- mm_2@linfct
+C_2 <- mm_2@V
+EMM_2 <- L_2 %*% mm_2@bhat
+var_EMM_2 <- L_2 %*% C_2 %*% t(L_2)
+se_EMM_2 <- sqrt(diag(var_EMM_2))
+data.frame(EMM_2, var_EMM_2 = diag(var_EMM_2), se_EMM_2)

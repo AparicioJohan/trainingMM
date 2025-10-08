@@ -35,8 +35,8 @@ website:
             text: Marginal means (SE)
           - href: pages/02_QR_decomp.html
             text: QR decomposition in LM
-          - href: pages/99_404.html
-            text: Likelihood
+          - href: pages/04_covariates_LM.html
+            text: Covariates in LM
           - href: pages/99_404.html
             text: Other software
       - section: "Starting LMM"

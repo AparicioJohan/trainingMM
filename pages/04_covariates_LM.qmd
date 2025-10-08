@@ -1,0 +1,143 @@
+---
+title: "Covariates in LM"
+---
+
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
+library(tidyverse)
+library(emmeans)
+library(lme4)
+library(gt)
+```
+
+## Data
+
+```{r, warning=FALSE, message=FALSE}
+# RCBD example: 4 gens, 3 blocks, 12 observations
+data <- read.csv("../data/example_1.csv") |>
+  mutate(gen = as.factor(gen), block = as.factor(block))
+head(data)
+```
+
+```{r}
+# A numeric covariate derived from blocks (for illustration only)
+data$covariate <- as.numeric(data$block)
+data$covariate_s <- scale(data$covariate, scale = FALSE)
+```
+
+## Two models: raw vs centered covariate
+
+```{r}
+mod_1 <- lm(formula = yield ~ 1 + covariate + gen, data = data)
+mod_2 <- lm(formula = yield ~ 1 + covariate_s + gen, data = data)
+```
+
+```{r}
+tibble(
+  term = names(coef(mod_1)),
+  coef_1 = unname(coef(mod_1)), se_1 = sqrt(diag(vcov(mod_1))),
+  coef_2 = unname(coef(mod_2)), se_2 = sqrt(diag(vcov(mod_2)))
+) |>
+  mutate_if(is.numeric, round, 2) |>
+  gt() |>
+  fmt_number(columns = c(coef_1, coef_2), decimals = 3) |>
+  tab_header(title = "Coefficient estimates and SEs")
+```
+
+## Estimated marginal means (EMMs) for genotypes
+
+::: columns
+::: {.column width="49%"}
+### Marginal means with model 1
+
+```{r}
+mm_1 <- emmeans(mod_1, ~gen)
+L_1 <- mm_1@linfct
+rownames(L_1) <- paste0("gen_", 1:4)
+print(L_1)
+```
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+
+### Marginal means with model 2
+
+```{r}
+mm_2 <- emmeans(mod_2, ~gen)
+L_2 <- mm_2@linfct
+rownames(L_2) <- paste0("gen_", 1:4)
+print(L_2)
+```
+:::
+:::
+
+We can clearly see the differences in the construction of the $L$ matrix in order to get proper estimations of
+the marginal means. In mod_1, the covariate column equals the mean of the uncentered covariate (here, 2) for each gen row. In mod_2, the covariate column is 0 because we centered it.
+
+::: columns
+::: {.column width="49%"}
+
+```{r}
+C_1 <- mm_1@V
+print(round(C_1, 2))
+```
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+
+```{r}
+C_2 <- mm_2@V
+print(round(C_2, 2))
+```
+:::
+:::
+
+The variance–covariance matrix of the model coefficients is also influenced by the scaling of the covariate, as we observed earlier through the standard errors. When the covariate is centered, the covariance between the intercept and the covariate becomes zero, reflecting the removal of linear dependence between the intercept and the covariate.
+
+| Relationship        | Before centering | After centering  |
+| ------------------- | ---------------- | ---------------- |
+| Intercept–covariate | Correlated       | Uncorrelated (0) |
+| Covariate–genotypes | 0                | 0                |
+| Genotype–genotype   | unchanged        | unchanged        |
+
+::: columns
+::: {.column width="49%"}
+
+```{r}
+EMM_1 <- L_1 %*% mm_1@bhat
+var_EMM_1 <- L_1 %*% C_1 %*% t(L_1)
+se_EMM_1 <- sqrt(diag(var_EMM_1))
+data.frame(
+  Gen = rownames(EMM_1),
+  EMM_1 = EMM_1, 
+  var_EMM_1 = diag(var_EMM_1),
+  se_EMM_1
+) |> gt()
+```
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+
+```{r}
+EMM_2 <- L_2 %*% mm_2@bhat
+var_EMM_2 <- L_2 %*% C_2 %*% t(L_2)
+se_EMM_2 <- sqrt(diag(var_EMM_2))
+data.frame(
+  Gen = rownames(EMM_2),
+  EMM_2 = EMM_2, 
+  var_EMM_2 = diag(var_EMM_2),
+  se_EMM_2
+) |> gt()
+```
+:::
+:::
+
+This vignette outlines practical considerations for incorporating covariates in linear models, including the impact of centering on the intercept, implications for standard errors, and consequences for the estimation of marginal means.
