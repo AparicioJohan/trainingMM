@@ -8,7 +8,7 @@ message: false
 
 ## Data
 
-We analyze the same randomized complete block design (RCBD) with 4 genotypes and 3 blocks (12 observations total).
+We will analyze the same randomized complete block design (RCBD) (4 genotypes and 3 blocks).
 
 ```{r}
 library(dplyr)
@@ -47,8 +47,21 @@ beta_normal
 
 ## Coefficients via QR Decomposition
 
-We factor $X = QR$ with $Q^\top Q = I$ and upper-triangular $R$.
-Then $R \beta = Q^\top y$ and we solve by back substitution.
+::: callout-important
+The QR decomposition (also called the QR factorization) of a matrix is a decomposition
+of the matrix into an orthogonal matrix and a triangular matrix. A QR decomposition of
+a real square matrix $A$ is a decomposition of $A$ as $A = QR$, where $Q$ is an orthogonal
+matrix (i.e. $Q^\top Q = I$) and $R$ is an upper triangular matrix. If $A$ is nonsingular,
+then this factorization is unique. By Yanovsky (UCLA) (PDF) [link](https://www.math.ucla.edu/~yanovsky/Teaching/Math151B/handouts/GramSchmidt.pdf)
+:::
+
+We start by factoring the design matrix $X$, such that $$X = QR$$
+
+Substituting this factorization into the normal equations, $$X^\top X \beta = X^\top y,$$
+we obtain  $$(R^\top Q^\top)(Q R)\beta = R^\top Q^\top y$$
+Because $Q^\top Q = I$, this simplifies to $$R^\top R \beta = R^\top Q^\top y$$
+By pre-multiplying both sides by $(R^\top)^{-1}$, we get $$R \beta = Q^\top y$$
+Finally, since $R$ is upper triangular, we can solve for $\beta$ efficiently using **back substitution**.
 
 ```{r}
 qrX <- qr(X)
