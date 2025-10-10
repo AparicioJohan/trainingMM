@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -64,15 +64,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../about.html" rel="next">
+<link href="../pages/99_404.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -142,9 +144,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      trainingMM
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Starting LMM</a></li><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Mixed models</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -230,8 +230,14 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../pages/03_LMM.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Mixed models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Mixed model equations</span></a>
+ <span class="menu-text">Predict LMM</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -301,7 +307,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Starting LMM</a></li><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Mixed models</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Linear Mixed Models</h1>
 </div>
@@ -335,7 +341,7 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "/Users/alejandrodominguezrondon/Documents/PhD/trainingMM/pages"</code></pre>
+<pre><code>[1] "C:/Users/johan/OneDrive/Documentos/GitHub/trainingMM/pages"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/example_1.csv"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gen =</span> <span class="fu">as.factor</span>(gen), <span class="at">block =</span> <span class="fu">as.factor</span>(block))</span>
@@ -524,16 +530,16 @@ C_{21} &amp; C_{22}
 <div class="cell-output cell-output-stdout">
 <pre><code>            (Intercept)        block2        block3         geng1         geng2
 (Intercept)   0.2508333 -1.000000e-01 -1.000000e-01 -1.508333e-01 -1.508333e-01
-block2       -0.1000000  2.000000e-01  1.000000e-01  4.890795e-17  4.890795e-17
-block3       -0.1000000  1.000000e-01  2.000000e-01  4.890795e-17  4.890795e-17
-geng1        -0.1508333  4.890795e-17  4.890795e-17  2.327338e-01  1.235332e-01
-geng2        -0.1508333  4.890795e-17  4.890795e-17  1.235332e-01  2.327338e-01
-geng3        -0.1508333  4.890795e-17  4.890795e-17  1.235332e-01  1.235332e-01
-geng4        -0.1508333  4.890795e-17  4.890795e-17  1.235332e-01  1.235332e-01
+block2       -0.1000000  2.000000e-01  1.000000e-01 -8.038015e-17 -8.038015e-17
+block3       -0.1000000  1.000000e-01  2.000000e-01 -8.038015e-17 -8.038015e-17
+geng1        -0.1508333 -8.038015e-17 -8.038015e-17  2.327338e-01  1.235332e-01
+geng2        -0.1508333 -8.038015e-17 -8.038015e-17  1.235332e-01  2.327338e-01
+geng3        -0.1508333 -8.038015e-17 -8.038015e-17  1.235332e-01  1.235332e-01
+geng4        -0.1508333 -8.038015e-17 -8.038015e-17  1.235332e-01  1.235332e-01
                     geng3         geng4
 (Intercept) -1.508333e-01 -1.508333e-01
-block2       4.890795e-17  4.890795e-17
-block3       4.890795e-17  4.890795e-17
+block2      -8.038015e-17 -8.038015e-17
+block3      -8.038015e-17 -8.038015e-17
 geng1        1.235332e-01  1.235332e-01
 geng2        1.235332e-01  1.235332e-01
 geng3        2.327338e-01  1.235332e-01
@@ -738,6 +744,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -848,6 +856,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
@@ -1073,6 +1082,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../pages/99_404.html" class="pagination-link" aria-label="Other software">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Other software</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../about.html" class="pagination-link" aria-label="About">
+        <span class="nav-page-text">About</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

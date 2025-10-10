@@ -44,6 +44,8 @@ website:
           - href: pages/03_LMM.html
             text: Mixed models
           - href: pages/99_404.html
+            text: Predict LMM
+          - href: pages/99_404.html
             text: Heritability
           - href: pages/99_404.html
             text: Outliers LMM
