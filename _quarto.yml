@@ -41,8 +41,8 @@ website:
             text: Other software
       - section: "Starting LMM"
         contents:
-          - href: pages/99_404.html
-            text: Mixed model equations
+          - href: pages/03_LMM.html
+            text: Mixed models
           - href: pages/99_404.html
             text: Heritability
           - href: pages/99_404.html
