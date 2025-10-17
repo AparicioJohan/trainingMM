@@ -69,12 +69,34 @@ ans <- C_inv %*% rhs
 ans
 
 # Betas
-betas <- solve(t(X) %*% solve(V) %*% X) %*% t(X) %*% solve(V) %*% y
-u <- G %*% t(Z) %*% solve(V) %*% (y - X %*% betas)
+V_inv <- solve(V)
+betas <- solve(t(X) %*% V_inv %*% X) %*% t(X) %*% V_inv %*% y
+u <- G %*% t(Z) %*% V_inv %*% (y - X %*% betas)
 rownames(u) <- colnames(Z)
 
+cond_var <- G - G %*% t(Z) %*% V_inv %*% Z %*% G
+cond_var
 
-# stop --------------------------------------------------------------------
+# Due to not know beta we have
+P <- V_inv - V_inv %*% X %*% (solve(t(X) %*% V_inv %*% X)) %*% t(X) %*% V_inv
+P
+
+# Blups
+G %*% t(Z) %*% P %*% y
+
+# Marginal variance V(u_hat)
+G %*% t(Z) %*% P %*% V %*% P %*% Z %*% G
+
+# Variance of differences V(u - u_hat)
+G - G %*% t(Z) %*% P %*% Z %*% G
+
+# v(u-u_hat) = C_22-
+C_inv[4:7, 4:7]
+
+# v(u_hat) = G - C_22-
+G - C_inv[4:7, 4:7]
+
+# -------------------------------------------------------------------------
 
 # Variance of the mean
 # v(y.) = var_g + var_e/r
@@ -83,6 +105,23 @@ rownames(u) <- colnames(Z)
 gen_levels <- colnames(Z)
 C22_g <- C_inv[gen_levels, gen_levels]
 C22_g
+
+# test
+new_C22_g <- C22_g
+new_C22_g[upper.tri(new_C22_g)] <- NA
+new_mat <- matrix(data = NA, nrow = 4, ncol = 4)
+for (i in 1:4) {
+  for (j in 1:4) {
+    new_mat[i, j] <- C22_g[i, i] - C22_g[i, j]
+  }
+}
+new_mat[upper.tri(new_mat, diag = TRUE)] <- NA
+mean(new_mat, na.rm = TRUE)
+
+mod_asr <- asreml(fixed = yield ~ block, random = ~gen, data = data, trace = FALSE)
+predict(mod_asr, classify = "gen", sed = TRUE)$sed^2
+
+# -------------------------------------------------------------------------
 
 # PEV
 pev <- diag(C22_g)
@@ -147,3 +186,8 @@ H2reg # 0.8190045
 mm <- lmer(formula = yield ~ 1 + block + (1 | gen), data = data)
 as.data.frame(VarCorr(mm))
 summary(mm)
+
+aveped <- mean(attr(ranef(mm, drop = TRUE)[["gen"]], "postVar"))
+vc.g <- var_g
+H2Cullis <- ifelse(vc.g == 0, 0, 1 - aveped / vc.g)
+H2Cullis
