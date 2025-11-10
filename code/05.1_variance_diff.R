@@ -88,7 +88,9 @@ L %*% C_inv[1:4, 1:4] %*% t(L) |>
 
 mm <- lmer(formula = yield ~ 1 + block + (1 | gen), data = data)
 ranef(mm)
+as.data.frame(ranef(mm, condVar = TRUE))
 emmeans(mm, ~block)
+
 
 # -------------------------------------------------------------------------
 # Variance of difference between two blups --------------------------------

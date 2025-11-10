@@ -74,6 +74,7 @@ betas <- solve(t(X) %*% V_inv %*% X) %*% t(X) %*% V_inv %*% y
 u <- G %*% t(Z) %*% V_inv %*% (y - X %*% betas)
 rownames(u) <- colnames(Z)
 
+# Same from ranef in lme4
 cond_var <- G - G %*% t(Z) %*% V_inv %*% Z %*% G
 cond_var
 
@@ -84,17 +85,32 @@ P
 # Blups
 G %*% t(Z) %*% P %*% y
 
-# Marginal variance V(u_hat)
+# Marginal variance V(u_hat) = G - C_22-
 G %*% t(Z) %*% P %*% V %*% P %*% Z %*% G
+
+# v(u_hat) = G - C_22-
+G - C_inv[4:7, 4:7]
 
 # Variance of differences V(u - u_hat)
 G - G %*% t(Z) %*% P %*% Z %*% G
 
-# v(u-u_hat) = C_22-
+# V(u - u_hat) = C_22-
 C_inv[4:7, 4:7]
 
-# v(u_hat) = G - C_22-
-G - C_inv[4:7, 4:7]
+# lme4breeding ------------------------------------------------------------
+
+# library(lme4breeding)
+# ans1 <- lmebreed(formula = yield ~ 1 + block + (1 | gen), data = data)
+# attr(ranef(ans1), "condVarMat") |> as.matrix() |> round(5)
+# round(C_inv, 5)
+#
+# attr(ans1, "class") <- "lmerMod"
+# emmeans(ans1)
+#
+# ans1 <- lmebreed(formula = yield ~ 1 + block + (1 | gen), data = data)
+# attr(ans1, "class") <- c(class(ans1), "lmerMod")
+# emmeans(ans1, ~ block)
+# emmeans(ans1, pairwise ~ block)
 
 # -------------------------------------------------------------------------
 
@@ -106,21 +122,26 @@ gen_levels <- colnames(Z)
 C22_g <- C_inv[gen_levels, gen_levels]
 C22_g
 
-# test
-new_C22_g <- C22_g
-new_C22_g[upper.tri(new_C22_g)] <- NA
-new_mat <- matrix(data = NA, nrow = 4, ncol = 4)
-for (i in 1:4) {
-  for (j in 1:4) {
-    new_mat[i, j] <- C22_g[i, i] - C22_g[i, j]
-  }
+vd_BLUP_mat <- function(C) {
+  d <- diag(C)
+  vd <- outer(d, d, "+") - 2 * C
+  vd[vd < 0 & abs(vd) < 1e-12] <- 0
+  diag(vd) <- NA
+  return(vd)
 }
-new_mat[upper.tri(new_mat, diag = TRUE)] <- NA
-mean(new_mat, na.rm = TRUE)
+
+var_diff_mat <- vd_BLUP_mat(C22_g)
+var_diff_mat
 
 mod_asr <- asreml(fixed = yield ~ block, random = ~gen, data = data, trace = FALSE)
 predict(mod_asr, classify = "gen", sed = TRUE)$sed^2
 
+# -------------------------------------------------------------------------
+Dhat  <- diag(1 / sqrt(diag(G - C22_g)))
+Du    <- diag(1 / sqrt(diag(G)))
+R12 <- Dhat %*% (G - C22_g) %*% Du                   # cross corr BLUP vs true
+R12
+diag(R12)^2
 # -------------------------------------------------------------------------
 
 # PEV
@@ -135,6 +156,7 @@ sqrt(diag(var_blup))
 # Reliability var(u_hat) / var(u) = "(G - C22) / G"
 reliability <- 1 - pev / var_g
 reliability
+mean(reliability)
 
 # Standard heritability
 H2stand <- var_g / (var_g + var_e / n_blks)
@@ -153,7 +175,13 @@ round(eD$values, 4)
 H2Oakey <- sum(eD$values) / (n_gens - 1)
 H2Oakey # 0.8190045
 
+# Oakey approx
+H2Oakey_appr <- sum(eD$values) / n_gens
+H2Oakey_appr <- sum(diag(D)) / n_gens
+H2Oakey_appr # 0.6142534
+
 # Effective dimensions trace(D) / (ng - 1)
+sum(diag(D)) / (n_gens - 1)
 sum(diag(D)) / (n_gens - 1)
 
 # Piepho heritability
