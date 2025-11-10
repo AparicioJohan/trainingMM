@@ -1,0 +1,623 @@
+---
+title: "Parametrizations"
+date: "last-modified"
+echo: true 
+warning: false 
+message: false
+---
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+library(dplyr)
+library(knitr)
+library(kableExtra)
+```
+
+
+Let's assume the following model
+
+$$
+y = \mu + Zu + Zd + \varepsilon
+$$
+
+Consider now the genetic value of a genotype for one locus 
+
+```{r}
+#| echo: FALSE
+data.frame(
+  Genotype = c('$A_1A_1$', '$A_1A_2$', '$A_2A_2$'),
+  Frequency = c('$q^2$', '$2pq$', '$p^2$'),
+  Value = c('$- a$', '$d$', '$a$'),
+  u = c('$2q\\alpha$', '$(q - p)\\alpha$', '$-2p\\alpha$')
+) |> 
+  kbl(caption = 'Genotypic Values For a Loxus', format = "pipe") |> 
+  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+```
+
+Then, the genotypic values can be expressed as 
+
+$$
+G_{A_1, A_1} = -a
+$$
+$$
+G_{A_1, A_2} = d 
+$$
+$$
+G_{A_2, A_2} = a
+$$
+
+Then, the genetic mean of the population under HWE equals
+
+$$
+\begin{align*}
+\mu_G &= \sum (\text{value} \times \text{frequency}) = \\
+     &= P_{A_1, A_1}G_{A_1, A_1} + P_{A_1, A_2}G_{A_1, A_2} + P_{A_2, A_2}G_{A_2, A_2}\\
+     &= p^2(-a) + 2pq(d) + q^2(a) \\
+     &= a(p^2 - q^2) + 2pqd \\
+     &= a((p - q)(p + q)) + 2pqd \\
+     &= a(p - q) + 2pqd
+\end{align*} \\
+$$
+
+
+# 1) Breeding Parametrization
+
+Under the Breeding Parametrization 
+
+$$
+G = \mu_G + u + v
+$$
+
+## Breeding Values ($u$)
+
+Where $u$ is the Breeding Value and $v$ is the dominance deviation. The $u$ of an 
+individual is defined as a function of the additive substitution effect $\alpha$. 
+This parameter is computed as the difference of the alleles substitution 
+effects, which represent the mean deviation from the population mean of those individuals which received this particular allele from one parent and the
+second allele at random from the population. Therefore
+
+$$
+\alpha_A = \mu_A - \mu
+$$
+$$
+\alpha_a = \mu_a - \mu 
+$$
+
+Consider the average effect of Allele $A$
+
+```{r}
+#| echo: FALSE
+data.frame(
+  'Allele from other Parent' = c('A', 'a'),
+  Probability = c('$p$', '$q$'),
+  Genotype = c('$Aa$', '$aa$'),
+  Value = c('$a$', '$d$')
+) |> 
+  kbl(caption = 'Genotypic Values For a Loxus') |> 
+  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+```
+
+And the average effect of Allele $a$
+
+```{r}
+#| echo: FALSE
+data.frame(
+  'Allele from other Parent' = c('A', 'a'),
+  Probability = c('$p$', '$q$'),
+  Genotype = c('$Aa$', '$aa$'),
+  Value = c('$d$', '$-a$')
+) |> 
+  kbl(caption = 'Genotypic Values For a Loxus') |> 
+  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+```
+
+Then
+
+
+$$
+\mu_A = dp + dq 
+$$
+$$
+\mu_a = dp - aq
+$$
+
+Thus
+
+$$
+\begin{align*}
+\alpha_A &= ap + dq - (a(p - q) + 2pqd) \\
+         &= ap + dq - ap + aq - 2pqd \\
+         &= q(a - 2pd + d) \\
+         &= q(a + d(-2p + 1)) \\
+         &= q(a + d(-2p + p + q)) \\
+         &= q(a + d(q - p))
+\end{align*}
+$$
+
+$$
+\begin{align*}
+\alpha_a &= ap + dq - (a(p - q) + 2pqd) \\
+         &= dp - aq - ap + aq - 2pqd \\
+         &= p(-a + d(-2q + 1)) \\
+         &= -p(a + d(2q - (p + q))) \\
+         &= -p(a + d(q - p))
+\end{align*}
+$$
+
+Now we can solve 
+
+$$
+\begin{align*}
+\alpha &= q(a + d(q - p)) - (-p(a - d(q + p)))\\
+       &= a + d(q - p)
+\end{align*}
+$$
+
+We can also express the allele substitution effects of each allele in terms of $\alpha$
+
+$$
+\alpha_A = q(a + d(q - p)) = q\alpha 
+$$
+$$
+\alpha_a = -p(a + d(q - p)) = -p\alpha
+$$
+
+Thus, for a single locus with two alleles 
+
+$$
+\mathbf{u} =
+\begin{cases}
+    (2 - 2p)\alpha = 2q\alpha\\
+    (1 - 2p)\alpha = (q - p)\alpha\\
+    (0 - 2p)\alpha = -2p\alpha
+\end{cases}
+$$
+
+So, the breeding values of a set of individuals is $\mathbf{u} = \mathbf{Z}\alpha = \mathbf{Z}a + \mathbf{Z}(q - p)d$ 
+where $\mathbf{Z}$ is the centered marker matrix
+
+$$
+\mathbf{Z} = 
+\begin{cases}
+    2q, & \text{for } A_1A_1\\
+    q - p, & \text{for } A_1A_2\\
+    -2p, & \text{for } A_2A_2
+\end{cases}
+$$
+
+
+## Dominance Deviations ($\operatorname{v}$)
+
+Alternatively, the dominance deviations can be computed as the difference between the actual genotypic value and the genotypic value predicted from
+the sum of the average effects 
+
+$$
+\begin{align*}
+G_{ij} &= \mu_G + \alpha_i + \alpha_j + v{ij} \\
+\hat{G}_{ij} &= \mu_G + \alpha_i + \alpha_j \\
+v_{ij} &= G_{ij} - \hat{G}_{ij} \\
+             &= G_{ij} - (\mu_G + \alpha_i + \alpha_j) \\
+             &= G_{ij} - \mu_G - u_{ij}
+\end{align*}
+$$
+So, assuming that
+
+```{r}
+#| echo: FALSE
+data.frame(
+  Genotypes = c('aa', 'Aa', 'AA'),
+  Frequency = c('q^2', '2pq', 'p^2'),
+  Value = c('m - a', 'm + d', 'm + a'),
+  u = c('$2q\\alpha$', '$(q - p)\\alpha$', '$-2p\\alpha$')
+) |> 
+  kbl(caption = 'Genotypic Values For a Loxus') |> 
+  kable_styling(bootstrap_options = "striped", full_width = TRUE)
+```
+
+We can solve that
+
+$$
+\begin{align*}
+v_{A_1, A_1}
+&= a - \big(a(p-q) + 2pq d\big) -2q\alpha \\
+&= a -ap + aq -2pqd -2q(a+ d(q-p))\\
+&= a -ap + aq -2pqd -2aq -2q^2d + 2pqd \\
+&= a - ap -aq -2q^2d \\
+&= -2q^2d
+\end{align*}
+$$
+
+
+$$
+\begin{align*}
+v_{A_1, A_2}
+&= d - \big(a(p-q) + 2pq d\big) - (q-p)\big(a + d(q-p)\big) \\
+&= d - a(p-q) - 2pq d - (q-p)a - d(q-p)^2 \\
+&= d - 2pq d - d(q-p)^2 \\
+&= d(1 - 2pq - (q-p)^2) \\
+&= d\big(1 - p^2 - q^2\big) \\
+&= d(2pq) \\
+&= 2pq\,d
+\end{align*}
+$$
+
+
+$$
+\begin{align*}
+v_{A_2, A_2} &= -a - (a(p - q) + 2pqd) - (-2p\alpha) \\
+    &= -a -ap + aq - 2pqd + 2p(a + d(q - p )) \\
+    &= -a -ap + aq - 2pqd + 2pa + 2pdq - 2p^2d \\
+    &= -a + aq + pa - 2p^2d \\
+    &= -a + a(p + q) - 2p^2d \\
+    &= - 2p^2d \\
+\end{align*}
+$$
+
+Then
+
+$$
+\mathbf{v} =
+\begin{cases}
+    -2q^2d\\
+    2pqd\\
+    - 2p^2d
+\end{cases}
+$$
+
+In summary, $\mathbf{v} = \mathbf{W}d$, where $W$ is the centered marker matrix
+
+$$
+W =
+\begin{cases}
+    -2q^2,  & \text{for } A_1A_1\\\\
+    2pq,  & \text{for } A_1A_2\\\\
+    - 2p^2,  & \text{for } A_2A_2\\
+\end{cases}
+$$
+
+
+
+
+Besides that, it is important to note that
+
+$$
+\begin{align*}
+E(u) &= p^2(2q\alpha) + 2pq(q-p)\alpha + q^2(-2p\alpha) \\
+  &= 2p^2q\alpha + 2pq^2\alpha - 2p^2q\alpha -2pq^2\alpha \\
+  &= 0
+\end{align*}
+$$
+
+$$
+\begin{align*}
+E(v) &= p^2(-2q^2d) + 2pq2pqd + q^2(-2p^2d) \\
+  &= -2p^2q^2d + 4p^2q^2d -2p^2q^2d\\
+  &= 0
+\end{align*}
+$$
+
+Therefore, we can described genetic variance as
+
+$$
+\operatorname{var}(G) = \operatorname{var}(A) + \operatorname{var}(D)  
+$$
+$$
+\begin{align*}
+\operatorname{var}(A) &= \operatorname{var}(u) = E[(u−E(u))^2]=E(u^2)− \cancel{[E(u)]^2} \\
+  &= p^2(2q\alpha)^2 + 2pq((q-p)\alpha)^2 + q^2(-2p\alpha)^2\\
+  &= 4p^2q^2\alpha^2 + 2pq(q-p)^2\alpha^2 +4 p^2q^2\alpha^2 \\
+  &= 2pq\alpha^2(2pq + (q-p)^2 + 2pq) \\
+  &= 2pq\alpha^2(2pq + p^2 + q^2 -2pq + 2pq) \\
+  &= 2pq\alpha^2(p^2 + q^2 + 2pq) \\
+  &= 2pq\alpha^2 = 2pq[a + d(1-p)]^2
+\end{align*}
+$$
+
+$$
+\begin{align*}
+\operatorname{var}(D) &= \operatorname{var}(v) = E[(v−E(v))^2]=E(v^2)−\cancel{[E(v)]^2} \\
+  &= p^2(-2q^2d)^2 + 2pq(2pqd)^2 + q^2(-2p^2d) ^2 \\
+  &= 4p^2q^4d^2 + 8p^3q^3d^2 + 4p^4q^2d^2 \\
+  &= 4p^2q^2d^2(q^2 + 2pq + p^2) \\
+  &= 4p^2q^2d^2 = (2pqd)^2
+\end{align*}
+$$
+
+Therefore
+
+$$
+\operatorname{var}(G) = 2pq[a + d(1-p)]^2 + (2pqd)^2
+$$
+
+As you can see, this parametrization assumes that there is no covariance between 
+the additive and dominance, that is, that they are independent. Besides that, 
+if we assume that $a \sim N(0, \sigma^2_a)$ and $d \sim N(0, \sigma^2_d)$, then
+
+
+$$
+\begin{align*}
+\operatorname{cov}(\mathbf{u}) &= \operatorname{var}(\mathbf{Z}\alpha) \\
+  &= \operatorname{var}(\mathbf{Z}(\mathbf{a} + \mathbf{d}(p-q))) \\
+  &= \mathbf{ZZ'}\operatorname{var}(\mathbf{a}) + \mathbf{ZZ'}(p-q)^2\operatorname{var}(\mathbf{d}) \\
+  &=  \mathbf{ZZ'}\sigma^2_a + \mathbf{ZZ'}(p-q)^2\sigma^2_d
+\end{align*}
+$$
+
+Taking into account that
+
+$$
+\begin{aligned}
+\sigma_A^2 &= \operatorname{Var}(\mathbf{u})
+= E\big[(\mathbf{Z} a + \mathbf{Z}(q - p)d)^2\big] \\
+&= E[\mathbf{Z}^2]\,E[\mathbf{a}^2] + 2(q - p)E[\mathbf{Z}^2]\,E[\mathbf{a} \mathbf{d}] + (q - p)^2 E[\mathbf{Z}^2]\,E[\mathbf{d}^2] \\
+&= E[\mathbf{Z}^2]\big(\sigma_a^2 + (q - p)^2\sigma_d^2\big) \\
+\end{aligned}
+$$
+
+And given that
+
+$$
+\begin{align*}
+E[\mathbf{Z}^2] &= p^2(2q)^2 + 2pq(q - p)^2 + q^2(2p)^2 \\[6pt]
+&= 4p^2q^2 + 2pq(q^2 - 2pq + p^2) + 4p^2q^2 \\[6pt]
+&= 8p^2q^2 + 2pq(p^2 + q^2 - 2pq) \\[6pt]
+&= 2pq(p^2 + q^2 + 4pq - 2pq) = 2pq \\[6pt]
+\end{align*}
+$$
+
+We can solve 
+
+$$
+\sigma_A^2 = 2pq\big(\sigma_a^2 + (q - p)^2\sigma_d^2\big) ;\\
+\frac{\sigma_A^2}{2pq} = (\sigma_a^2 + (q - p)^2\sigma_d^2\big)
+$$
+
+So that finally 
+
+$$
+\begin{align*}
+\operatorname{cov}(\mathbf{u}) 
+&= \mathbf{ZZ'} \big(\sigma_a^2 + (p-q)^2 \sigma_d^2\big) \\
+&= \mathbf{ZZ'} \frac{\sigma_A^2}{2pq} \\
+&= \frac{\mathbf{ZZ'}}{2pq} \, \sigma_A^2 \\
+&= \mathbf{G} \, \sigma_A^2
+\end{align*}
+$$
+
+A similar Derivation can be made for dominance
+
+$$
+\operatorname{\sigma^2_D} = (2pq)^2\sigma^2_d
+$$
+
+$$
+\begin{align*}
+\operatorname{cov}(\mathbf{v}) 
+&= \operatorname{var}(\mathbf{W}\mathbf{d}) \\
+&= \mathbf{WW'} \, \sigma_d^2 \\
+&= \frac{\mathbf{WW'}}{(2pq)^2} \, \sigma_D^2 \\
+&= \mathbf{D} \, \sigma_D^2
+\end{align*}
+$$
+
+# 2) Genotypic Parametrization
+
+Another alternative is to define the genotypic value as
+
+$$
+G = E(G) + u^* + v^*
+$$
+
+Where $u^*$ and $v^*$ are no longer the breeding values and dominance deviations
+but pure additive and pure additive values. Therefore
+
+$$
+u^*_{A_1, A_1} = 2qa \\
+$$
+$$
+u^*_{A_1, A_2} = (q-p)a \\
+$$
+$$
+u^*_{A_2, A_2} = -2pa
+$$
+
+Which equals the $Z$ matrix as in the Breeding parametrization. And the pure 
+dominance values are derived then as
+
+$$
+\begin{align*}
+v^*_{A_1A_1}
+&= a - \big(a(p-q) + 2pq d\big) -2qa \\
+&= a - ap + aq -2pqd -2qa \\
+&= a -ap -2pqd -qa \\
+&= a -a(p + 1) -2pqd \\
+&= -2pqd
+\end{align*}
+$$
+
+$$
+\begin{align*}
+v^*_{A_1A_2}
+&= d - \big(a(p-q) + 2pq d\big) -(q-p)a) \\
+&= d -ap + aq -2pqd -aq + ap \\
+&= d(1 -2pq)
+\end{align*}
+$$
+
+$$
+\begin{align*}
+v^*_{A_2A_2}
+&= -a - \big(a(p-q) + 2pq d\big) + 2pa \\
+&= -a -ap + aq -2pqd + 2pa \\
+&= -a + a(p + q) -2pqd \\
+&= -2pqd
+\end{align*}
+$$
+
+So that $\mathbf{v} = \mathbf{H}d$ where 
+
+$$
+\mathbf{H} =
+\begin{cases}
+    -2pqd,  & \text{for } A_1A_1\\\\
+    (1 -2pq)d,  & \text{for } A_1A_2\\\\
+    -2pqd,  & \text{for } A_2A_2\\
+\end{cases}
+$$
+
+And therefore $H \neq W$. Besides that,
+
+$$
+\begin{align*}
+E(u^*) &= p^2(2qa) + 2pq(q-p)a + q(-2pa) \\
+  &= 2p^2qa + 2pq^2a - 2p^2qa -2pq^2a\\
+  &= 0\\
+\end{align*}
+$$
+
+$$
+\begin{align*}
+E(u^*) &= p^2(-2pqd) + 2pq((1-2pq)d) + q(-2pqd) \\
+  &= -2p^2qd + 2pqd - 4p^2q^2d -2pq^2d\\
+  &= 2pqd(-p^2 + 1 - 2pq - q^2)\\
+  &= 2pqd(-1 + 1) = 0
+\end{align*}
+$$
+
+$$
+\begin{align*}
+Var(A^*) = \sigma^2_{A^*} &= E(u^{*2}) + \cancel{E(u^*)^2} \\
+    &= p^2(2qa)^2 + 2pq((q-p)a)^2 + q^2(-2pa)^2 \\
+    &= 4p^2q^2a^2 + 2pq(q-p)^2a^2 + 4p^2q^2a^2 \\
+    &= 2pqa^2(2pq + (q-p)^2 + 2pq) \\
+    &= 2pqa^2(q^2 + p^2 +2pq)\\
+    &= 2pqa^2
+\end{align*}
+$$
+$$
+\begin{align*}
+Var(D^*) = \sigma^2_{D^*} &= E(v^{*2}) + \cancel{E(v^*)^2} \\
+&= p^2\big(-2pq\,d)^2 \;+\; 2pq((1-2pq)\,d)^2 \;+\; q^2(-2pq\,d)^2 \\
+&= d^2[ p^2( -2pq )^2 \;+\; 2pq(1-2pq)^2 \;+\; q^2( -2pq )^2\\
+&= d^2[ 4p^4q^2 \;+\; 2pq(1 - 4pq + 4p^2q^2) \;+\; 4p^2q^4] \\
+&= d^2[ 4p^2q^2(p^2+q^2) \;+\; 2pq(1 - 4pq + 4p^2q^2)] \\
+&= 2pq[ 2pq(p^2+q^2) \;+\; (1 - 4pq + 4p^2q^2)]d^2\\
+&= 2pq[ 2pq(1-2pq) \;+\; 1 - 4pq + 4p^2q^2 ] d^2\\
+&= 2pq[ (2pq - 4p^2q^2) \;+\; (1 - 4pq + 4p^2q^2)d^2]d^2 \\
+&= 2pq[ 1 - 2pq ]d^2 \\
+\end{align*}
+$$
+
+Therefore 
+
+$$
+\begin{align*}
+\operatorname{cov}(\mathbf{u^*}) &= \mathbf{ZZ'}\sigma^2_{a} \\
+  &=  \frac{\mathbf{ZZ'}}{2pq}\sigma^2_{A^*} \\
+  &= \mathbf{G}\sigma^2_{A^*}
+\end{align*}
+$$
+
+Which equals $\operatorname{cov}(\mathbf{u})$. However
+
+$$
+\begin{align*}
+\operatorname{cov}(\mathbf{v^*}) &= \mathbf{HH'}\sigma^2_{d} \\
+  &=  \frac{\mathbf{HH'}}{2pq(1 - 2pq)}\sigma^2_{D^*} \\
+  &= \mathbf{D^*}\sigma^2_{D^*}
+\end{align*}
+$$
+
+Notice that $\mathbf{D^*} \neq \mathbf{D}$. Therefore, the breeding (or classical) and the genotypic models are equivalent models to explain the data (y) but
+their interpretation must be different. Let's show the differences for the Dominance 
+Covariance Matrix as explained in [Vitezica et al, 2013](https://academic.oup.com/genetics/article/195/4/1223/5935377?login=false). 
+
+Imagine $p = 0.7$ and $\sigma^2_d = 1$ and three individuals with the three possible
+genotypes
+
+$$
+W = \begin{bmatrix}
+-2q^2 \\ 2pq \\ -2p^2
+\end{bmatrix} = \begin{bmatrix}
+-0.18 \\ 0.42 \\ -0.98
+\end{bmatrix} 
+$$
+
+
+$$
+\operatorname{cov}(\mathbf{v}) 
+= \frac{\mathbf{WW'}}{\cancel{(2pq)^2}} \cancel{\sigma_D^2}
+=
+\begin{bmatrix}
+0.03 & -0.08 & 0.18 \\
+-0.08 & 0.18 & -0.41 \\
+0.18 & -0.41 & 0.96
+\end{bmatrix}
+$$
+
+
+On the other side
+
+$$
+H = \begin{bmatrix}
+-2pq \\ (1-2pq)d \\ -2pqd
+\end{bmatrix} = \begin{bmatrix}
+-0.42 \\ 0.58 \\ -0.42
+\end{bmatrix} 
+$$
+
+$$
+\operatorname{cov}(\mathbf{v^*}) 
+= \frac{\mathbf{HH'}}{\cancel{2pq(1-2pq)}} \cancel{\sigma_{D^*}^2}
+=
+\begin{bmatrix}
+0.18 & -0.24  & 0.18 \\
+-0.24 & 0.34 & -0.24 \\
+0.18 & -0.24  & 0.18
+\end{bmatrix}
+$$
+
+# 3) Correspondence
+
+Briefly, the additive and dominance variances for each model are
+
+$$
+\begin{align*}
+\sigma^2_A &= 2pq \, \sigma_a^2 + 2pq (q - p)^2 \, \sigma_d^2 \\ 
+\sigma^2_{A^*} &= 2pq \, \sigma_a^2 \\ 
+\sigma^2_D &= (2pq)^2 \, \sigma_d^2 \\ 
+\sigma^2_{D^*} &= 2pq (1 - 2pq) \, \sigma_d^2
+\end{align*}
+$$
+
+We can then demonstrate that 
+
+$$
+\begin{align*}
+\sigma^2_A + \sigma^2_D &= 2pq\sigma^2_a + 2pq(q-p)^2\sigma^2_d + (2pq)^2\sigma^2_d \\
+  &= 2pq\sigma^2_a + \sigma^2_d(2pq(q-p)^2 + (2pq)^2)\\
+  &= 2pq\sigma^2_a + \sigma^2_d(2pq(q^2 + q^2 -2pq) + 4p^2q^2) \\
+  &= 2pq\sigma^2_a + \sigma^2_d(2pq^3 + 2p^3q -4p^2q^2 + 4p^2q^2) \\
+  &= 2pq\sigma^2_a + \sigma^2_d(2pq(q^2 + p^3))\\
+  &= 2pq\sigma^2_a + \sigma^2_d(2pq(1-2pq)) \\
+  &= 2pq(\sigma^2_a + \sigma^2_d(1-2pq)
+\end{align*}
+$$
+
+$$
+\begin{align*}
+\sigma^2_{A^*} + \sigma^2_{D^*} &= 2pq \, \sigma_a^2 + 2pq (1 - 2pq) \, \sigma_d^2 \\
+  &= 2pq(\sigma^2_a + \sigma^2_d(1-2pq)
+\end{align*}
+$$
+
+Which means that $\sigma^2_A + \sigma^2_D = \sigma^2_{A^*} + \sigma^2_{D^*}$.
+Additionally, if $p = q = 0.5$
+
+$$
+\begin{align*}
+\sigma^2_A  &= 2pq\sigma^2_a + \cancel{2pq(q-p)^2\sigma^2_d} = 2p^2\sigma^2_a = \sigma^2_{A^*}
+\end{align*}
+$$
+
+This identities allow for conversion between parametrizations. 

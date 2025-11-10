@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2025-11-03">
 
-<title>Home – trainingMM</title>
+<title>Multivariate Normal Distributions – trainingMM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +24,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./pages/00_start_lm.html" rel="next">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../pages/06_Heritabilities.html" rel="next">
+<link href="../pages/03_LMM.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,6 +69,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -79,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Starting LMM</a></li><li class="breadcrumb-item"><a href="../pages/05_MVN.html">Multivariate Normal</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -94,7 +125,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">trainingMM</a> 
+      <a href="../">trainingMM</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/AparicioJohan/trainingMM" title="GitHub repository" class="quarto-navigation-tool px-1" aria-label="GitHub repository"><i class="bi bi-github"></i></a>
 </div>
@@ -109,7 +140,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
@@ -124,31 +155,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ANOVA and fixed effects</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/01_predict_LM.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/01_predict_LM.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Marginal means (SE)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/02_QR_decomp.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/02_QR_decomp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">QR decomposition in LM</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/04_covariates_LM.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/04_covariates_LM.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Covariates in LM</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other software</span></a>
   </div>
 </li>
@@ -165,25 +196,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/03_LMM.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/03_LMM.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Mixed models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/05_MVN.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/05_MVN.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Multivariate Normal</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/06_Heritabilities.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/06_Heritabilities.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Heritability</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Outliers LMM</span></a>
   </div>
 </li>
@@ -200,13 +231,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Breeding vs Genotypic</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Polyploids and Digenic Dominance</span></a>
   </div>
 </li>
@@ -223,19 +254,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Genotype-by-environment</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Factor analytic models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Two-stage analysis</span></a>
   </div>
 </li>
@@ -243,7 +274,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./about.html" class="sidebar-item-text sidebar-link">
+  <a href="../about.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">About</span></a>
   </div>
 </li>
@@ -257,9 +288,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">👋 Welcome</a>
+  <li><a href="#generalized-case" id="toc-generalized-case" class="nav-link active" data-scroll-target="#generalized-case">1) Generalized Case</a></li>
+  <li><a href="#implications-in-quantitative-genetics" id="toc-implications-in-quantitative-genetics" class="nav-link" data-scroll-target="#implications-in-quantitative-genetics">2) Implications in Quantitative Genetics</a>
   <ul class="collapse">
-  <li><a href="#what-to-expect" id="toc-what-to-expect" class="nav-link" data-scroll-target="#what-to-expect">What to Expect</a></li>
+  <li><a href="#conditional-mathbfeu-mid-y" id="toc-conditional-mathbfeu-mid-y" class="nav-link" data-scroll-target="#conditional-mathbfeu-mid-y">1) Conditional <span class="math inline">\(\mathbf{E[u \mid y]}\)</span></a></li>
+  <li><a href="#variance-of-mathbfhat-u" id="toc-variance-of-mathbfhat-u" class="nav-link" data-scroll-target="#variance-of-mathbfhat-u">1) Variance of <span class="math inline">\(\mathbf{\hat u}\)</span></a></li>
+  <li><a href="#mathbfcovhatu-u" id="toc-mathbfcovhatu-u" class="nav-link" data-scroll-target="#mathbfcovhatu-u">2) <span class="math inline">\(\mathbf{Cov(\hat{u}, u)}\)</span></a></li>
+  <li><a href="#mathbfvaru---hatu" id="toc-mathbfvaru---hatu" class="nav-link" data-scroll-target="#mathbfvaru---hatu">3) <span class="math inline">\(\mathbf{Var(u - \hat{u})}\)</span></a></li>
+  <li><a href="#conditional-mathbfhatu-u" id="toc-conditional-mathbfhatu-u" class="nav-link" data-scroll-target="#conditional-mathbfhatu-u">2) Conditional <span class="math inline">\(\mathbf{\hat{u}, u}\)</span></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -267,9 +303,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Starting LMM</a></li><li class="breadcrumb-item"><a href="../pages/05_MVN.html">Multivariate Normal</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Home</h1>
+<h1 class="title">Multivariate Normal Distributions</h1>
 </div>
 
 
@@ -277,6 +313,12 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 3, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -286,20 +328,234 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1">
-<h1>👋 Welcome</h1>
-<p>This webpage is <strong>under development</strong>.</p>
-<p>Our goal is to build a collection of resources that use <strong>R code</strong> and <strong>mathematical explanations</strong> to make concepts in statistical modeling easier to understand.</p>
-<p>We will begin with the basics of <strong>linear models</strong>, and progressively extend toward more advanced <strong>mixed models</strong>, which are widely applied in plant breeding, animal breeding, and many other fields.</p>
-<section id="what-to-expect" class="level2">
-<h2 class="anchored" data-anchor-id="what-to-expect">What to Expect</h2>
-<ul>
-<li><strong>Hands-on examples</strong>: R scripts that you can run and adapt.<br>
-</li>
-<li><strong>Step-by-step math</strong>: showing how model equations connect to code.<br>
-</li>
-<li><strong>Conceptual explanations</strong>: to make sense of linear models and linear mixed models.</li>
-</ul>
+<blockquote class="blockquote">
+<p>In probability theory and statistics, the multivariate normal distribution, multivariate Gaussian distribution, or joint normal distribution is a generalization of the one-dimensional (univariate) normal distribution to higher dimensions.</p>
+</blockquote>
+<section id="generalized-case" class="level2">
+<h2 class="anchored" data-anchor-id="generalized-case">1) Generalized Case</h2>
+<p>A Bivariate Normal Distribution follows the distribution:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\boldsymbol{a}\\
+\boldsymbol{b}
+\end{bmatrix} \sim
+MVN(
+  \mu_{ab},
+  \Sigma_{ab}
+),
+\text{where }
+\mu_{ab} = \begin{bmatrix}
+\boldsymbol{\mu_a}\\
+\boldsymbol{\mu_b}
+\end{bmatrix}
+\text{ and }
+\boldsymbol{\Sigma_{ab}} = \begin{bmatrix}
+\boldsymbol{\Sigma_{aa}}\ \boldsymbol{\Sigma_{ab}}\\
+\boldsymbol{\Sigma_{ba}}\ \boldsymbol{\Sigma_{bb}}\\
+\end{bmatrix}
+\]</span></p>
+<p>One interesting property of these kind of distribution is that allows us to compute the mean and the variance of the conditional distributions <span class="math inline">\(b \mid a\)</span> (or <span class="math inline">\(a \mid b\)</span>) as follows</p>
+<p><span class="math display">\[
+\mathbf{b}\mid\mathbf{a}\ \sim\
+N\left(
+  \underbrace{\boldsymbol{\mu}_b + \boldsymbol{\Sigma}_{ba}\,\boldsymbol{\Sigma}_{aa}^{-1}\,(\mathbf{a}-\boldsymbol{\mu}_a)}_{\,\mathbb{E}(\mathbf{b}\mid\mathbf{a})\,},
+  \underbrace{\boldsymbol{\Sigma}_{bb} - \boldsymbol{\Sigma}_{ba}\,\boldsymbol{\Sigma}_{aa}^{-1}\,\boldsymbol{\Sigma}_{ab}}_{\operatorname{Var}(\mathbf{b}\mid\mathbf{a})}
+\right).
+\]</span></p>
+<p>Therefore, if we focus solely on the conditional mean and variances</p>
+<p><span class="math display">\[
+E(b \mid a) = \mu_b + \Sigma_{ba}(\Sigma_{aa})^{-1}(a - \mu_a)
+\]</span></p>
+<p><span class="math display">\[
+var(b \mid a) = \Sigma_{bb} - \Sigma_{ab} (\Sigma_{aa})^{-1}\Sigma_{ba}
+\]</span></p>
+</section>
+<section id="implications-in-quantitative-genetics" class="level2">
+<h2 class="anchored" data-anchor-id="implications-in-quantitative-genetics">2) Implications in Quantitative Genetics</h2>
+<section id="conditional-mathbfeu-mid-y" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-mathbfeu-mid-y">1) Conditional <span class="math inline">\(\mathbf{E[u \mid y]}\)</span></h3>
+<p>Let’s illustrate this with our model where we fit a single variable (i.e, block) as fixed and another one (i.e, genotype) as random. Therefore:</p>
+<p><span class="math display">\[
+y = X\beta + Zu + \epsilon, \text{ where } u \sim N(0,\underbrace{I\sigma^2_u}_{G}) \text{ and } \epsilon\sim N(0, \underbrace{I\sigma^2_e}_{R})
+\]</span></p>
+<p>Therefore, we could write the Multivariate Normal distribution of <span class="math inline">\(y\)</span> and <span class="math inline">\(u\)</span> as follows.</p>
+<!-- $$ -->
+<!-- \begin{bmatrix} -->
+<!-- y\\ -->
+<!-- u -->
+<!-- \end{bmatrix} \sim -->
+<!-- MVN( -->
+<!-- \begin{bmatrix} -->
+<!-- E(y)\\ -->
+<!-- E(u) -->
+<!-- \end{bmatrix},  -->
+<!-- \begin{bmatrix} -->
+<!-- var(y) \ cov(y, u) \\ -->
+<!-- cov(u, y) \ var(u) \\ -->
+<!-- \end{bmatrix} -->
+<!-- ) -->
+<!-- $$ -->
+<!-- Remember that: -->
+<!-- -   $E[y] = X\beta$  -->
+<!-- -   $V(y) = V(X\beta + Zu + \epsilon) = var(Zu) + var(\epsilon ) = ZGZ' + R = V$ -->
+<p><!-- -   $E[u] = 0$ --> <!-- -   $V(u) = G$ --> <!-- -   $cov(u, y) = cov(u, XB + Zu + \epsilon) = cov(u, Zu) = cov(u, u)Z' = var(u)Z' = GZ'$ --> <!-- -   $cov(y, u) = cov(u, y)' = ZG$ --></p>
+<p><!-- Having this in mind we can write --></p>
+<p><span class="math display">\[
+\begin{bmatrix}
+y\\
+u
+\end{bmatrix} \sim
+MVN(
+  \begin{bmatrix}
+  X\beta\\
+  0
+  \end{bmatrix},
+  \begin{bmatrix}
+  V \ ZG \\
+  GZ'\ G \\
+\end{bmatrix}
+)
+\]</span></p>
+<p>Following the previous equations, the expected value of <span class="math inline">\(u\)</span> is</p>
+<p><span class="math display">\[
+\begin{align*}
+E[u \mid y]
+  &amp;= \mu_u + \Sigma_{uy}(\Sigma_{yy})^{-1}(y - \mu_y) \\
+  &amp;= GZ'V^{-1}(y - X\beta)
+\end{align*}
+\]</span></p>
+<p>Given that we don’t have the true <span class="math inline">\(\beta\)</span> but the estimated ones (<span class="math inline">\(\hat \beta\)</span>), then the expression for the estimator and predictors becomes</p>
+<p><span class="math display">\[
+\begin{align*}
+E[\hat u \mid y]
+  &amp;= GZ'V^{-1}(y - X\hat{\beta}) \\
+&amp;= GZ'V^{-1}\big(y - X(X'V^{-1}X)^{-1}X'V^{-1}y\big) \\
+  &amp;= GZ'V^{-1}\big(I - X(X'V^{-1}X)^{-1}X'V^{-1}\big)y \\
+                   &amp;= GZ'\big(V^{-1} - V^{-1}X(X'V^{-1}X)^{-1}X'V^{-1}\big)y \\
+  &amp;= GZ'Py \\
+&amp; \text{where }
+P = V^{-1} - V^{-1}X(X'V^{-1}X)^{-1}X'V^{-1}
+\end{align*}
+\]</span></p>
+<p>So, briefly</p>
+<p><span class="math display">\[
+BLUPs = \hat u = GZ'Py
+\]</span></p>
+<p>This BLUP definition is very useful to derive some variance and covariances that we might need in future chapters.</p>
+</section>
+<section id="variance-of-mathbfhat-u" class="level3">
+<h3 class="anchored" data-anchor-id="variance-of-mathbfhat-u">1) Variance of <span class="math inline">\(\mathbf{\hat u}\)</span></h3>
+<p><span class="math display">\[
+\begin{align*}
+\mathrm{var}(\hat u)
+  &amp;= var(GZ'Py) \\
+&amp;= GZ'Pvar(y)PZG \\
+  &amp;= GZ'PVPZG \\
+&amp;= GZ'PZG
+\end{align*}
+\]</span></p>
+<p>This is possible thanks to one of the many useful properties of <span class="math inline">\(P\)</span>, that fulfills that <span class="math inline">\(PVP = P\)</span></p>
+</section>
+<section id="mathbfcovhatu-u" class="level3">
+<h3 class="anchored" data-anchor-id="mathbfcovhatu-u">2) <span class="math inline">\(\mathbf{Cov(\hat{u}, u)}\)</span></h3>
+<p><span class="math display">\[
+\begin{align*}
+\mathrm{cov}(\hat u, u)
+  &amp;= cov(GZ'Py, u) \\
+&amp;= GZ'Pcov(y, u) \\
+  &amp;= GZ'PZG
+\end{align*}
+\]</span></p>
+<p>Interestingly</p>
+<p><span class="math display">\[
+  \begin{align*}
+\mathrm{cov}(u, \hat u)
+&amp;= cov(\hat u, u)' \\
+  &amp;= GZ'PZG
+\end{align*}
+\]</span></p>
+<p>Then <span class="math inline">\(\mathrm{cov}(u, \hat u) = \mathrm{cov}(\hat u, u)\)</span></p>
+</section>
+<section id="mathbfvaru---hatu" class="level3">
+<h3 class="anchored" data-anchor-id="mathbfvaru---hatu">3) <span class="math inline">\(\mathbf{Var(u - \hat{u})}\)</span></h3>
+<p>Following the properties of the variances</p>
+<p><span class="math display">\[
+\begin{align*}
+  \mathrm{var}(u - \hat{u})
+  &amp;= E\!\left[(u - \hat{u} - E(u - \hat{u}))(u - \hat{u} - E(u - \hat{u}))'\right] \\
+  &amp;= E\!\left[(u - \hat{u})(u - \hat{u})'\right] \\
+  &amp;= E(uu') - E(u\hat{u}') - E(\hat{u}u') + E(\hat{u}\hat{u}') \\
+  &amp;= \mathrm{var}(u) - \mathrm{cov}(u, \hat{u}) - \mathrm{cov}(\hat{u}, u) + \mathrm{var}(\hat{u})
+  \end{align*}
+\]</span></p>
+<p>Then, using the previously computed variances and covariances we can solve for</p>
+<p><span class="math display">\[
+\begin{align*}
+  \operatorname{var}(u - \hat{u})
+  &amp;= G - GZ'PZG - GZ'PGZ + GZ'PZG \\
+  &amp;= G - GZ'PZG
+\end{align*}
+\]</span></p>
+<p>Remember that this differences are represented in the so called Prediction Error Variance Matrix, so</p>
+<p><span class="math display">\[
+    C_{22} = PEV =  G - GZ'PZG
+\]</span></p>
+<p>This is helpful since now we can prove that the marginal variance <span class="math inline">\(var(\hat{u})\)</span> equals</p>
+<p><span class="math display">\[
+\begin{align*}
+\operatorname{var}(\hat{u})
+  &amp;= G - C_{22} \\
+  &amp;= G - (G - GZ'PZG) \\
+&amp;= GZ'PZG
+\end{align*}
+\]</span></p>
+</section>
+<section id="conditional-mathbfhatu-u" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-mathbfhatu-u">2) Conditional <span class="math inline">\(\mathbf{\hat{u}, u}\)</span></h3>
+<p>Starting from the joint distribution</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\hat{u} \\[4pt]
+u
+\end{bmatrix}
+\sim
+\text{MVN}\!\left(
+\begin{bmatrix}
+0 \\[4pt]
+0
+\end{bmatrix},
+\begin{bmatrix}
+GZ'PZG &amp; GZ'PZG \\[4pt]
+GZ'PZG &amp; G
+\end{bmatrix}
+\right)
+\]</span></p>
+<p>We can derive <span class="math inline">\(\mathrm{var}(u \mid \hat{u})\)</span> as</p>
+<p><span class="math display">\[
+\begin{align*}
+\mathrm{var}(u \mid \hat{u})
+&amp;= \Sigma_{uu} - \Sigma_{\hat{u}u} (\Sigma_{\hat{u}\hat{u}})^{-1}\Sigma_{u\hat{u}} \\
+&amp;= G - GZ'PZG(GZ'PZG)^{-1}GZ'PZG \\
+  &amp;= G - GZ'PZG
+\end{align*}
+\]</span></p>
+<p>We have just proved then that</p>
+<p><span class="math display">\[
+\mathrm{var}(u \mid \hat{u}) = \operatorname{var}(u - \hat{u})
+\]</span></p>
+<p>Besides that, if we solve for the mean of the conditional distribution, we get that</p>
+<p><span class="math display">\[
+\begin{align*}
+  E[u \mid \hat{u}]
+  &amp;= \mu_u + \Sigma_{u\hat{u}}(\Sigma_{\hat{u}\hat{u}})^{-1}(\hat{u} - \mu_\hat{u}) \\
+  &amp;= GZ'PZG(GZ'PZG)^{-1}(\hat{u}) \\
+&amp;= \hat{u}
+\end{align*}
+\]</span></p>
+<p>So that</p>
+<p><span class="math display">\[
+E[u \mid \hat{u}] = E[u \mid y] = \hat{u} = BLUP
+\]</span></p>
 
 
 </section>
@@ -725,10 +981,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../pages/03_LMM.html" class="pagination-link" aria-label="Mixed models">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Mixed models</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./pages/00_start_lm.html" class="pagination-link" aria-label="ANOVA and fixed effects">
-        <span class="nav-page-text">ANOVA and fixed effects</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../pages/06_Heritabilities.html" class="pagination-link" aria-label="Heritability">
+        <span class="nav-page-text">Heritability</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

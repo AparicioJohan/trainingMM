@@ -1,0 +1,236 @@
+---
+title: "Heritability"
+date: "last-modified"
+echo: true 
+warning: false 
+message: false
+---
+
+Heritability is a key concept in Quantitative Genetics and Plant Breeding. It has 
+been largely used for different purposes, such as estimating the response to selection, 
+estimate model accuracy or determine how difficult is to make progress for a trait. 
+Because of its relevance, many researchers have studied how to improve its estimation, 
+yielding multiple methods to do calculate this paremeter. In this chapter, we will cover some of the 
+these approaches and explain their differences and similarities. 
+
+
+# 1) Standard
+
+The easiest interpretation of the heritability defines it as the ratio 
+of genetic variance to phenotypic variance
+
+$$
+H^2 = \frac{\sigma^2_g}{\sigma^2_p}
+$$
+
+The issue with this approach is that, typically, when genotypes are tested in 
+Mutienvironmental Trials (MET) the purely environmental variance (i.e, the block effect)
+is not incorporated to the phenotypic variance, neglecting those effects in the 
+heritability calculation
+
+# 2) Cullis Heritability
+
+A different approach focuses on differences between genotypes as the source of heritability. The reasoning behind this is that rankings are uniquely determined by pairwise differences, making them more informative than individual genotypic effects. Heritability based on genotype differences can be calculated from a model by fitting the genotypes as either random effects or a combination of random and fixed effects. For simplicity, we will describe how to compute it using the first approach.
+
+The pairwise heritability can be defined as the squared correlation between the true difference and its predictor/estimator. To compute it, we will need to calculate the 
+covariance between the differences as well as their standard deviations
+
+$$
+H^2_{\Delta 12} =
+\left(
+\frac{\operatorname{cov}(u_1 - u_2, \hat{u}_1 - \hat{u}_2)}
+{\sqrt{\operatorname{var}(u_1 - u_2)} \, \sqrt{\operatorname{var}(\hat{u}_1 - \hat{u}_2)}} 
+\right)^2
+$$
+
+
+Assuming independence with constant variance, the variance of the 
+difference between the true values would be 
+
+$$
+\operatorname{var}(u_1 - u_2) = 2\sigma^2_g - \cancel{2\operatorname{cov}(u_1, u_2)} = 2\sigma^2_g
+$$
+
+
+To compute the variance of the estimated values we will use the marginal variance
+of $\hat{u}^{BLUP}$, which as wxplained in the previous chapter equals
+
+$$
+var(\hat{u}^{BLUP}) = G_{(g)} - C_{22(g)}
+$$
+
+Let's illustrate that $G - C_{22}$ matrix that contains the marginal variance of 
+each BLUP in the diagonals and the covariances between BLUPs in the off-diagonals. 
+
+$$
+\operatorname{var}(\hat{u}) =
+\underbrace{
+\begin{bmatrix}
+\sigma_g^2 & 0 & \cdots & 0 \\
+0 & \sigma_g^2 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \sigma_g^2
+\end{bmatrix}
+}_{G = I} - 
+\,
+\underbrace{
+\begin{bmatrix}
+\operatorname{var}(u_1 - \hat{u}_1) & \cdot & \cdots & \cdot \\
+\operatorname{cov}(u_1 - \hat{u}_1, u_2 - \hat{u}_2) & \operatorname{var}(u_2 - \hat{u}_2) & \cdots & \cdot \\
+\vdots & \vdots & \ddots & \vdots \\
+\operatorname{cov}(u_1 - \hat{u}_1, u_n - \hat{u}_n) & \operatorname{cov}(u_2 - \hat{u}_2, u_n - \hat{u}_n) & \cdots & \operatorname{var}(u_n - \hat{u}_n)
+\end{bmatrix}
+}_{C_{22}}
+$$
+
+When assuming independence between estimates, the off-diagonals in G equals 0, 
+as shown above, and thus $cov(\hat{u}^{BLUP}_1, \hat{u}^{BLUP}_2) = C_{22[1, 2]}$. 
+The variances and covariances would then be alculated as follows
+
+$$
+\begin{aligned}
+\operatorname{var}(\hat{u}_{1}) 
+&= G_{[1,1]} - C_{22[1,1]} 
+= \sigma_g^2 + \operatorname{var}(u_1 - \hat{u}_1) \\[6pt]
+\operatorname{cov}(\hat{u}_{1}, \hat{u}_{2}) 
+&= \cancel{G_{[1,2]}} - C_{22[1,2]} 
+= -\,\operatorname{cov}(u_1 - \hat{u}_1,\, u_2 - \hat{u}_2)
+\end{aligned}
+$$
+
+So, with this information we can now calculate the variance of the difference
+between two BLUPs, which under the assumption of independent genotypes would equal
+
+$$
+\begin{align*}
+\operatorname{var}(\hat{u}^{BLUP}_1 - \hat{u}^{BLUP}_2) 
+&= \operatorname{var}(\hat{u}^{BLUP}_1) + \operatorname{var}(\hat{u}^{BLUP}_2) - 2\operatorname{cov}(\hat{u}^{BLUP}_1, \hat{u}^{BLUP}_2)\\
+&= \sigma^2_g - \operatorname{var}(u_1 - \hat{u}_1) + \sigma^2_g - \operatorname{var}(u_2 - \hat{u}_2) + 2\operatorname{cov}(u_1 - \hat{u}_1, u_2 - \hat{u}_2) \\
+&= 2\sigma^2_g - (\operatorname{var}(u_1 - \hat{u}_1) + \operatorname{var}(u_2 - \hat{u}_2) - 2\operatorname{cov}(u_1 - \hat{u}_1, u_2 - \hat{u}_2)) \\
+&= 2\sigma^2_g - \operatorname{var}((u_1 - \hat{u}_1) - (u_1 - \hat{u}_1))\\
+&= 2\sigma^2_g - v^{BLUP}_{\Delta_{12}}
+\end{align*}
+$$
+
+The last component left is then to compute the covariance between differences
+
+$$
+\begin{align*}
+\operatorname{cov}(u_{1} - u_2, \hat{u}_1 - \hat{u}_2) 
+&= \operatorname{cov}(u_{1}, \hat{u}_1) - \operatorname{cov}(u_{1}, \hat{u}_2) - \operatorname{cov}(u_{2}, \hat{u}_1) + \operatorname{cov}(u_{2}, \hat{u}_2)\\
+&= (G-C_{22})_{[1,1]} - (G-C_{22})_{[1,2]} - (G-C_{22})_{[2,1]} + (G-C_{22})_{[2,2]} \\
+&= \sigma^2_g - C_{22[1,1]} + C_{22[1,2]} + C_{22[1,2]}  + \sigma^2_g - C_{22[2,2]} \\ 
+&= 2\sigma^2_g - v^{BLUP}_{\Delta_{12}}
+\end{align*}
+$$
+
+Finally, we can solve the Heritability as the square correlation of the differences 
+between the true values and the predictors 
+
+$$
+H^2_{{\Delta 12}_{BLUP}} =
+\left(
+\frac{\operatorname{cov}(u_1 - u_2, \hat{u}_1 - \hat{u}_2)}
+{\sqrt{\operatorname{var}(u_1 - u_2)} \, \sqrt{\operatorname{var}(\hat{u}_1 - \hat{u}_2)}} 
+\right)^2 = 
+\frac{(2\sigma_g^2 - v^{\text{BLUP}}_{\Delta_{12}})^2}
+{2\sigma_g^2 \left( 2\sigma_g^2 - v^{\text{BLUP}}_{\Delta_{12}} \right)}
+=
+\frac{2\sigma_g^2 - v^{\text{BLUP}}_{\Delta_{12}}}{2\sigma_g^2}
+$$
+
+This expression can be simplified to the Cullis Heritability [(Cullis et al, 2006)](https://link.springer.com/article/10.1198/108571106X154443), where
+$\overline v_{\Delta_{ii}}^{BLUP}$ represent the mean variance of a 
+difference of two BLUPs for the genotypic effects
+
+$$
+H^2_{Cullis} = 1 - \frac{\overline v_{\Delta_{ii}}^{BLUP}}{2\sigma^2_g}
+$$
+
+It is important to notice that this way to compute heritability only holds
+under the assumption that the genotypes are independent. Otherwise, a more
+generalized approach, as described by [(Schmidt et al, 2019)](https://academic.oup.com/genetics/article/212/4/991/5931331?login=true)
+should be used
+
+$$
+\begin{align*}
+H^2_{{\Delta 12}_{BLUP}} 
+&= \frac{\operatorname{var}(g_1 - g_2) - v^{BLUP}_{\Delta 12}}{\operatorname{var}(g_1 - g_2)}\\
+&= \frac{\sigma^2_{g(1,1)} + \sigma^2_{g(2,2)} - 2\sigma^2_{g(1,2)} -  v^{BLUP}_{\Delta 12}}{\sigma^2_{g(1,1)} + \sigma^2_{g(2,2)} - 2\sigma^2_{g(1,2)}}
+\end{align*}
+$$
+
+
+# 3) Oakey
+
+In this approach the contrast between the true and the predicted genotypic effects
+is defined as the square correlation of $c^Tg$ and $c^T\hat{g}^{BLUP}$, where 
+c represent any linear combination of genotypic effects where the elements of $c$ sum to 0. The variances and covariances needed to estimate that correlations are
+
+$$
+\operatorname{cov}(c^Tg, c^T\hat{g}^{BLUP}) = c^T\operatorname{cov}(g, \hat{g}^{BLUP})c = c^TGZ'PZGc
+$$
+
+$$
+\operatorname{var}(c^Tg) = c^T\operatorname{var}(g)c = c^TGc
+$$
+
+$$
+\operatorname{var}(c^T\hat{g}^{BLUP}) = c^T\operatorname{var}(\hat{g}^{BLUP})c = c^TGZ'PZGc
+$$
+
+Then we can compute Oakey's Heritability as
+
+$$
+\begin{align*}
+H^2_{c} 
+&= \left(
+  \frac{\operatorname{cov}(c^T g,\; c^T \hat{g}^{BLUP})}
+       {\sqrt{\operatorname{var}(c^T g)} \sqrt{\operatorname{var}(c^T \hat{g}^{BLUP})}}
+  \right)^{2} \\
+&= \frac{(c^T G Z' P Z G c)^2}{c^T G c \, (c^T G Z' P Z G c)} \\
+&= \frac{c^T G Z' P Z G c}{c^T G c} 
+\end{align*}
+$$
+
+The idea is to maximize $H^2_{c}$ subject to $c^T G c = 1$, using the 
+Lagrangian product $L_c = c^T G Z' P Z G c - \lambda(c^T G c - 1)$. In summary,
+the vector the maximizes $H^2_{c}$ is an eigenvector of $Z' P Z G$ with associated eigenvalue $\lambda$ ($\max\limits_{c} H^2_{c} = \lambda$). Therefore, 
+the full set of eigenvalues ($\lambda_1, \lambda_2, ..., \lambda_n$) characterizes
+the full heritability as follows, where $s$ represent the number of eigenvalues equals 0. 
+
+$$
+H^2_{Oakey} = \frac{\sum_{i = 1}^m \lambda_i}{m - s} 
+$$
+
+
+An interesting simplification is that, $Z' P Z G = I - G^{-1}C_{22} = D$. Following the properties of the trace, this $D$ matrix fulfills
+
+$$
+trace(D) = trace(Q\Lambda Q^{-T}) = trace(QQ^{-T}\Lambda) = trace(\Lambda) = \sum \lambda_i
+$$
+
+Briefly, the full Heritability can be approximated without the need of calculating the eigenvalues of the matrix. This is particularly useful
+for larger problems, although it ignores the possibility of zero eigenvalues. 
+
+$$
+H^2_{Approx} = 1 - \frac{\operatorname{tr}(G^{-1}C_{22})}{m}
+$$
+# 4) Reliability
+
+In the context of anial breeding, reliability is a popular stastistic expressing
+the squared corrrelation between predicted an true breeding value. For a particular entry, it can be computed as
+
+$$
+r^2_1 = 1 - \frac{\operatorname{var}(\hat{g}^{BLUP}_1)}{\operatorname{var}(g_1)}
+$$
+
+And thus, the mean reliability is computed as the average of the reliability 
+of the entire population 
+
+$$
+\bar{r}^2_. = \frac{1}{n_g}\sum_{i = 1}^{n_g}r^2_i 
+$$
+
+# 5) Simulated
+

@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2025-11-06">
 
-<title>Home – trainingMM</title>
+<title>Heritability – trainingMM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +24,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./pages/00_start_lm.html" rel="next">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../pages/08_Parametrizations.html" rel="next">
+<link href="../pages/05_MVN.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,6 +69,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -79,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Starting LMM</a></li><li class="breadcrumb-item"><a href="../pages/06_Heritabilities.html">Heritability</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -94,7 +125,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">trainingMM</a> 
+      <a href="../">trainingMM</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/AparicioJohan/trainingMM" title="GitHub repository" class="quarto-navigation-tool px-1" aria-label="GitHub repository"><i class="bi bi-github"></i></a>
 </div>
@@ -109,7 +140,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
@@ -124,31 +155,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/00_start_lm.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ANOVA and fixed effects</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/01_predict_LM.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/01_predict_LM.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Marginal means (SE)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/02_QR_decomp.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/02_QR_decomp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">QR decomposition in LM</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/04_covariates_LM.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/04_covariates_LM.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Covariates in LM</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other software</span></a>
   </div>
 </li>
@@ -165,25 +196,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/03_LMM.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/03_LMM.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Mixed models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/05_MVN.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/05_MVN.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Multivariate Normal</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/06_Heritabilities.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/06_Heritabilities.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Heritability</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Outliers LMM</span></a>
   </div>
 </li>
@@ -200,13 +231,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Breeding vs Genotypic</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Polyploids and Digenic Dominance</span></a>
   </div>
 </li>
@@ -223,19 +254,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Genotype-by-environment</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Factor analytic models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Two-stage analysis</span></a>
   </div>
 </li>
@@ -243,7 +274,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./about.html" class="sidebar-item-text sidebar-link">
+  <a href="../about.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">About</span></a>
   </div>
 </li>
@@ -257,19 +288,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">👋 Welcome</a>
-  <ul class="collapse">
-  <li><a href="#what-to-expect" id="toc-what-to-expect" class="nav-link" data-scroll-target="#what-to-expect">What to Expect</a></li>
-  </ul></li>
+  <li><a href="#standard" id="toc-standard" class="nav-link active" data-scroll-target="#standard">1) Standard</a></li>
+  <li><a href="#cullis-heritability" id="toc-cullis-heritability" class="nav-link" data-scroll-target="#cullis-heritability">2) Cullis Heritability</a></li>
+  <li><a href="#oakey" id="toc-oakey" class="nav-link" data-scroll-target="#oakey">3) Oakey</a></li>
+  <li><a href="#simulated" id="toc-simulated" class="nav-link" data-scroll-target="#simulated">5) Simulated</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/03_LMM.html">Starting LMM</a></li><li class="breadcrumb-item"><a href="../pages/06_Heritabilities.html">Heritability</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Home</h1>
+<h1 class="title">Heritability</h1>
 </div>
 
 
@@ -277,6 +308,12 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 6, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -286,23 +323,161 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1">
-<h1>👋 Welcome</h1>
-<p>This webpage is <strong>under development</strong>.</p>
-<p>Our goal is to build a collection of resources that use <strong>R code</strong> and <strong>mathematical explanations</strong> to make concepts in statistical modeling easier to understand.</p>
-<p>We will begin with the basics of <strong>linear models</strong>, and progressively extend toward more advanced <strong>mixed models</strong>, which are widely applied in plant breeding, animal breeding, and many other fields.</p>
-<section id="what-to-expect" class="level2">
-<h2 class="anchored" data-anchor-id="what-to-expect">What to Expect</h2>
-<ul>
-<li><strong>Hands-on examples</strong>: R scripts that you can run and adapt.<br>
-</li>
-<li><strong>Step-by-step math</strong>: showing how model equations connect to code.<br>
-</li>
-<li><strong>Conceptual explanations</strong>: to make sense of linear models and linear mixed models.</li>
-</ul>
-
-
+<p>Heritability is a key concept in Quantitative Genetics and Plant Breeding. It has been largely used for different purposes, such as estimating the response to selection, estimate model accuracy or determine how difficult is to make progress for a trait. Because of its relevance, many researchers have studied how to improve its estimation, yielding multiple methods to do calculate this paremeter. In this chapter, we will cover some of the these approaches and explain their differences and similarities.</p>
+<section id="standard" class="level1">
+<h1>1) Standard</h1>
+<p>The easiest interpretation of the heritability defines it as the ratio of genetic variance to phenotypic variance</p>
+<p><span class="math display">\[
+H^2 = \frac{\sigma^2_g}{\sigma^2_p}
+\]</span></p>
+<p>The issue with this approach is that, typically, when genotypes are tested in Mutienvironmental Trials (MET) the purely environmental variance (i.e, the block effect) is not incorporated to the phenotypic variance, neglecting those effects in the heritability calculation</p>
 </section>
+<section id="cullis-heritability" class="level1">
+<h1>2) Cullis Heritability</h1>
+<p>A different approach focuses on differences between genotypes as the source of heritability. The reasoning behind this is that rankings are uniquely determined by pairwise differences, making them more informative than individual genotypic effects. Heritability based on genotype differences can be calculated from a model by fitting the genotypes as either random effects or a combination of random and fixed effects. For simplicity, we will describe how to compute it using the first approach.</p>
+<p>The pairwise heritability can be defined as the squared correlation between the true difference and its predictor/estimator. To compute it, we will need to calculate the covariance between the differences as well as their standard deviations</p>
+<p><span class="math display">\[
+H^2_{\Delta 12} =
+\left(
+\frac{\operatorname{cov}(u_1 - u_2, \hat{u}_1 - \hat{u}_2)}
+{\sqrt{\operatorname{var}(u_1 - u_2)} \, \sqrt{\operatorname{var}(\hat{u}_1 - \hat{u}_2)}}
+\right)^2
+\]</span></p>
+<p>Assuming independence with constant variance, the variance of the difference between the true values would be</p>
+<p><span class="math display">\[
+\operatorname{var}(u_1 - u_2) = 2\sigma^2_g - \cancel{2\operatorname{cov}(u_1, u_2)} = 2\sigma^2_g
+\]</span></p>
+<p>To compute the variance of the estimated values we will use the marginal variance of <span class="math inline">\(\hat{u}^{BLUP}\)</span>, which as wxplained in the previous chapter equals</p>
+<p><span class="math display">\[
+var(\hat{u}^{BLUP}) = G_{(g)} - C_{22(g)}
+\]</span></p>
+<p>Let’s illustrate that <span class="math inline">\(G - C_{22}\)</span> matrix that contains the marginal variance of each BLUP in the diagonals and the covariances between BLUPs in the off-diagonals.</p>
+<p><span class="math display">\[
+\operatorname{var}(\hat{u}) =
+\underbrace{
+\begin{bmatrix}
+\sigma_g^2 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; \sigma_g^2 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \sigma_g^2
+\end{bmatrix}
+}_{G = I} -
+\,
+\underbrace{
+\begin{bmatrix}
+\operatorname{var}(u_1 - \hat{u}_1) &amp; \cdot &amp; \cdots &amp; \cdot \\
+\operatorname{cov}(u_1 - \hat{u}_1, u_2 - \hat{u}_2) &amp; \operatorname{var}(u_2 - \hat{u}_2) &amp; \cdots &amp; \cdot \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\operatorname{cov}(u_1 - \hat{u}_1, u_n - \hat{u}_n) &amp; \operatorname{cov}(u_2 - \hat{u}_2, u_n - \hat{u}_n) &amp; \cdots &amp; \operatorname{var}(u_n - \hat{u}_n)
+\end{bmatrix}
+}_{C_{22}}
+\]</span></p>
+<p>When assuming independence between estimates, the off-diagonals in G equals 0, as shown above, and thus <span class="math inline">\(cov(\hat{u}^{BLUP}_1, \hat{u}^{BLUP}_2) = C_{22[1, 2]}\)</span>. The variances and covariances would then be alculated as follows</p>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{var}(\hat{u}_{1})
+&amp;= G_{[1,1]} - C_{22[1,1]}
+= \sigma_g^2 + \operatorname{var}(u_1 - \hat{u}_1) \\[6pt]
+\operatorname{cov}(\hat{u}_{1}, \hat{u}_{2})
+&amp;= \cancel{G_{[1,2]}} - C_{22[1,2]}
+= -\,\operatorname{cov}(u_1 - \hat{u}_1,\, u_2 - \hat{u}_2)
+\end{aligned}
+\]</span></p>
+<p>So, with this information we can now calculate the variance of the difference between two BLUPs, which under the assumption of independent genotypes would equal</p>
+<p><span class="math display">\[
+\begin{align*}
+\operatorname{var}(\hat{u}^{BLUP}_1 - \hat{u}^{BLUP}_2)
+&amp;= \operatorname{var}(\hat{u}^{BLUP}_1) + \operatorname{var}(\hat{u}^{BLUP}_2) - 2\operatorname{cov}(\hat{u}^{BLUP}_1, \hat{u}^{BLUP}_2)\\
+&amp;= \sigma^2_g - \operatorname{var}(u_1 - \hat{u}_1) + \sigma^2_g - \operatorname{var}(u_2 - \hat{u}_2) + 2\operatorname{cov}(u_1 - \hat{u}_1, u_2 - \hat{u}_2) \\
+&amp;= 2\sigma^2_g - (\operatorname{var}(u_1 - \hat{u}_1) + \operatorname{var}(u_2 - \hat{u}_2) - 2\operatorname{cov}(u_1 - \hat{u}_1, u_2 - \hat{u}_2)) \\
+&amp;= 2\sigma^2_g - \operatorname{var}((u_1 - \hat{u}_1) - (u_1 - \hat{u}_1))\\
+&amp;= 2\sigma^2_g - v^{BLUP}_{\Delta_{12}}
+\end{align*}
+\]</span></p>
+<p>The last component left is then to compute the covariance between differences</p>
+<p><span class="math display">\[
+\begin{align*}
+\operatorname{cov}(u_{1} - u_2, \hat{u}_1 - \hat{u}_2)
+&amp;= \operatorname{cov}(u_{1}, \hat{u}_1) - \operatorname{cov}(u_{1}, \hat{u}_2) - \operatorname{cov}(u_{2}, \hat{u}_1) + \operatorname{cov}(u_{2}, \hat{u}_2)\\
+&amp;= (G-C_{22})_{[1,1]} - (G-C_{22})_{[1,2]} - (G-C_{22})_{[2,1]} + (G-C_{22})_{[2,2]} \\
+&amp;= \sigma^2_g - C_{22[1,1]} + C_{22[1,2]} + C_{22[1,2]}  + \sigma^2_g - C_{22[2,2]} \\
+&amp;= 2\sigma^2_g - v^{BLUP}_{\Delta_{12}}
+\end{align*}
+\]</span></p>
+<p>Finally, we can solve the Heritability as the square correlation of the differences between the true values and the predictors</p>
+<p><span class="math display">\[
+H^2_{{\Delta 12}_{BLUP}} =
+\left(
+\frac{\operatorname{cov}(u_1 - u_2, \hat{u}_1 - \hat{u}_2)}
+{\sqrt{\operatorname{var}(u_1 - u_2)} \, \sqrt{\operatorname{var}(\hat{u}_1 - \hat{u}_2)}}
+\right)^2 =
+\frac{(2\sigma_g^2 - v^{\text{BLUP}}_{\Delta_{12}})^2}
+{2\sigma_g^2 \left( 2\sigma_g^2 - v^{\text{BLUP}}_{\Delta_{12}} \right)}
+=
+\frac{2\sigma_g^2 - v^{\text{BLUP}}_{\Delta_{12}}}{2\sigma_g^2}
+\]</span></p>
+<p>This expression can be simplified to the Cullis Heritability <a href="https://link.springer.com/article/10.1198/108571106X154443">(Cullis et al, 2006)</a>, where <span class="math inline">\(\overline v_{\Delta_{ii}}^{BLUP}\)</span> represent the mean variance of a difference of two BLUPs for the genotypic effects</p>
+<p><span class="math display">\[
+H^2_{Cullis} = 1 - \frac{\overline v_{\Delta_{ii}}^{BLUP}}{2\sigma^2_g}
+\]</span></p>
+<p>It is important to notice that this way to compute heritability only holds under the assumption that the genotypes are independent. Otherwise, a more generalized approach, as described by <a href="https://academic.oup.com/genetics/article/212/4/991/5931331?login=true">(Schmidt et al, 2019)</a> should be used</p>
+<p><span class="math display">\[
+\begin{align*}
+H^2_{{\Delta 12}_{BLUP}}
+&amp;= \frac{\operatorname{var}(g_1 - g_2) - v^{BLUP}_{\Delta 12}}{\operatorname{var}(g_1 - g_2)}\\
+&amp;= \frac{\sigma^2_{g(1,1)} + \sigma^2_{g(2,2)} - 2\sigma^2_{g(1,2)} -  v^{BLUP}_{\Delta 12}}{\sigma^2_{g(1,1)} + \sigma^2_{g(2,2)} - 2\sigma^2_{g(1,2)}}
+\end{align*}
+\]</span></p>
+</section>
+<section id="oakey" class="level1">
+<h1>3) Oakey</h1>
+<p>In this approach the contrast between the true and the predicted genotypic effects is defined as the square correlation of <span class="math inline">\(c^Tg\)</span> and <span class="math inline">\(c^T\hat{g}^{BLUP}\)</span>, where c represent any linear combination of genotypic effects where the elements of <span class="math inline">\(c\)</span> sum to 0. The variances and covariances needed to estimate that correlations are</p>
+<p><span class="math display">\[
+\operatorname{cov}(c^Tg, c^T\hat{g}^{BLUP}) = c^T\operatorname{cov}(g, \hat{g}^{BLUP})c = c^TGZ'PZGc
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{var}(c^Tg) = c^T\operatorname{var}(g)c = c^TGc
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{var}(c^T\hat{g}^{BLUP}) = c^T\operatorname{var}(\hat{g}^{BLUP})c = c^TGZ'PZGc
+\]</span></p>
+<p>Then we can compute Oakey’s Heritability as</p>
+<p><span class="math display">\[
+\begin{align*}
+H^2_{c}
+&amp;= \left(
+  \frac{\operatorname{cov}(c^T g,\; c^T \hat{g}^{BLUP})}
+       {\sqrt{\operatorname{var}(c^T g)} \sqrt{\operatorname{var}(c^T \hat{g}^{BLUP})}}
+  \right)^{2} \\
+&amp;= \frac{(c^T G Z' P Z G c)^2}{c^T G c \, (c^T G Z' P Z G c)} \\
+&amp;= \frac{c^T G Z' P Z G c}{c^T G c}
+\end{align*}
+\]</span></p>
+<p>The idea is to maximize <span class="math inline">\(H^2_{c}\)</span> subject to <span class="math inline">\(c^T G c = 1\)</span>, using the Lagrangian product <span class="math inline">\(L_c = c^T G Z' P Z G c - \lambda(c^T G c - 1)\)</span>. In summary, the vector the maximizes <span class="math inline">\(H^2_{c}\)</span> is an eigenvector of <span class="math inline">\(Z' P Z G\)</span> with associated eigenvalue <span class="math inline">\(\lambda\)</span> (<span class="math inline">\(\max\limits_{c} H^2_{c} = \lambda\)</span>). Therefore, the full set of eigenvalues (<span class="math inline">\(\lambda_1, \lambda_2, ..., \lambda_n\)</span>) characterizes the full heritability as follows, where <span class="math inline">\(s\)</span> represent the number of eigenvalues equals 0.</p>
+<p><span class="math display">\[
+H^2_{Oakey} = \frac{\sum_{i = 1}^m \lambda_i}{m - s}
+\]</span></p>
+<p>An interesting simplification is that, <span class="math inline">\(Z' P Z G = I - G^{-1}C_{22} = D\)</span>. Following the properties of the trace, this <span class="math inline">\(D\)</span> matrix fulfills</p>
+<p><span class="math display">\[
+trace(D) = trace(Q\Lambda Q^{-T}) = trace(QQ^{-T}\Lambda) = trace(\Lambda) = \sum \lambda_i
+\]</span></p>
+<p>Briefly, the full Heritability can be approximated without the need of calculating the eigenvalues of the matrix. This is particularly useful for larger problems, although it ignores the possibility of zero eigenvalues.</p>
+<p><span class="math display">\[
+H^2_{Approx} = 1 - \frac{\operatorname{tr}(G^{-1}C_{22})}{m}
+\]</span> # 4) Reliability</p>
+<p>In the context of anial breeding, reliability is a popular stastistic expressing the squared corrrelation between predicted an true breeding value. For a particular entry, it can be computed as</p>
+<p><span class="math display">\[
+r^2_1 = 1 - \frac{\operatorname{var}(\hat{g}^{BLUP}_1)}{\operatorname{var}(g_1)}
+\]</span></p>
+<p>And thus, the mean reliability is computed as the average of the reliability of the entire population</p>
+<p><span class="math display">\[
+\bar{r}^2_. = \frac{1}{n_g}\sum_{i = 1}^{n_g}r^2_i
+\]</span></p>
+</section>
+<section id="simulated" class="level1">
+<h1>5) Simulated</h1>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -725,10 +900,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../pages/05_MVN.html" class="pagination-link" aria-label="Multivariate Normal">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Multivariate Normal</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./pages/00_start_lm.html" class="pagination-link" aria-label="ANOVA and fixed effects">
-        <span class="nav-page-text">ANOVA and fixed effects</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../pages/08_Parametrizations.html" class="pagination-link" aria-label="Breeding vs Genotypic">
+        <span class="nav-page-text">Breeding vs Genotypic</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

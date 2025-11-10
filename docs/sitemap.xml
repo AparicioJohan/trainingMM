@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>google/pages/00_start_lm.html</loc>
-    <lastmod>2025-09-10T15:48:20.659Z</lastmod>
+    <lastmod>2025-09-19T14:00:58.502Z</lastmod>
   </url>
   <url>
     <loc>google/index.html</loc>
-    <lastmod>2025-10-06T14:23:12.958Z</lastmod>
+    <lastmod>2025-10-07T13:43:08.787Z</lastmod>
   </url>
   <url>
     <loc>google/pages/01_predict_LM.html</loc>
-    <lastmod>2025-10-06T14:30:39.459Z</lastmod>
+    <lastmod>2025-10-07T13:43:08.788Z</lastmod>
   </url>
   <url>
     <loc>google/pages/02_QR_decomp.html</loc>
@@ -18,11 +18,11 @@
   </url>
   <url>
     <loc>google/pages/99_404.html</loc>
-    <lastmod>2025-10-06T14:52:39.237Z</lastmod>
+    <lastmod>2025-10-07T13:43:08.788Z</lastmod>
   </url>
   <url>
     <loc>google/about.html</loc>
-    <lastmod>2025-10-06T15:30:10.771Z</lastmod>
+    <lastmod>2025-10-07T13:43:08.772Z</lastmod>
   </url>
   <url>
     <loc>google/pages/04_covariates_LM.html</loc>
@@ -30,6 +30,18 @@
   </url>
   <url>
     <loc>google/pages/03_LMM.html</loc>
-    <lastmod>2025-10-10T15:09:56.019Z</lastmod>
+    <lastmod>2025-10-10T14:34:04.319Z</lastmod>
+  </url>
+  <url>
+    <loc>google/pages/05_MVN.html</loc>
+    <lastmod>2025-11-03T15:48:05.266Z</lastmod>
+  </url>
+  <url>
+    <loc>google/pages/06_Heritabilities.html</loc>
+    <lastmod>2025-11-06T22:55:57.999Z</lastmod>
+  </url>
+  <url>
+    <loc>google/pages/08_Parametrizations.html</loc>
+    <lastmod>2025-11-10T17:21:21.374Z</lastmod>
   </url>
 </urlset>

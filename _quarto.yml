@@ -43,12 +43,18 @@ website:
         contents:
           - href: pages/03_LMM.html
             text: Mixed models
-          - href: pages/99_404.html
-            text: Predict LMM
-          - href: pages/99_404.html
+          - href: pages/05_MVN.html
+            text: Multivariate Normal
+          - href: pages/06_Heritabilities.html
             text: Heritability
           - href: pages/99_404.html
             text: Outliers LMM
+      - section: "Parametrizations"
+        contents:
+          - href: pages/08_Parametrizations.html
+            text: Breeding vs Genotypic
+          - href: pages/08_Parametrizations.html
+            text: Polyploids and Digenic Dominance
       - section: "Advanced LMM"
         contents:
           - href: pages/99_404.html
