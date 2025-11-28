@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-09-19">
+<meta name="dcterms.date" content="2025-11-28">
 
 <title>Understanding a linear model – trainingMM</title>
 <style>
@@ -71,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -236,13 +236,13 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Predict LMM</span></a>
+  <a href="../pages/05_MVN.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multivariate Normal</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/06_Heritabilities.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Heritability</span></a>
   </div>
 </li>
@@ -257,12 +257,35 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Advanced LMM</span></a>
+ <span class="menu-text">Parametrizations</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Breeding vs Genotypic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/08_Parametrizations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Polyploids and Digenic Dominance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Advanced LMM</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
@@ -307,16 +330,16 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#intercept-only-model-overall-mean" id="toc-intercept-only-model-overall-mean" class="nav-link" data-scroll-target="#intercept-only-model-overall-mean">2.1 Intercept-only model (overall mean)</a></li>
   <li><a href="#add-blocks" id="toc-add-blocks" class="nav-link" data-scroll-target="#add-blocks">2.2 Add blocks</a></li>
-  <li><a href="#genotype-main-effects-no-intercept" id="toc-genotype-main-effects-no-intercept" class="nav-link" data-scroll-target="#genotype-main-effects-no-intercept">2.3 Genotype main effects (no intercept)</a></li>
-  <li><a href="#genotype-main-effects-intercept" id="toc-genotype-main-effects-intercept" class="nav-link" data-scroll-target="#genotype-main-effects-intercept">2.4 Genotype main effects (Intercept)</a></li>
-  <li><a href="#full-model-intercept-blocks-genotypes" id="toc-full-model-intercept-blocks-genotypes" class="nav-link" data-scroll-target="#full-model-intercept-blocks-genotypes">2.5 Full model: intercept + blocks + genotypes</a></li>
+  <li><a href="#add-genotypes" id="toc-add-genotypes" class="nav-link" data-scroll-target="#add-genotypes">2.3 Add genotypes</a></li>
+  <li><a href="#full-model-intercept-blocks-genotypes" id="toc-full-model-intercept-blocks-genotypes" class="nav-link" data-scroll-target="#full-model-intercept-blocks-genotypes">2.4 Full model: intercept + blocks + genotypes</a></li>
+  <li><a href="#coefficients-and-variance-covariances" id="toc-coefficients-and-variance-covariances" class="nav-link" data-scroll-target="#coefficients-and-variance-covariances">2.5 Coefficients and variance-covariances</a></li>
   </ul></li>
   <li><a href="#reduction-in-ss-and-anova-table" id="toc-reduction-in-ss-and-anova-table" class="nav-link" data-scroll-target="#reduction-in-ss-and-anova-table">3) Reduction-in-SS and ANOVA table</a></li>
   <li><a href="#verify-with-lm" id="toc-verify-with-lm" class="nav-link" data-scroll-target="#verify-with-lm">4) Verify with <code>lm()</code></a></li>
-  <li><a href="#interpreting-coefficients-under-treatment-coding" id="toc-interpreting-coefficients-under-treatment-coding" class="nav-link" data-scroll-target="#interpreting-coefficients-under-treatment-coding">5) Interpreting coefficients under treatment coding</a>
+  <li><a href="#reconstructing-means" id="toc-reconstructing-means" class="nav-link" data-scroll-target="#reconstructing-means">5) Reconstructing means</a>
   <ul class="collapse">
-  <li><a href="#genotype-means-including-the-missing-reference-level" id="toc-genotype-means-including-the-missing-reference-level" class="nav-link" data-scroll-target="#genotype-means-including-the-missing-reference-level">5.1 Genotype means including the missing (reference) level</a></li>
-  <li><a href="#block-means-including-the-missing-reference-level" id="toc-block-means-including-the-missing-reference-level" class="nav-link" data-scroll-target="#block-means-including-the-missing-reference-level">5.2 Block means including the missing (reference) level</a></li>
+  <li><a href="#genotype-means-including-the-missing-baseline-level" id="toc-genotype-means-including-the-missing-baseline-level" class="nav-link" data-scroll-target="#genotype-means-including-the-missing-baseline-level">5.1 Genotype means including the missing (baseline) level</a></li>
+  <li><a href="#block-means-including-the-missing-baseline-level" id="toc-block-means-including-the-missing-baseline-level" class="nav-link" data-scroll-target="#block-means-including-the-missing-baseline-level">5.2 Block means including the missing (baseline) level</a></li>
   </ul></li>
   <li><a href="#estimated-marginal-means-and-pairwise-comparisons" id="toc-estimated-marginal-means-and-pairwise-comparisons" class="nav-link" data-scroll-target="#estimated-marginal-means-and-pairwise-comparisons">6) Estimated marginal means and pairwise comparisons</a></li>
   </ul>
@@ -338,7 +361,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 19, 2025</p>
+      <p class="date">November 28, 2025</p>
     </div>
   </div>
   
@@ -564,23 +587,23 @@ Note
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">mean =</span> <span class="st">"mean"</span>, <span class="at">beta =</span> <span class="fu">mean</span>(data<span class="sc">$</span>yield)) <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="ospysxslid" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ospysxslid table {
+<div id="csntdmobuj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#csntdmobuj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ospysxslid thead, #ospysxslid tbody, #ospysxslid tfoot, #ospysxslid tr, #ospysxslid td, #ospysxslid th {
+#csntdmobuj thead, #csntdmobuj tbody, #csntdmobuj tfoot, #csntdmobuj tr, #csntdmobuj td, #csntdmobuj th {
   border-style: none;
 }
 
-#ospysxslid p {
+#csntdmobuj p {
   margin: 0;
   padding: 0;
 }
 
-#ospysxslid .gt_table {
+#csntdmobuj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -606,12 +629,12 @@ Note
   border-left-color: #D3D3D3;
 }
 
-#ospysxslid .gt_caption {
+#csntdmobuj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ospysxslid .gt_title {
+#csntdmobuj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -623,7 +646,7 @@ Note
   border-bottom-width: 0;
 }
 
-#ospysxslid .gt_subtitle {
+#csntdmobuj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -635,7 +658,7 @@ Note
   border-top-width: 0;
 }
 
-#ospysxslid .gt_heading {
+#csntdmobuj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -647,13 +670,13 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#ospysxslid .gt_bottom_border {
+#csntdmobuj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ospysxslid .gt_col_headings {
+#csntdmobuj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -668,7 +691,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#ospysxslid .gt_col_heading {
+#csntdmobuj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -688,7 +711,7 @@ Note
   overflow-x: hidden;
 }
 
-#ospysxslid .gt_column_spanner_outer {
+#csntdmobuj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -700,15 +723,15 @@ Note
   padding-right: 4px;
 }
 
-#ospysxslid .gt_column_spanner_outer:first-child {
+#csntdmobuj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ospysxslid .gt_column_spanner_outer:last-child {
+#csntdmobuj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ospysxslid .gt_column_spanner {
+#csntdmobuj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -720,11 +743,11 @@ Note
   width: 100%;
 }
 
-#ospysxslid .gt_spanner_row {
+#csntdmobuj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ospysxslid .gt_group_heading {
+#csntdmobuj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -750,7 +773,7 @@ Note
   text-align: left;
 }
 
-#ospysxslid .gt_empty_group_heading {
+#csntdmobuj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -765,15 +788,15 @@ Note
   vertical-align: middle;
 }
 
-#ospysxslid .gt_from_md > :first-child {
+#csntdmobuj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ospysxslid .gt_from_md > :last-child {
+#csntdmobuj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ospysxslid .gt_row {
+#csntdmobuj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -792,7 +815,7 @@ Note
   overflow-x: hidden;
 }
 
-#ospysxslid .gt_stub {
+#csntdmobuj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -805,7 +828,7 @@ Note
   padding-right: 5px;
 }
 
-#ospysxslid .gt_stub_row_group {
+#csntdmobuj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -819,15 +842,15 @@ Note
   vertical-align: top;
 }
 
-#ospysxslid .gt_row_group_first td {
+#csntdmobuj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ospysxslid .gt_row_group_first th {
+#csntdmobuj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ospysxslid .gt_summary_row {
+#csntdmobuj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -837,16 +860,16 @@ Note
   padding-right: 5px;
 }
 
-#ospysxslid .gt_first_summary_row {
+#csntdmobuj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ospysxslid .gt_first_summary_row.thick {
+#csntdmobuj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ospysxslid .gt_last_summary_row {
+#csntdmobuj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -856,7 +879,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#ospysxslid .gt_grand_summary_row {
+#csntdmobuj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -866,7 +889,7 @@ Note
   padding-right: 5px;
 }
 
-#ospysxslid .gt_first_grand_summary_row {
+#csntdmobuj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -876,7 +899,7 @@ Note
   border-top-color: #D3D3D3;
 }
 
-#ospysxslid .gt_last_grand_summary_row_top {
+#csntdmobuj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -886,11 +909,11 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#ospysxslid .gt_striped {
+#csntdmobuj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ospysxslid .gt_table_body {
+#csntdmobuj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -899,7 +922,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#ospysxslid .gt_footnotes {
+#csntdmobuj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -913,7 +936,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#ospysxslid .gt_footnote {
+#csntdmobuj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -922,7 +945,7 @@ Note
   padding-right: 5px;
 }
 
-#ospysxslid .gt_sourcenotes {
+#csntdmobuj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -936,7 +959,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#ospysxslid .gt_sourcenote {
+#csntdmobuj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -944,79 +967,79 @@ Note
   padding-right: 5px;
 }
 
-#ospysxslid .gt_left {
+#csntdmobuj .gt_left {
   text-align: left;
 }
 
-#ospysxslid .gt_center {
+#csntdmobuj .gt_center {
   text-align: center;
 }
 
-#ospysxslid .gt_right {
+#csntdmobuj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ospysxslid .gt_font_normal {
+#csntdmobuj .gt_font_normal {
   font-weight: normal;
 }
 
-#ospysxslid .gt_font_bold {
+#csntdmobuj .gt_font_bold {
   font-weight: bold;
 }
 
-#ospysxslid .gt_font_italic {
+#csntdmobuj .gt_font_italic {
   font-style: italic;
 }
 
-#ospysxslid .gt_super {
+#csntdmobuj .gt_super {
   font-size: 65%;
 }
 
-#ospysxslid .gt_footnote_marks {
+#csntdmobuj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ospysxslid .gt_asterisk {
+#csntdmobuj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ospysxslid .gt_indent_1 {
+#csntdmobuj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ospysxslid .gt_indent_2 {
+#csntdmobuj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ospysxslid .gt_indent_3 {
+#csntdmobuj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ospysxslid .gt_indent_4 {
+#csntdmobuj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ospysxslid .gt_indent_5 {
+#csntdmobuj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ospysxslid .katex-display {
+#csntdmobuj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ospysxslid div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#csntdmobuj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="header gt_col_headings">
 <th id="mean" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">mean</th>
 <th id="beta" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">beta</th>
 </tr>
@@ -1179,23 +1202,23 @@ b_3 \\
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">beta =</span> <span class="fu">mean</span>(yield, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="momziatsag" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#momziatsag table {
+<div id="nozrdsxgmz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#nozrdsxgmz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#momziatsag thead, #momziatsag tbody, #momziatsag tfoot, #momziatsag tr, #momziatsag td, #momziatsag th {
+#nozrdsxgmz thead, #nozrdsxgmz tbody, #nozrdsxgmz tfoot, #nozrdsxgmz tr, #nozrdsxgmz td, #nozrdsxgmz th {
   border-style: none;
 }
 
-#momziatsag p {
+#nozrdsxgmz p {
   margin: 0;
   padding: 0;
 }
 
-#momziatsag .gt_table {
+#nozrdsxgmz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1221,12 +1244,12 @@ b_3 \\
   border-left-color: #D3D3D3;
 }
 
-#momziatsag .gt_caption {
+#nozrdsxgmz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#momziatsag .gt_title {
+#nozrdsxgmz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1238,7 +1261,7 @@ b_3 \\
   border-bottom-width: 0;
 }
 
-#momziatsag .gt_subtitle {
+#nozrdsxgmz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1250,7 +1273,7 @@ b_3 \\
   border-top-width: 0;
 }
 
-#momziatsag .gt_heading {
+#nozrdsxgmz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1262,13 +1285,13 @@ b_3 \\
   border-right-color: #D3D3D3;
 }
 
-#momziatsag .gt_bottom_border {
+#nozrdsxgmz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#momziatsag .gt_col_headings {
+#nozrdsxgmz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1283,7 +1306,7 @@ b_3 \\
   border-right-color: #D3D3D3;
 }
 
-#momziatsag .gt_col_heading {
+#nozrdsxgmz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1303,7 +1326,7 @@ b_3 \\
   overflow-x: hidden;
 }
 
-#momziatsag .gt_column_spanner_outer {
+#nozrdsxgmz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1315,15 +1338,15 @@ b_3 \\
   padding-right: 4px;
 }
 
-#momziatsag .gt_column_spanner_outer:first-child {
+#nozrdsxgmz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#momziatsag .gt_column_spanner_outer:last-child {
+#nozrdsxgmz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#momziatsag .gt_column_spanner {
+#nozrdsxgmz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1335,11 +1358,11 @@ b_3 \\
   width: 100%;
 }
 
-#momziatsag .gt_spanner_row {
+#nozrdsxgmz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#momziatsag .gt_group_heading {
+#nozrdsxgmz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1365,7 +1388,7 @@ b_3 \\
   text-align: left;
 }
 
-#momziatsag .gt_empty_group_heading {
+#nozrdsxgmz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1380,15 +1403,15 @@ b_3 \\
   vertical-align: middle;
 }
 
-#momziatsag .gt_from_md > :first-child {
+#nozrdsxgmz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#momziatsag .gt_from_md > :last-child {
+#nozrdsxgmz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#momziatsag .gt_row {
+#nozrdsxgmz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1407,7 +1430,7 @@ b_3 \\
   overflow-x: hidden;
 }
 
-#momziatsag .gt_stub {
+#nozrdsxgmz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1420,7 +1443,7 @@ b_3 \\
   padding-right: 5px;
 }
 
-#momziatsag .gt_stub_row_group {
+#nozrdsxgmz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1434,15 +1457,15 @@ b_3 \\
   vertical-align: top;
 }
 
-#momziatsag .gt_row_group_first td {
+#nozrdsxgmz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#momziatsag .gt_row_group_first th {
+#nozrdsxgmz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#momziatsag .gt_summary_row {
+#nozrdsxgmz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1452,16 +1475,16 @@ b_3 \\
   padding-right: 5px;
 }
 
-#momziatsag .gt_first_summary_row {
+#nozrdsxgmz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#momziatsag .gt_first_summary_row.thick {
+#nozrdsxgmz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#momziatsag .gt_last_summary_row {
+#nozrdsxgmz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1471,7 +1494,7 @@ b_3 \\
   border-bottom-color: #D3D3D3;
 }
 
-#momziatsag .gt_grand_summary_row {
+#nozrdsxgmz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1481,7 +1504,7 @@ b_3 \\
   padding-right: 5px;
 }
 
-#momziatsag .gt_first_grand_summary_row {
+#nozrdsxgmz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1491,7 +1514,7 @@ b_3 \\
   border-top-color: #D3D3D3;
 }
 
-#momziatsag .gt_last_grand_summary_row_top {
+#nozrdsxgmz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1501,11 +1524,11 @@ b_3 \\
   border-bottom-color: #D3D3D3;
 }
 
-#momziatsag .gt_striped {
+#nozrdsxgmz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#momziatsag .gt_table_body {
+#nozrdsxgmz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1514,7 +1537,7 @@ b_3 \\
   border-bottom-color: #D3D3D3;
 }
 
-#momziatsag .gt_footnotes {
+#nozrdsxgmz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1528,7 +1551,7 @@ b_3 \\
   border-right-color: #D3D3D3;
 }
 
-#momziatsag .gt_footnote {
+#nozrdsxgmz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1537,7 +1560,7 @@ b_3 \\
   padding-right: 5px;
 }
 
-#momziatsag .gt_sourcenotes {
+#nozrdsxgmz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1551,7 +1574,7 @@ b_3 \\
   border-right-color: #D3D3D3;
 }
 
-#momziatsag .gt_sourcenote {
+#nozrdsxgmz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1559,79 +1582,79 @@ b_3 \\
   padding-right: 5px;
 }
 
-#momziatsag .gt_left {
+#nozrdsxgmz .gt_left {
   text-align: left;
 }
 
-#momziatsag .gt_center {
+#nozrdsxgmz .gt_center {
   text-align: center;
 }
 
-#momziatsag .gt_right {
+#nozrdsxgmz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#momziatsag .gt_font_normal {
+#nozrdsxgmz .gt_font_normal {
   font-weight: normal;
 }
 
-#momziatsag .gt_font_bold {
+#nozrdsxgmz .gt_font_bold {
   font-weight: bold;
 }
 
-#momziatsag .gt_font_italic {
+#nozrdsxgmz .gt_font_italic {
   font-style: italic;
 }
 
-#momziatsag .gt_super {
+#nozrdsxgmz .gt_super {
   font-size: 65%;
 }
 
-#momziatsag .gt_footnote_marks {
+#nozrdsxgmz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#momziatsag .gt_asterisk {
+#nozrdsxgmz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#momziatsag .gt_indent_1 {
+#nozrdsxgmz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#momziatsag .gt_indent_2 {
+#nozrdsxgmz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#momziatsag .gt_indent_3 {
+#nozrdsxgmz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#momziatsag .gt_indent_4 {
+#nozrdsxgmz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#momziatsag .gt_indent_5 {
+#nozrdsxgmz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#momziatsag .katex-display {
+#nozrdsxgmz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#momziatsag div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#nozrdsxgmz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="header gt_col_headings">
 <th id="block" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">block</th>
 <th id="beta" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">beta</th>
 </tr>
@@ -1689,8 +1712,8 @@ $SSE_blk
 </div>
 </div>
 </section>
-<section id="genotype-main-effects-no-intercept" class="level3">
-<h3 class="anchored" data-anchor-id="genotype-main-effects-no-intercept">2.3 Genotype main effects (no intercept)</h3>
+<section id="add-genotypes" class="level3">
+<h3 class="anchored" data-anchor-id="add-genotypes">2.3 Add genotypes</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Matrices</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Code</a></li></ul>
 <div class="tab-content">
@@ -1789,7 +1812,7 @@ g_4 \\
 0 \ \frac{1}{3} \ 0 \ 0 \\
 0 \ 0 \ \frac{1}{3} \ 0 \\
 0 \ 0 \ 0 \ \frac{1}{3} \\
-\end{bmatrix}}_{(X'X)^{-1}}
+\end{bmatrix}}_{(\boldsymbol{X'X})^{-1}}
 \underbrace{
 \begin{bmatrix}
 19.5 \\
@@ -1812,23 +1835,23 @@ g_4 \\
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">beta =</span> <span class="fu">mean</span>(yield, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="amahycrogy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#amahycrogy table {
+<div id="reigkeocqr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#reigkeocqr table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#amahycrogy thead, #amahycrogy tbody, #amahycrogy tfoot, #amahycrogy tr, #amahycrogy td, #amahycrogy th {
+#reigkeocqr thead, #reigkeocqr tbody, #reigkeocqr tfoot, #reigkeocqr tr, #reigkeocqr td, #reigkeocqr th {
   border-style: none;
 }
 
-#amahycrogy p {
+#reigkeocqr p {
   margin: 0;
   padding: 0;
 }
 
-#amahycrogy .gt_table {
+#reigkeocqr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1854,12 +1877,12 @@ g_4 \\
   border-left-color: #D3D3D3;
 }
 
-#amahycrogy .gt_caption {
+#reigkeocqr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#amahycrogy .gt_title {
+#reigkeocqr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1871,7 +1894,7 @@ g_4 \\
   border-bottom-width: 0;
 }
 
-#amahycrogy .gt_subtitle {
+#reigkeocqr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1883,7 +1906,7 @@ g_4 \\
   border-top-width: 0;
 }
 
-#amahycrogy .gt_heading {
+#reigkeocqr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1895,13 +1918,13 @@ g_4 \\
   border-right-color: #D3D3D3;
 }
 
-#amahycrogy .gt_bottom_border {
+#reigkeocqr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#amahycrogy .gt_col_headings {
+#reigkeocqr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1916,7 +1939,7 @@ g_4 \\
   border-right-color: #D3D3D3;
 }
 
-#amahycrogy .gt_col_heading {
+#reigkeocqr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1936,7 +1959,7 @@ g_4 \\
   overflow-x: hidden;
 }
 
-#amahycrogy .gt_column_spanner_outer {
+#reigkeocqr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1948,15 +1971,15 @@ g_4 \\
   padding-right: 4px;
 }
 
-#amahycrogy .gt_column_spanner_outer:first-child {
+#reigkeocqr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#amahycrogy .gt_column_spanner_outer:last-child {
+#reigkeocqr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#amahycrogy .gt_column_spanner {
+#reigkeocqr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1968,11 +1991,11 @@ g_4 \\
   width: 100%;
 }
 
-#amahycrogy .gt_spanner_row {
+#reigkeocqr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#amahycrogy .gt_group_heading {
+#reigkeocqr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1998,7 +2021,7 @@ g_4 \\
   text-align: left;
 }
 
-#amahycrogy .gt_empty_group_heading {
+#reigkeocqr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2013,15 +2036,15 @@ g_4 \\
   vertical-align: middle;
 }
 
-#amahycrogy .gt_from_md > :first-child {
+#reigkeocqr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#amahycrogy .gt_from_md > :last-child {
+#reigkeocqr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#amahycrogy .gt_row {
+#reigkeocqr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2040,7 +2063,7 @@ g_4 \\
   overflow-x: hidden;
 }
 
-#amahycrogy .gt_stub {
+#reigkeocqr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2053,7 +2076,7 @@ g_4 \\
   padding-right: 5px;
 }
 
-#amahycrogy .gt_stub_row_group {
+#reigkeocqr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2067,15 +2090,15 @@ g_4 \\
   vertical-align: top;
 }
 
-#amahycrogy .gt_row_group_first td {
+#reigkeocqr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#amahycrogy .gt_row_group_first th {
+#reigkeocqr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#amahycrogy .gt_summary_row {
+#reigkeocqr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2085,16 +2108,16 @@ g_4 \\
   padding-right: 5px;
 }
 
-#amahycrogy .gt_first_summary_row {
+#reigkeocqr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#amahycrogy .gt_first_summary_row.thick {
+#reigkeocqr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#amahycrogy .gt_last_summary_row {
+#reigkeocqr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2104,7 +2127,7 @@ g_4 \\
   border-bottom-color: #D3D3D3;
 }
 
-#amahycrogy .gt_grand_summary_row {
+#reigkeocqr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2114,7 +2137,7 @@ g_4 \\
   padding-right: 5px;
 }
 
-#amahycrogy .gt_first_grand_summary_row {
+#reigkeocqr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2124,7 +2147,7 @@ g_4 \\
   border-top-color: #D3D3D3;
 }
 
-#amahycrogy .gt_last_grand_summary_row_top {
+#reigkeocqr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2134,11 +2157,11 @@ g_4 \\
   border-bottom-color: #D3D3D3;
 }
 
-#amahycrogy .gt_striped {
+#reigkeocqr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#amahycrogy .gt_table_body {
+#reigkeocqr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2147,7 +2170,7 @@ g_4 \\
   border-bottom-color: #D3D3D3;
 }
 
-#amahycrogy .gt_footnotes {
+#reigkeocqr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2161,7 +2184,7 @@ g_4 \\
   border-right-color: #D3D3D3;
 }
 
-#amahycrogy .gt_footnote {
+#reigkeocqr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2170,7 +2193,7 @@ g_4 \\
   padding-right: 5px;
 }
 
-#amahycrogy .gt_sourcenotes {
+#reigkeocqr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2184,7 +2207,7 @@ g_4 \\
   border-right-color: #D3D3D3;
 }
 
-#amahycrogy .gt_sourcenote {
+#reigkeocqr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2192,79 +2215,79 @@ g_4 \\
   padding-right: 5px;
 }
 
-#amahycrogy .gt_left {
+#reigkeocqr .gt_left {
   text-align: left;
 }
 
-#amahycrogy .gt_center {
+#reigkeocqr .gt_center {
   text-align: center;
 }
 
-#amahycrogy .gt_right {
+#reigkeocqr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#amahycrogy .gt_font_normal {
+#reigkeocqr .gt_font_normal {
   font-weight: normal;
 }
 
-#amahycrogy .gt_font_bold {
+#reigkeocqr .gt_font_bold {
   font-weight: bold;
 }
 
-#amahycrogy .gt_font_italic {
+#reigkeocqr .gt_font_italic {
   font-style: italic;
 }
 
-#amahycrogy .gt_super {
+#reigkeocqr .gt_super {
   font-size: 65%;
 }
 
-#amahycrogy .gt_footnote_marks {
+#reigkeocqr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#amahycrogy .gt_asterisk {
+#reigkeocqr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#amahycrogy .gt_indent_1 {
+#reigkeocqr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#amahycrogy .gt_indent_2 {
+#reigkeocqr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#amahycrogy .gt_indent_3 {
+#reigkeocqr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#amahycrogy .gt_indent_4 {
+#reigkeocqr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#amahycrogy .gt_indent_5 {
+#reigkeocqr .gt_indent_5 {
   text-indent: 25px;
 }
 
-#amahycrogy .katex-display {
+#reigkeocqr .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#amahycrogy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#reigkeocqr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="header gt_col_headings">
 <th id="gen" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">gen</th>
 <th id="beta" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">beta</th>
 </tr>
@@ -2315,152 +2338,12 @@ g_4 \\
 </div>
 </div>
 </section>
-<section id="genotype-main-effects-intercept" class="level3">
-<h3 class="anchored" data-anchor-id="genotype-main-effects-intercept">2.4 Genotype main effects (Intercept)</h3>
+<section id="full-model-intercept-blocks-genotypes" class="level3">
+<h3 class="anchored" data-anchor-id="full-model-intercept-blocks-genotypes">2.4 Full model: intercept + blocks + genotypes</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Matrices</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<ul>
-<li>Model:</li>
-</ul>
-<p><span class="math display">\[
-\small
-\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon} =&gt;
-\begin{bmatrix}
-7.4 \\
-6.5 \\
-5.6 \\
-9.8 \\
-6.8 \\
-6.2 \\
-7.3 \\
-6.1 \\
-6.4 \\
-9.5 \\
-8.0 \\
-7.4 \\
-\end{bmatrix} =
-\begin{bmatrix}
-\overset{intercept}{1} &amp; \overset{gen2}{0} &amp; \overset{gen3}{0} &amp; \overset{gen4}{0} \\
-1 &amp; 0 &amp; 0 &amp; 0 \\
-1 &amp; 0 &amp; 0 &amp; 0 \\
-1 &amp; 1 &amp; 0 &amp; 0 \\
-1 &amp; 1 &amp; 0 &amp; 0 \\
-1 &amp; 1 &amp; 0 &amp; 0 \\
-1 &amp; 0 &amp; 1 &amp; 0 \\
-1 &amp; 0 &amp; 1 &amp; 0 \\
-1 &amp; 0 &amp; 1 &amp; 0 \\
-1 &amp; 0 &amp; 0 &amp; 1 \\
-1 &amp; 0 &amp; 0 &amp; 1 \\
-1 &amp; 0 &amp; 0 &amp; 1
-\end{bmatrix}
-\begin{bmatrix}
-\mu \\
-g_2 \\
-g_3 \\
-g_4 \\
-\end{bmatrix} + \boldsymbol{\varepsilon}
-\]</span></p>
-<ul>
-<li>BLUE(s):</li>
-</ul>
-<p><span class="math display">\[
-\small
-\boldsymbol{\beta} =
-\underbrace{
-\left(\begin{bmatrix}
-1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \\
-0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \\
-\end{bmatrix}
-\begin{bmatrix}
-1 \ 0 \ 0 \ 0 \\
-1 \ 0 \ 0 \ 0 \\
-1 \ 0 \ 0 \ 0 \\
-1 \ 1 \ 0 \ 0 \\
-1 \ 1 \ 0 \ 0 \\
-1 \ 1 \ 0 \ 0 \\
-1 \ 0 \ 1 \ 0 \\
-1 \ 0 \ 1 \ 0 \\
-1 \ 0 \ 1 \ 0 \\
-1 \ 0 \ 0 \ 1 \\
-1 \ 0 \ 0 \ 1 \\
-1 \ 0 \ 0 \ 1 \\
-\end{bmatrix}\right)^{-1}}_{(\boldsymbol{X'X})^{-1}}
-\underbrace{
-\begin{bmatrix}
-1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \\
-0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \\
-\end{bmatrix}
-\begin{bmatrix}
-7.4 \\
-6.5 \\
-5.6 \\
-9.8 \\
-6.8 \\
-6.2 \\
-7.3 \\
-6.1 \\
-6.4 \\
-9.5 \\
-8.0 \\
-7.4 \\
-\end{bmatrix}}_{\boldsymbol{X'y}} =
-\underbrace{\begin{bmatrix}
-\frac{1}{3}\ \frac{-1}{3} \ \frac{-1}{3} \ \frac{-1}{3} \\
-\frac{-1}{3} \ \frac{2}{3} \ \frac{1}{3} \ \frac{1}{3} \\
-\frac{-1}{3} \ \frac{1}{3} \ \frac{2}{3} \ \frac{1}{3} \\
-\frac{-1}{3} \ \frac{1}{3} \ \frac{1}{3} \ \frac{2}{3} \\
-\end{bmatrix}}_{(X'X)^{-1}}
-\underbrace{
-\begin{bmatrix}
-87.0 \\
-22.8 \\
-19.8 \\
-24.9 \\
-\end{bmatrix}
-}_{\boldsymbol{X'y}} =
-\begin{bmatrix}
-6.5 \\
-1.1 \\
-0.1 \\
-1.8 \\
-\end{bmatrix}
-\]</span></p>
-</div>
-<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">&lt;-</span> yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> gen</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">model.frame</span>(ff, data)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(ff, m)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(data<span class="sc">$</span>yield)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>Xty <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> y</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>XtX <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> X</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>rank_X <span class="ot">&lt;-</span> <span class="fu">qr</span>(XtX)<span class="sc">$</span>rank</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>XtX_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(XtX)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>beta_gen <span class="ot">&lt;-</span> XtX_inv <span class="sc">%*%</span> Xty</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>SSE_gen <span class="ot">&lt;-</span> <span class="fu">t</span>(y <span class="sc">-</span> X <span class="sc">%*%</span> beta_gen) <span class="sc">%*%</span> (y <span class="sc">-</span> X <span class="sc">%*%</span> beta_gen)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>SSE_gen <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(SSE_gen)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">rank =</span> rank_X, <span class="at">beta_gen =</span> <span class="fu">drop</span>(beta_gen), <span class="at">SSE_gen =</span> SSE_gen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>In progress …</p>
-</div>
-</div>
-</div>
-</section>
-<section id="full-model-intercept-blocks-genotypes" class="level3">
-<h3 class="anchored" data-anchor-id="full-model-intercept-blocks-genotypes">2.5 Full model: intercept + blocks + genotypes</h3>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Matrices</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Code</a></li></ul>
-<div class="tab-content">
-<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <ul>
 <li>Model:</li>
 </ul>
@@ -2600,23 +2483,23 @@ g_4 \\
 \end{align*}
 \]</span></p>
 </div>
-<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">&lt;-</span> yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> block <span class="sc">+</span> gen</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">model.frame</span>(ff, data)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(ff, m)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(data<span class="sc">$</span>yield)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>Xty <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> y</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>XtX <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> X</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>rank_X <span class="ot">&lt;-</span> <span class="fu">qr</span>(XtX)<span class="sc">$</span>rank</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>XtX_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(XtX)</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> XtX_inv <span class="sc">%*%</span> Xty</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">t</span>(y <span class="sc">-</span> X <span class="sc">%*%</span> beta) <span class="sc">%*%</span> (y <span class="sc">-</span> X <span class="sc">%*%</span> beta)</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(SSE)</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">rank =</span> rank_X, <span class="at">betas =</span> <span class="fu">drop</span>(beta), <span class="at">SSE =</span> SSE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">&lt;-</span> yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> block <span class="sc">+</span> gen</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">model.frame</span>(ff, data)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(ff, m)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(data<span class="sc">$</span>yield)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>Xty <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> y</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>XtX <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> X</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>rank_X <span class="ot">&lt;-</span> <span class="fu">qr</span>(XtX)<span class="sc">$</span>rank</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>XtX_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(XtX)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> XtX_inv <span class="sc">%*%</span> Xty</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">t</span>(y <span class="sc">-</span> X <span class="sc">%*%</span> beta) <span class="sc">%*%</span> (y <span class="sc">-</span> X <span class="sc">%*%</span> beta)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(SSE)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">rank =</span> rank_X, <span class="at">betas =</span> <span class="fu">drop</span>(beta), <span class="at">SSE =</span> SSE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$rank
 [1] 6
@@ -2632,67 +2515,51 @@ $SSE
 </div>
 </div>
 </div>
+<p>Notice that the first level of each factor (baseline) is dropped in order to have a full rank <span class="math inline">\(\boldsymbol{X}\)</span> matrix.</p>
 </section>
-</section>
-<section id="reduction-in-ss-and-anova-table" class="level2">
-<h2 class="anchored" data-anchor-id="reduction-in-ss-and-anova-table">3) Reduction-in-SS and ANOVA table</h2>
-<p>Partial Sum of Squares (SS) measures the unique contribution of a predictor variable to a model, accounting for all other variables. It is calculated by comparing the error sum of squares (SSE) of the model without the variable to the SSE of the model with it. A larger reduction in SSE indicates a greater unique contribution of that variable.</p>
+<section id="coefficients-and-variance-covariances" class="level3">
+<h3 class="anchored" data-anchor-id="coefficients-and-variance-covariances">2.5 Coefficients and variance-covariances</h3>
+<p><span class="math display">\[ \boldsymbol{\hat\beta} = (\boldsymbol{X^\top X})^{-1} \boldsymbol{X^\top} \boldsymbol{y} \]</span> <span class="math display">\[V(\boldsymbol{\hat{\beta}}) = (\boldsymbol{X^\top X})^{-1} \sigma^2\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sse_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">factor</span>(</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"Intercept"</span>, <span class="st">"Add Blocks"</span>, <span class="st">"Add Genotypes"</span>, <span class="st">"Full"</span>),</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>, <span class="st">"Add Blocks"</span>, <span class="st">"Add Genotypes"</span>, <span class="st">"Full"</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">SS =</span> <span class="fu">c</span>(SSE_mu, SSE_mu <span class="sc">-</span> SSE_blk, SSE_mu <span class="sc">-</span> SSE_gen, SSE)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sse_df, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Model, <span class="at">y =</span> SS, <span class="at">group =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"#00BFC4"</span>) <span class="sc">+</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="00_start_lm_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sigma_2 <span class="ot">&lt;-</span> SSE <span class="sc">/</span> (n <span class="sc">-</span> <span class="fu">length</span>(beta))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>vcov_betas <span class="ot">&lt;-</span> XtX_inv <span class="sc">*</span> sigma_2</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>vcov_betas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            (Intercept) block2 block3      geng2      geng3      geng4
+(Intercept)   0.2000000   -0.1   -0.1 -0.1333333 -0.1333333 -0.1333333
+block2       -0.1000000    0.2    0.1  0.0000000  0.0000000  0.0000000
+block3       -0.1000000    0.1    0.2  0.0000000  0.0000000  0.0000000
+geng2        -0.1333333    0.0    0.0  0.2666667  0.1333333  0.1333333
+geng3        -0.1333333    0.0    0.0  0.1333333  0.2666667  0.1333333
+geng4        -0.1333333    0.0    0.0  0.1333333  0.1333333  0.2666667</code></pre>
 </div>
 </div>
-</div>
-<p>We now assemble an ANOVA table. Residual df is</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>anova_dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">c</span>(<span class="st">"block"</span>, <span class="st">"gen"</span>, <span class="st">"residuals"</span>), <span class="co"># factors included in the model</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Df     =</span> <span class="fu">c</span>(n_blks <span class="sc">-</span> <span class="dv">1</span>, n_gens <span class="sc">-</span> <span class="dv">1</span>, n <span class="sc">-</span> <span class="fu">length</span>(beta)), <span class="co"># `n - p`, where `p` is the number of coefficients</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">SSq    =</span> <span class="fu">c</span>(SSE_mu <span class="sc">-</span> SSE_blk, SSE_mu <span class="sc">-</span> SSE_gen, SSE) <span class="co"># differences between baseline model and nested models</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">MSq =</span> SSq <span class="sc">/</span> Df,</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">F.value =</span> MSq <span class="sc">/</span> MSq[<span class="dv">3</span>],</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pf</span>(<span class="at">q =</span> F.value, <span class="at">df1 =</span> Df, <span class="at">df2 =</span> Df[<span class="dv">3</span>], <span class="at">lower.tail =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">F.value =</span> <span class="fu">ifelse</span>(Source <span class="sc">==</span> <span class="st">"residuals"</span>, <span class="cn">NA</span>, F.value),</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(Source <span class="sc">==</span> <span class="st">"residuals"</span>, <span class="cn">NA</span>, <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>)</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>anova_dt <span class="sc">|&gt;</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">coefficient =</span> <span class="fu">rownames</span>(vcov_betas),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">solution =</span> beta,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">variance =</span> <span class="fu">diag</span>(vcov_betas),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.error =</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(vcov_betas)),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="umjvhcjkrj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#umjvhcjkrj table {
+<div id="ysgbkrbbrn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ysgbkrbbrn table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#umjvhcjkrj thead, #umjvhcjkrj tbody, #umjvhcjkrj tfoot, #umjvhcjkrj tr, #umjvhcjkrj td, #umjvhcjkrj th {
+#ysgbkrbbrn thead, #ysgbkrbbrn tbody, #ysgbkrbbrn tfoot, #ysgbkrbbrn tr, #ysgbkrbbrn td, #ysgbkrbbrn th {
   border-style: none;
 }
 
-#umjvhcjkrj p {
+#ysgbkrbbrn p {
   margin: 0;
   padding: 0;
 }
 
-#umjvhcjkrj .gt_table {
+#ysgbkrbbrn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2718,12 +2585,12 @@ $SSE
   border-left-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_caption {
+#ysgbkrbbrn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#umjvhcjkrj .gt_title {
+#ysgbkrbbrn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2735,7 +2602,7 @@ $SSE
   border-bottom-width: 0;
 }
 
-#umjvhcjkrj .gt_subtitle {
+#ysgbkrbbrn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2747,7 +2614,7 @@ $SSE
   border-top-width: 0;
 }
 
-#umjvhcjkrj .gt_heading {
+#ysgbkrbbrn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2759,13 +2626,13 @@ $SSE
   border-right-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_bottom_border {
+#ysgbkrbbrn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_col_headings {
+#ysgbkrbbrn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2780,7 +2647,7 @@ $SSE
   border-right-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_col_heading {
+#ysgbkrbbrn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2800,7 +2667,7 @@ $SSE
   overflow-x: hidden;
 }
 
-#umjvhcjkrj .gt_column_spanner_outer {
+#ysgbkrbbrn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2812,15 +2679,15 @@ $SSE
   padding-right: 4px;
 }
 
-#umjvhcjkrj .gt_column_spanner_outer:first-child {
+#ysgbkrbbrn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#umjvhcjkrj .gt_column_spanner_outer:last-child {
+#ysgbkrbbrn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#umjvhcjkrj .gt_column_spanner {
+#ysgbkrbbrn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2832,11 +2699,11 @@ $SSE
   width: 100%;
 }
 
-#umjvhcjkrj .gt_spanner_row {
+#ysgbkrbbrn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#umjvhcjkrj .gt_group_heading {
+#ysgbkrbbrn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2862,7 +2729,7 @@ $SSE
   text-align: left;
 }
 
-#umjvhcjkrj .gt_empty_group_heading {
+#ysgbkrbbrn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2877,15 +2744,15 @@ $SSE
   vertical-align: middle;
 }
 
-#umjvhcjkrj .gt_from_md > :first-child {
+#ysgbkrbbrn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#umjvhcjkrj .gt_from_md > :last-child {
+#ysgbkrbbrn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#umjvhcjkrj .gt_row {
+#ysgbkrbbrn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2904,7 +2771,7 @@ $SSE
   overflow-x: hidden;
 }
 
-#umjvhcjkrj .gt_stub {
+#ysgbkrbbrn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2917,7 +2784,7 @@ $SSE
   padding-right: 5px;
 }
 
-#umjvhcjkrj .gt_stub_row_group {
+#ysgbkrbbrn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2931,15 +2798,15 @@ $SSE
   vertical-align: top;
 }
 
-#umjvhcjkrj .gt_row_group_first td {
+#ysgbkrbbrn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#umjvhcjkrj .gt_row_group_first th {
+#ysgbkrbbrn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#umjvhcjkrj .gt_summary_row {
+#ysgbkrbbrn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2949,16 +2816,16 @@ $SSE
   padding-right: 5px;
 }
 
-#umjvhcjkrj .gt_first_summary_row {
+#ysgbkrbbrn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_first_summary_row.thick {
+#ysgbkrbbrn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#umjvhcjkrj .gt_last_summary_row {
+#ysgbkrbbrn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2968,7 +2835,7 @@ $SSE
   border-bottom-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_grand_summary_row {
+#ysgbkrbbrn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2978,7 +2845,7 @@ $SSE
   padding-right: 5px;
 }
 
-#umjvhcjkrj .gt_first_grand_summary_row {
+#ysgbkrbbrn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2988,7 +2855,7 @@ $SSE
   border-top-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_last_grand_summary_row_top {
+#ysgbkrbbrn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2998,11 +2865,11 @@ $SSE
   border-bottom-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_striped {
+#ysgbkrbbrn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#umjvhcjkrj .gt_table_body {
+#ysgbkrbbrn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3011,7 +2878,7 @@ $SSE
   border-bottom-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_footnotes {
+#ysgbkrbbrn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3025,7 +2892,7 @@ $SSE
   border-right-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_footnote {
+#ysgbkrbbrn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3034,7 +2901,7 @@ $SSE
   padding-right: 5px;
 }
 
-#umjvhcjkrj .gt_sourcenotes {
+#ysgbkrbbrn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3048,7 +2915,7 @@ $SSE
   border-right-color: #D3D3D3;
 }
 
-#umjvhcjkrj .gt_sourcenote {
+#ysgbkrbbrn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3056,79 +2923,642 @@ $SSE
   padding-right: 5px;
 }
 
-#umjvhcjkrj .gt_left {
+#ysgbkrbbrn .gt_left {
   text-align: left;
 }
 
-#umjvhcjkrj .gt_center {
+#ysgbkrbbrn .gt_center {
   text-align: center;
 }
 
-#umjvhcjkrj .gt_right {
+#ysgbkrbbrn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#umjvhcjkrj .gt_font_normal {
+#ysgbkrbbrn .gt_font_normal {
   font-weight: normal;
 }
 
-#umjvhcjkrj .gt_font_bold {
+#ysgbkrbbrn .gt_font_bold {
   font-weight: bold;
 }
 
-#umjvhcjkrj .gt_font_italic {
+#ysgbkrbbrn .gt_font_italic {
   font-style: italic;
 }
 
-#umjvhcjkrj .gt_super {
+#ysgbkrbbrn .gt_super {
   font-size: 65%;
 }
 
-#umjvhcjkrj .gt_footnote_marks {
+#ysgbkrbbrn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#umjvhcjkrj .gt_asterisk {
+#ysgbkrbbrn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#umjvhcjkrj .gt_indent_1 {
+#ysgbkrbbrn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#umjvhcjkrj .gt_indent_2 {
+#ysgbkrbbrn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#umjvhcjkrj .gt_indent_3 {
+#ysgbkrbbrn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#umjvhcjkrj .gt_indent_4 {
+#ysgbkrbbrn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#umjvhcjkrj .gt_indent_5 {
+#ysgbkrbbrn .gt_indent_5 {
   text-indent: 25px;
 }
 
-#umjvhcjkrj .katex-display {
+#ysgbkrbbrn .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#umjvhcjkrj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ysgbkrbbrn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="header gt_col_headings">
+<th id="coefficient" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">coefficient</th>
+<th id="solution" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">solution</th>
+<th id="variance" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">variance</th>
+<th id="std.error" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">std.error</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="coefficient">(Intercept)</td>
+<td class="gt_row gt_right" headers="solution">7.75</td>
+<td class="gt_row gt_right" headers="variance">0.2000000</td>
+<td class="gt_row gt_right" headers="std.error">0.4472136</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="coefficient">block2</td>
+<td class="gt_row gt_right" headers="solution">-1.65</td>
+<td class="gt_row gt_right" headers="variance">0.2000000</td>
+<td class="gt_row gt_right" headers="std.error">0.4472136</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="coefficient">block3</td>
+<td class="gt_row gt_right" headers="solution">-2.10</td>
+<td class="gt_row gt_right" headers="variance">0.2000000</td>
+<td class="gt_row gt_right" headers="std.error">0.4472136</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="coefficient">geng2</td>
+<td class="gt_row gt_right" headers="solution">1.10</td>
+<td class="gt_row gt_right" headers="variance">0.2666667</td>
+<td class="gt_row gt_right" headers="std.error">0.5163978</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="coefficient">geng3</td>
+<td class="gt_row gt_right" headers="solution">0.10</td>
+<td class="gt_row gt_right" headers="variance">0.2666667</td>
+<td class="gt_row gt_right" headers="std.error">0.5163978</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="coefficient">geng4</td>
+<td class="gt_row gt_right" headers="solution">1.80</td>
+<td class="gt_row gt_right" headers="variance">0.2666667</td>
+<td class="gt_row gt_right" headers="std.error">0.5163978</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s be careful when interpreting the coefficients and the variance of these factor coefficients. In a linear model, when you include a categorical factor like “genotype”, the model needs a baseline. In R it chooses g1 as the reference. Therefore:</p>
+<ul>
+<li>The coefficient for g2 is the estimated difference between g2 and g1 (7.6 - 6.5 = 1.1).</li>
+<li>The variance for the g2 coefficient is the uncertainty around that difference (g2 - g1).</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="reduction-in-ss-and-anova-table" class="level2">
+<h2 class="anchored" data-anchor-id="reduction-in-ss-and-anova-table">3) Reduction-in-SS and ANOVA table</h2>
+<p>Partial Sum of Squares (SS) measures the unique contribution of a predictor variable to a model, accounting for all other variables. It is calculated by comparing the error sum of squares (SSE) of the model without the variable to the SSE of the model with it. A larger reduction in SSE indicates a greater unique contribution of that variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sse_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">factor</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"Intercept"</span>, <span class="st">"Add Blocks"</span>, <span class="st">"Add Genotypes"</span>, <span class="st">"Full"</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>, <span class="st">"Add Blocks"</span>, <span class="st">"Add Genotypes"</span>, <span class="st">"Full"</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">SS =</span> <span class="fu">c</span>(SSE_mu, SSE_mu <span class="sc">-</span> SSE_blk, SSE_mu <span class="sc">-</span> SSE_gen, SSE)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sse_df, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Model, <span class="at">y =</span> SS, <span class="at">group =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"#00BFC4"</span>) <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="00_start_lm_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We now assemble an ANOVA table. Residual df is</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>anova_dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Source =</span> <span class="fu">c</span>(<span class="st">"block"</span>, <span class="st">"gen"</span>, <span class="st">"residuals"</span>), <span class="co"># factors included in the model</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Df     =</span> <span class="fu">c</span>(n_blks <span class="sc">-</span> <span class="dv">1</span>, n_gens <span class="sc">-</span> <span class="dv">1</span>, n <span class="sc">-</span> <span class="fu">length</span>(beta)), <span class="co"># `n - p`, where `p` is the number of coefficients</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">SSq    =</span> <span class="fu">c</span>(SSE_mu <span class="sc">-</span> SSE_blk, SSE_mu <span class="sc">-</span> SSE_gen, SSE) <span class="co"># differences between baseline model and nested models</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">MSq =</span> SSq <span class="sc">/</span> Df,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">F.value =</span> MSq <span class="sc">/</span> MSq[<span class="dv">3</span>],</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pf</span>(<span class="at">q =</span> F.value, <span class="at">df1 =</span> Df, <span class="at">df2 =</span> Df[<span class="dv">3</span>], <span class="at">lower.tail =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">F.value =</span> <span class="fu">ifelse</span>(Source <span class="sc">==</span> <span class="st">"residuals"</span>, <span class="cn">NA</span>, F.value),</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(Source <span class="sc">==</span> <span class="st">"residuals"</span>, <span class="cn">NA</span>, <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>anova_dt <span class="sc">|&gt;</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="nyzowcwxrb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#nyzowcwxrb table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#nyzowcwxrb thead, #nyzowcwxrb tbody, #nyzowcwxrb tfoot, #nyzowcwxrb tr, #nyzowcwxrb td, #nyzowcwxrb th {
+  border-style: none;
+}
+
+#nyzowcwxrb p {
+  margin: 0;
+  padding: 0;
+}
+
+#nyzowcwxrb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#nyzowcwxrb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#nyzowcwxrb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#nyzowcwxrb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#nyzowcwxrb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#nyzowcwxrb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#nyzowcwxrb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#nyzowcwxrb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#nyzowcwxrb .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#nyzowcwxrb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#nyzowcwxrb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nyzowcwxrb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#nyzowcwxrb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#nyzowcwxrb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#nyzowcwxrb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nyzowcwxrb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#nyzowcwxrb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#nyzowcwxrb .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#nyzowcwxrb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nyzowcwxrb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#nyzowcwxrb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nyzowcwxrb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#nyzowcwxrb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nyzowcwxrb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nyzowcwxrb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nyzowcwxrb .gt_left {
+  text-align: left;
+}
+
+#nyzowcwxrb .gt_center {
+  text-align: center;
+}
+
+#nyzowcwxrb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#nyzowcwxrb .gt_font_normal {
+  font-weight: normal;
+}
+
+#nyzowcwxrb .gt_font_bold {
+  font-weight: bold;
+}
+
+#nyzowcwxrb .gt_font_italic {
+  font-style: italic;
+}
+
+#nyzowcwxrb .gt_super {
+  font-size: 65%;
+}
+
+#nyzowcwxrb .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#nyzowcwxrb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#nyzowcwxrb .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#nyzowcwxrb .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#nyzowcwxrb .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#nyzowcwxrb .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#nyzowcwxrb .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#nyzowcwxrb .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#nyzowcwxrb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
 <th id="Source" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Source</th>
 <th id="Df" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Df</th>
 <th id="SSq" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">SSq</th>
@@ -3185,8 +3615,8 @@ Note
 <section id="verify-with-lm" class="level2">
 <h2 class="anchored" data-anchor-id="verify-with-lm">4) Verify with <code>lm()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> block <span class="sc">+</span> gen, <span class="at">data =</span> data)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> block <span class="sc">+</span> gen, <span class="at">data =</span> data)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -3211,12 +3641,12 @@ Residual standard error: 0.6325 on 6 degrees of freedom
 Multiple R-squared:  0.8724,    Adjusted R-squared:  0.7661 
 F-statistic: 8.205 on 5 and 6 DF,  p-value: 0.01173</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Intercept)      block2      block3       geng2       geng3       geng4 
        7.75       -1.65       -2.10        1.10        0.10        1.80 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -3228,7 +3658,7 @@ Residuals  6   2.40    0.40
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">vcov</span>(mod), <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">vcov</span>(mod), <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            (Intercept) block2 block3    geng2    geng3    geng4
 (Intercept)     0.20000   -0.1   -0.1 -0.13333 -0.13333 -0.13333
@@ -3238,11 +3668,8 @@ geng2          -0.13333    0.0    0.0  0.26667  0.13333  0.13333
 geng3          -0.13333    0.0    0.0  0.13333  0.26667  0.13333
 geng4          -0.13333    0.0    0.0  0.13333  0.13333  0.26667</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that (X'X)^{-1} * sigma^2 matches vcov</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sigma^2 estimate using the full model (p = length(beta))</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>sigma_2 <span class="ot">&lt;-</span> SSE <span class="sc">/</span> (n <span class="sc">-</span> <span class="fu">length</span>(beta))</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>vcov_betas <span class="ot">&lt;-</span> XtX_inv <span class="sc">*</span> sigma_2</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vcov_betas, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that (X'X)^{-1} * sigma^2 matches vcov</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vcov_betas, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            (Intercept) block2 block3    geng2    geng3    geng4
 (Intercept)     0.20000   -0.1   -0.1 -0.13333 -0.13333 -0.13333
@@ -3254,34 +3681,34 @@ geng4          -0.13333    0.0    0.0  0.13333  0.13333  0.26667</code></pre>
 </div>
 </div>
 </section>
-<section id="interpreting-coefficients-under-treatment-coding" class="level2">
-<h2 class="anchored" data-anchor-id="interpreting-coefficients-under-treatment-coding">5) Interpreting coefficients under treatment coding</h2>
-<p>With <code>block</code> and <code>gen</code> as factors and an intercept present, R uses treatment (reference-cell) coding by default. The printed <code>beta</code> therefore contains:</p>
+<section id="reconstructing-means" class="level2">
+<h2 class="anchored" data-anchor-id="reconstructing-means">5) Reconstructing means</h2>
+<p>With <code>block</code> and <code>gen</code> as factors and an intercept present, R uses treatment (baseline) coding by default. The printed <code>beta</code> therefore contains:</p>
 <ul>
 <li><code>beta[1]</code>: the intercept (no longer overall mean)</li>
 <li><code>beta[2:3]</code>: effects for non-reference blocks</li>
 <li><code>beta[4:6]</code>: effects for non-reference genotypes</li>
 </ul>
-<p>You can reconstruct <strong>overall mean</strong>, <strong>genotype cell means</strong>, and <strong>block means</strong> as follows.</p>
+<p>You can reconstruct <strong>overall mean</strong>, <strong>genotype means</strong>, and <strong>block means</strong> as follows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of coefficients in full model</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>n_coef <span class="ot">&lt;-</span> <span class="fu">length</span>(beta)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Overall mean reconstructed from coefficients</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>mu_recon <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> n_blks <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> n_gens</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare with the intercept-only estimate</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>mu_recon <span class="sc">-</span> beta_mu[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of coefficients in full model</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>n_coef <span class="ot">&lt;-</span> <span class="fu">length</span>(beta)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Overall mean reconstructed from coefficients</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>mu_recon <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> n_blks <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> n_gens</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare with the intercept-only estimate</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>mu_recon <span class="sc">-</span> beta_mu[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 6.217249e-15</code></pre>
+<pre><code>[1] 7.993606e-15</code></pre>
 </div>
 </div>
-<section id="genotype-means-including-the-missing-reference-level" class="level3">
-<h3 class="anchored" data-anchor-id="genotype-means-including-the-missing-reference-level">5.1 Genotype means including the missing (reference) level</h3>
+<section id="genotype-means-including-the-missing-baseline-level" class="level3">
+<h3 class="anchored" data-anchor-id="genotype-means-including-the-missing-baseline-level">5.1 Genotype means including the missing (baseline) level</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># beta currently has: (Intercept), block2, block3, gen2, gen3, gen4</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a named vector for gen effects including the reference level set to 0</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># beta currently has: (Intercept), block2, block3, gen2, gen3, gen4</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a named vector for gen effects including the reference level set to 0</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             [,1]
 (Intercept)  7.75
@@ -3291,20 +3718,20 @@ geng2        1.10
 geng3        0.10
 geng4        1.80</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>gens <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"geng1"</span> <span class="ot">=</span> <span class="dv">0</span>, beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, ])</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Add back the intercept and average block effect</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>gens <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> n_blks <span class="sc">+</span> gens</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>gens</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>gens <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"geng1"</span> <span class="ot">=</span> <span class="dv">0</span>, beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, ])</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Add back the intercept and average block effect</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>gens <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> n_blks <span class="sc">+</span> gens</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>gens</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>geng1 geng2 geng3 geng4 
   6.5   7.6   6.6   8.3 </code></pre>
 </div>
 </div>
 </section>
-<section id="block-means-including-the-missing-reference-level" class="level3">
-<h3 class="anchored" data-anchor-id="block-means-including-the-missing-reference-level">5.2 Block means including the missing (reference) level</h3>
+<section id="block-means-including-the-missing-baseline-level" class="level3">
+<h3 class="anchored" data-anchor-id="block-means-including-the-missing-baseline-level">5.2 Block means including the missing (baseline) level</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             [,1]
 (Intercept)  7.75
@@ -3314,9 +3741,9 @@ geng2        1.10
 geng3        0.10
 geng4        1.80</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>blks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"block1"</span> <span class="ot">=</span> <span class="dv">0</span>, beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, ])</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>blks <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> n_gens <span class="sc">+</span> blks</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>blks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>blks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"block1"</span> <span class="ot">=</span> <span class="dv">0</span>, beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, ])</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>blks <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> n_gens <span class="sc">+</span> blks</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>blks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>block1 block2 block3 
   8.50   6.85   6.40 </code></pre>
@@ -3328,9 +3755,9 @@ geng4        1.80</code></pre>
 <h2 class="anchored" data-anchor-id="estimated-marginal-means-and-pairwise-comparisons">6) Estimated marginal means and pairwise comparisons</h2>
 <p><code>emmeans</code> provides adjusted means (marginal over the other factors) and convenient contrasts.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genotype adjusted means</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>emm_gen <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(mod, <span class="sc">~</span>gen)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>emm_gen</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genotype adjusted means</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>emm_gen <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(mod, <span class="sc">~</span>gen)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>emm_gen</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> gen emmean    SE df lower.CL upper.CL
  g1     6.5 0.365  6     5.61     7.39
@@ -3340,12 +3767,6 @@ geng4        1.80</code></pre>
 
 Results are averaged over the levels of: block 
 Confidence level used: 0.95 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard errors of genotype via (X'X)^{-1} * sigma2</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(vcov_betas)[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    geng2     geng3     geng4 
-0.5163978 0.5163978 0.5163978 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pairwise genotype comparisons</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(emm_gen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3377,7 +3798,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Notice that the standard errors via <span class="math inline">\((\boldsymbol{X' X})^{-1}\sigma^2\)</span> are different to the ones return by <code>emmeans</code>. Interestingly those from <span class="math inline">\((\boldsymbol{X' X})^{-1}\sigma^2\)</span> look exactly like the pairwise genotype comparison Standard Errors. Why? We will see why in the next article.</p>
+<p>Notice that the standard errors via <span class="math inline">\((\boldsymbol{X' X})^{-1}\sigma^2\)</span> are different to the ones return by <code>emmeans</code>, as expected.</p>
 </div>
 </div>
 
@@ -3467,6 +3888,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -3577,6 +4000,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

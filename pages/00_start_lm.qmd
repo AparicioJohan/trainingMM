@@ -369,7 +369,7 @@ list(rank = rank_X, beta_blk = drop(beta_blk), SSE_blk = SSE_blk)
 
 :::
 
-### 2.3 Genotype main effects (no intercept)
+### 2.3 Add genotypes
 
 ::: {.panel-tabset}
 
@@ -469,7 +469,7 @@ $$
 0 \ \frac{1}{3} \ 0 \ 0 \\
 0 \ 0 \ \frac{1}{3} \ 0 \\
 0 \ 0 \ 0 \ \frac{1}{3} \\
-\end{bmatrix}}_{(X'X)^{-1}}
+\end{bmatrix}}_{(\boldsymbol{X'X})^{-1}}
 \underbrace{
 \begin{bmatrix}
 19.5 \\
@@ -520,149 +520,7 @@ m2 <- list(rank = rank_X, beta_gen = drop(beta_gen), SSE_gen = SSE_gen)
 :::
 
 
-### 2.4 Genotype main effects (Intercept)
-
-::: {.panel-tabset}
-
-# Matrices
-
--   Model: 
-
-$$
-\small
-\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon} => 
-\begin{bmatrix}
-7.4 \\
-6.5 \\
-5.6 \\
-9.8 \\
-6.8 \\
-6.2 \\
-7.3 \\
-6.1 \\
-6.4 \\
-9.5 \\
-8.0 \\
-7.4 \\
-\end{bmatrix} = 
-\begin{bmatrix}
-\overset{intercept}{1} & \overset{gen2}{0} & \overset{gen3}{0} & \overset{gen4}{0} \\
-1 & 0 & 0 & 0 \\
-1 & 0 & 0 & 0 \\
-1 & 1 & 0 & 0 \\
-1 & 1 & 0 & 0 \\
-1 & 1 & 0 & 0 \\
-1 & 0 & 1 & 0 \\
-1 & 0 & 1 & 0 \\
-1 & 0 & 1 & 0 \\
-1 & 0 & 0 & 1 \\
-1 & 0 & 0 & 1 \\
-1 & 0 & 0 & 1
-\end{bmatrix}
-\begin{bmatrix}
-\mu \\
-g_2 \\
-g_3 \\
-g_4 \\
-\end{bmatrix} + \boldsymbol{\varepsilon}
-$$
-
--   BLUE(s):
-
-
-$$
-\small
-\boldsymbol{\beta} = 
-\underbrace{
-\left(\begin{bmatrix}
-1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \\
-0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \\
-\end{bmatrix}
-\begin{bmatrix}
-1 \ 0 \ 0 \ 0 \\
-1 \ 0 \ 0 \ 0 \\
-1 \ 0 \ 0 \ 0 \\
-1 \ 1 \ 0 \ 0 \\
-1 \ 1 \ 0 \ 0 \\
-1 \ 1 \ 0 \ 0 \\
-1 \ 0 \ 1 \ 0 \\
-1 \ 0 \ 1 \ 0 \\
-1 \ 0 \ 1 \ 0 \\
-1 \ 0 \ 0 \ 1 \\
-1 \ 0 \ 0 \ 1 \\
-1 \ 0 \ 0 \ 1 \\
-\end{bmatrix}\right)^{-1}}_{(\boldsymbol{X'X})^{-1}}
-\underbrace{
-\begin{bmatrix}
-1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \ 1 \\
-0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 1 \ 1 \\
-\end{bmatrix}
-\begin{bmatrix}
-7.4 \\
-6.5 \\
-5.6 \\
-9.8 \\
-6.8 \\
-6.2 \\
-7.3 \\
-6.1 \\
-6.4 \\
-9.5 \\
-8.0 \\
-7.4 \\
-\end{bmatrix}}_{\boldsymbol{X'y}} = 
-\underbrace{\begin{bmatrix}
-\frac{1}{3}\ \frac{-1}{3} \ \frac{-1}{3} \ \frac{-1}{3} \\ 
-\frac{-1}{3} \ \frac{2}{3} \ \frac{1}{3} \ \frac{1}{3} \\
-\frac{-1}{3} \ \frac{1}{3} \ \frac{2}{3} \ \frac{1}{3} \\
-\frac{-1}{3} \ \frac{1}{3} \ \frac{1}{3} \ \frac{2}{3} \\
-\end{bmatrix}}_{(X'X)^{-1}}
-\underbrace{
-\begin{bmatrix}
-87.0 \\
-22.8 \\
-19.8 \\
-24.9 \\
-\end{bmatrix}
-}_{\boldsymbol{X'y}} = 
-\begin{bmatrix}
-6.5 \\
-1.1 \\
-0.1 \\
-1.8 \\
-\end{bmatrix}
-$$
-
-# Code
-
-```{r}
-ff <- yield ~ 1 + gen
-m <- model.frame(ff, data)
-X <- model.matrix(ff, m)
-y <- matrix(data$yield)
-
-Xty <- t(X) %*% y
-XtX <- t(X) %*% X
-rank_X <- qr(XtX)$rank
-XtX_inv <- solve(XtX)
-
-beta_gen <- XtX_inv %*% Xty
-SSE_gen <- t(y - X %*% beta_gen) %*% (y - X %*% beta_gen)
-SSE_gen <- as.numeric(SSE_gen)
-
-m3 <- list(rank = rank_X, beta_gen = drop(beta_gen), SSE_gen = SSE_gen)
-```
-
-In progress ...
-
-:::
-
-
-### 2.5 Full model: intercept + blocks + genotypes
+### 2.4 Full model: intercept + blocks + genotypes
 
 ::: {.panel-tabset}
 
@@ -829,6 +687,36 @@ list(rank = rank_X, betas = drop(beta), SSE = SSE)
 
 :::
 
+Notice that the first level of each factor (baseline) is dropped in order to have a full rank $\boldsymbol{X}$ matrix.
+
+### 2.5 Coefficients and variance-covariances
+
+$$ \boldsymbol{\hat\beta} = (\boldsymbol{X^\top X})^{-1} \boldsymbol{X^\top} \boldsymbol{y} $$
+$$V(\boldsymbol{\hat{\beta}}) = (\boldsymbol{X^\top X})^{-1} \sigma^2$$
+ 
+```{r}
+sigma_2 <- SSE / (n - length(beta))
+vcov_betas <- XtX_inv * sigma_2
+vcov_betas
+```
+```{r}
+data.frame(
+  coefficient = rownames(vcov_betas),
+  solution = beta,
+  variance = diag(vcov_betas),
+  std.error = sqrt(diag(vcov_betas)),
+  row.names = NULL
+) |> gt()
+```
+
+::: callout-note
+Let's be careful when interpreting the coefficients and the variance of these factor coefficients. In a linear model, when you include a categorical factor like "genotype", the model needs a baseline. In R it chooses g1 as the reference. Therefore:
+
+* The coefficient for g2 is the estimated difference between g2 and g1 (7.6 - 6.5 = 1.1).
+* The variance for the g2 coefficient is the uncertainty around that difference (g2 - g1).
+:::
+
+
 ## 3) Reduction-in-SS and ANOVA table
 
 Partial Sum of Squares (SS) measures the unique contribution of a predictor variable to a model, accounting for all other variables. It is calculated by comparing the error sum of squares (SSE) of the model without the variable to the SSE of the model with it. A larger reduction in SSE indicates a greater unique contribution of that variable.     
@@ -882,21 +770,18 @@ anova(mod)
 round(vcov(mod), 5)
 
 # Check that (X'X)^{-1} * sigma^2 matches vcov
-# Sigma^2 estimate using the full model (p = length(beta))
-sigma_2 <- SSE / (n - length(beta))
-vcov_betas <- XtX_inv * sigma_2
 round(vcov_betas, 5)
 ```
 
-## 5) Interpreting coefficients under treatment coding
+## 5) Reconstructing means
 
-With `block` and `gen` as factors and an intercept present, R uses treatment (reference-cell) coding by default. The printed `beta` therefore contains:
+With `block` and `gen` as factors and an intercept present, R uses treatment (baseline) coding by default. The printed `beta` therefore contains:
 
 -   `beta[1]`: the intercept (no longer overall mean)
 -   `beta[2:3]`: effects for non-reference blocks
 -   `beta[4:6]`: effects for non-reference genotypes
 
-You can reconstruct **overall mean**, **genotype cell means**, and **block means** as follows.
+You can reconstruct **overall mean**, **genotype means**, and **block means** as follows.
 
 ```{r}
 # Number of coefficients in full model
@@ -909,7 +794,7 @@ mu_recon <- beta[1] + sum(beta[2:3]) / n_blks + sum(beta[4:6]) / n_gens
 mu_recon - beta_mu[1]
 ```
 
-### 5.1 Genotype means including the missing (reference) level
+### 5.1 Genotype means including the missing (baseline) level
 
 ```{r}
 # beta currently has: (Intercept), block2, block3, gen2, gen3, gen4
@@ -921,7 +806,7 @@ gens <- beta[1] + sum(beta[2:3]) / n_blks + gens
 gens
 ```
 
-### 5.2 Block means including the missing (reference) level
+### 5.2 Block means including the missing (baseline) level
 
 ```{r}
 print(beta)
@@ -939,9 +824,6 @@ blks
 emm_gen <- emmeans(mod, ~gen)
 emm_gen
 
-# Standard errors of genotype via (X'X)^{-1} * sigma2
-sqrt(diag(vcov_betas)[4:6])
-
 # Pairwise genotype comparisons
 pairs(emm_gen)
 
@@ -950,5 +832,5 @@ sqrt(sigma_2 / 3 + sigma_2 / 3)
 ```
 
 ::: callout-important
-Notice that the standard errors via $(\boldsymbol{X' X})^{-1}\sigma^2$ are different to the ones return by `emmeans`. Interestingly those from $(\boldsymbol{X' X})^{-1}\sigma^2$ look exactly like the pairwise genotype comparison Standard Errors. Why? We will see why in the next article.
+Notice that the standard errors via $(\boldsymbol{X' X})^{-1}\sigma^2$ are different to the ones return by `emmeans`, as expected.
 :::
