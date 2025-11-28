@@ -65,7 +65,7 @@ We will progressively build the RCBD model using `model.frame()` and `model.matr
 -   $\boldsymbol{y} = \boldsymbol{X\beta} + \boldsymbol{\varepsilon}$: linear model
 -   $\boldsymbol{y}$: response vector (yield)
 -   $\boldsymbol{X}$: model matrix
--   $\boldsymbol{\varepsilon} \sim MVN(0, \boldsymbol{I}\sigma^2)$
+-   $\boldsymbol{\varepsilon} \sim MVN(\boldsymbol{0}, \boldsymbol{I}\sigma^2)$
 -   $E(\boldsymbol{y}) = \boldsymbol{X\beta}; \; V(\boldsymbol{y}) = \boldsymbol{I}\sigma^2$
 -   $\boldsymbol{\hat\beta} = (\boldsymbol{X^\top X})^{-1} \boldsymbol{X^\top} \boldsymbol{y}$
 -   $V(\boldsymbol{\hat{\beta}}) = (\boldsymbol{X^\top X})^{-1} \sigma^2$
@@ -764,9 +764,8 @@ anova_dt |>
 
 ```{r}
 mod <- lm(yield ~ 1 + block + gen, data = data)
-summary(mod)
-coef(mod)
 anova(mod)
+coef(mod)
 round(vcov(mod), 5)
 
 # Check that (X'X)^{-1} * sigma^2 matches vcov

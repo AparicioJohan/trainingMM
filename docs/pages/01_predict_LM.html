@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-10-06">
+<meta name="dcterms.date" content="2025-11-28">
 
 <title>Marginal means – trainingMM</title>
 <style>
@@ -347,7 +347,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 6, 2025</p>
+      <p class="date">November 28, 2025</p>
     </div>
   </div>
   
@@ -359,7 +359,7 @@ window.Quarto = {
 </header>
 
 
-<p>In the previous chapter, we introduced how linear models are fitted and how coefficients are estimated. However, these coefficients depend on how categorical factors are encoded in the design matrix (for example, using the first level as a reference). As a result, they are not directly expressed in the units of the response variable. In this section, we show how to recover <strong>estimated marginal means (EMMs)</strong>—also known as <strong>least-squares means</strong>—from the model coefficients, along with their variances.</p>
+<p>In the previous chapter, we introduced how linear models are fitted and how coefficients are estimated. However, these coefficients depend on how categorical factors are encoded in the design matrix (for example, using the first level as a reference). As a result, they are not directly expressed in the units of the response variable. In this section, we show in more detail how to recover <strong>estimated marginal means (EMMs)</strong>—also known as <strong>least-squares means</strong>—from the model coefficients, along with their variances.</p>
 <section id="estimating-coefficients" class="level2">
 <h2 class="anchored" data-anchor-id="estimating-coefficients">1) Estimating coefficients</h2>
 <div class="cell">
@@ -416,23 +416,23 @@ geng4        1.80</code></pre>
 <h2 class="anchored" data-anchor-id="marginal-means-scalar-form">2) Marginal means (scalar form)</h2>
 <p>Let’s start by using a scalar form to derive the estimated marginal means:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>EMM_g1 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])<span class="sc">/</span><span class="dv">3</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>EMM_b1 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>])<span class="sc">/</span><span class="dv">4</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>EMM_g1 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> <span class="dv">3</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>EMM_b1 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Which mathematically represent the following operations</p>
 <p><span class="math display">\[EMM(g_1) = \mu + \frac{1}{3}\hat\beta_{block_1} + \frac{1}{3}\hat\beta_{block_2} + \frac{1}{3}\hat\beta_{block_3} = 7.75 + 0 - \frac{1.65}{3} - \frac{2.10}{3} = 6.5\]</span></p>
 <p><span class="math display">\[EMM(b_1) = \mu + \frac{1}{4}\hat\beta_{g_1} + \frac{1}{4}\hat\beta_{g_2} + \frac{1}{4}\hat\beta_{g_3} + \frac{1}{4}\hat\beta_{g_4} = 7.75 + 0 + \frac{1.10}{4} + \frac{0.10}{4} + \frac{1.80}{4} = 8.5\]</span></p>
 <p>Then, for the remaining levels</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>EMM_b2 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>])<span class="sc">/</span><span class="dv">4</span> <span class="sc">+</span> beta[<span class="dv">2</span>]</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>EMM_b3 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>])<span class="sc">/</span><span class="dv">4</span> <span class="sc">+</span> beta[<span class="dv">3</span>]</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>EMM_b2 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> <span class="dv">4</span> <span class="sc">+</span> beta[<span class="dv">2</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>EMM_b3 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> <span class="dv">4</span> <span class="sc">+</span> beta[<span class="dv">3</span>]</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>EMM_g2 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])<span class="sc">/</span><span class="dv">3</span>  <span class="sc">+</span> beta[<span class="dv">4</span>]</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>EMM_g3 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])<span class="sc">/</span><span class="dv">3</span>  <span class="sc">+</span> beta[<span class="dv">5</span>]</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>EMM_g4 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])<span class="sc">/</span><span class="dv">3</span>  <span class="sc">+</span> beta[<span class="dv">6</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>EMM_g2 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> <span class="dv">3</span> <span class="sc">+</span> beta[<span class="dv">4</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>EMM_g3 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> <span class="dv">3</span> <span class="sc">+</span> beta[<span class="dv">5</span>]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>EMM_g4 <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">sum</span>(beta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> <span class="dv">3</span> <span class="sc">+</span> beta[<span class="dv">6</span>]</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>EMM <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(EMM_b1, EMM_b2, EMM_b3, EMM_g1, EMM_g2, EMM_g3, EMM_g4), <span class="at">ncol =</span> <span class="dv">1</span>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(EMM) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'b1'</span>, <span class="st">'b2'</span>, <span class="st">'b3'</span>, <span class="st">'g1'</span>, <span class="st">'g2'</span>, <span class="st">'g3'</span>, <span class="st">'g4'</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(EMM) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"b1"</span>, <span class="st">"b2"</span>, <span class="st">"b3"</span>, <span class="st">"g1"</span>, <span class="st">"g2"</span>, <span class="st">"g3"</span>, <span class="st">"g4"</span>)</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>EMM</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   [,1]
@@ -448,9 +448,9 @@ g4 8.30</code></pre>
 </section>
 <section id="marginal-means-matrix-form" class="level2">
 <h2 class="anchored" data-anchor-id="marginal-means-matrix-form">3) Marginal means (matrix form)</h2>
-<p>Now let’s explore the matrix form. Specifically, we will make use of the <span class="math inline">\(L\)</span> matrix to compute all desired values simultaneously, so that:</p>
-<p><span class="math display">\[EMM(\boldsymbol{g}) = L\hat{\boldsymbol{\beta}}\]</span></p>
-<p>The <span class="math inline">\(L\)</span> matrix represents the levels we want to compute. For example, if we want to extract the EMMs of the genotypes, we should include the intercept, the fraction of each block level that we have to add to the mean, and the levels that we want to compute from the genotypes. Notice how L has as many rows as levels are in the factor to be solved.</p>
+<p>Now let’s explore the matrix form. Specifically, we will make use of the <span class="math inline">\(\boldsymbol{L}\)</span> matrix to compute all desired values simultaneously, so that:</p>
+<p><span class="math display">\[EMM(\boldsymbol{g}) = \boldsymbol{L}\hat{\boldsymbol{\beta}}\]</span></p>
+<p>The <span class="math inline">\(\boldsymbol{L}\)</span> matrix represents the levels we want to compute. For example, if we want to extract the EMMs of the genotypes, we should include the intercept, the fraction of each block level that we have to add to the mean, and the levels that we want to compute from the genotypes. Notice how <span class="math inline">\(\boldsymbol{L}\)</span> has as many rows as levels are in the factor to be solved.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> n_g, <span class="at">ncol =</span> <span class="dv">1</span>), <span class="co"># Intercept</span></span>
@@ -518,8 +518,8 @@ EMM(\boldsymbol{g})_{[1]} = 1*7.75 + \frac{1}{3}*-1.65 + \frac{1}{3}*-2.10 = 6.5
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>L2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> n_b, <span class="at">ncol =</span> <span class="dv">1</span>), <span class="co"># Intercept</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="fu">rbind</span>(<span class="dv">0</span>, <span class="fu">diag</span>(<span class="at">nrow =</span> n_b <span class="sc">-</span> <span class="dv">1</span>)), <span class="at">nrow =</span> n_b, <span class="at">ncol =</span> n_b <span class="sc">-</span> <span class="dv">1</span>), <span class="co"># Average block</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="dv">1</span> <span class="sc">/</span> n_g, <span class="at">nrow =</span> n_b, <span class="at">ncol =</span> n_g <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="fu">rbind</span>(<span class="dv">0</span>, <span class="fu">diag</span>(<span class="at">nrow =</span> n_b <span class="sc">-</span> <span class="dv">1</span>)), <span class="at">nrow =</span> n_b, <span class="at">ncol =</span> n_b <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="dv">1</span> <span class="sc">/</span> n_g, <span class="at">nrow =</span> n_b, <span class="at">ncol =</span> n_g <span class="sc">-</span> <span class="dv">1</span>) <span class="co"># Average genotype</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>L2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -556,16 +556,16 @@ g4 8.30 8.30</code></pre>
 </section>
 <section id="variance-covariance-se" class="level2">
 <h2 class="anchored" data-anchor-id="variance-covariance-se">4) Variance-covariance (SE)</h2>
-<p>Now let’s compute the variance and the SE of the EMMS. We know that <span class="math inline">\(EMMs = L\hat\beta\)</span>, thus</p>
-<p><span class="math display">\[Var(L\hat\beta) = LVar(\hat\beta) L^T = LC_{11} L^T\]</span></p>
-<p>We will discuss more in detail about the Coefficient Matrix once we start digging into Linear Mixed Models. For now, we will just say that <span class="math inline">\(C_{ii}\)</span> corresponds to <span class="math inline">\(Var(\hat\beta)\)</span>, so</p>
+<p>Now let’s compute the variance and the SE of the EMMS. We know that <span class="math inline">\(EMMs = \boldsymbol{L\hat\beta}\)</span>, thus</p>
+<p><span class="math display">\[Var(\boldsymbol{L\hat\beta}) = \boldsymbol{L}Var(\boldsymbol{\hat\beta}) \boldsymbol{L^T} = \boldsymbol{LC_{11} L^T}\]</span></p>
+<p>We will discuss more in detail about the Coefficient Matrix once we start digging into Linear Mixed Models. For now, we will just say that <span class="math inline">\(\boldsymbol{C_{11}}\)</span> corresponds to <span class="math inline">\(Var(\boldsymbol{\hat\beta})\)</span>, so</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the errors to compute sigma^2 </span></span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the errors to compute sigma^2</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>y_hat <span class="ot">&lt;-</span> X <span class="sc">%*%</span> beta</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>errors <span class="ot">&lt;-</span> y <span class="sc">-</span> y_hat</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">sum</span>(errors<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>sigma_2 <span class="ot">&lt;-</span> SSE <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">6</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>C_11 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>X) <span class="sc">*</span> sigma_2</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>C_11 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">*</span> sigma_2</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>C_11</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            (Intercept) block2 block3      geng2      geng3      geng4
@@ -611,22 +611,18 @@ geng4        -0.1333333    0.0    0.0  0.1333333  0.1333333  0.2666667</code></p
 </section>
 <section id="using-lm-and-emmeans" class="level2">
 <h2 class="anchored" data-anchor-id="using-lm-and-emmeans">5) Using <code>lm</code> and <code>emmeans</code></h2>
-<p>We can also use <code>lm</code> to fit the model and extract the coefficients and <code>emmeans</code> to retrieve the estimated marginal means. The function <code>emmeans</code> does the job automatically but it also returns the <span class="math inline">\(L\)</span> and <span class="math inline">\(C_{11}\)</span> matrices used, so we can explore them.</p>
+<p>We can also use <code>lm</code> to fit the model and extract the coefficients and <code>emmeans</code> to retrieve the estimated marginal means. The function <code>emmeans</code> does the job automatically but it also returns the <span class="math inline">\(\boldsymbol{L}\)</span> and <span class="math inline">\(\boldsymbol{C_{11}}\)</span> matrices used, so we can explore them.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> block <span class="sc">+</span> gen, <span class="at">data =</span> data)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>beta_mod <span class="ot">&lt;-</span> <span class="fu">coef</span>(mod)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>mod</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>beta_lm <span class="ot">&lt;-</span> <span class="fu">coef</span>(mod)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>beta_lm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = yield ~ 1 + block + gen, data = data)
-
-Coefficients:
-(Intercept)       block2       block3        geng2        geng3        geng4  
-       7.75        -1.65        -2.10         1.10         0.10         1.80  </code></pre>
+<pre><code>(Intercept)      block2      block3       geng2       geng3       geng4 
+       7.75       -1.65       -2.10        1.10        0.10        1.80 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(mod, <span class="sc">~</span>gen)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>mm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Marginal means</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(mod, <span class="sc">~</span>gen)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>mm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> gen emmean    SE df lower.CL upper.CL
  g1     6.5 0.365  6     5.61     7.39
@@ -637,12 +633,11 @@ Coefficients:
 Results are averaged over the levels of: block 
 Confidence level used: 0.95 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>L_emm <span class="ot">&lt;-</span> mm<span class="sc">@</span>linfct</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>C_11_emm <span class="ot">&lt;-</span> mm<span class="sc">@</span>V</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>BLUE_mod <span class="ot">&lt;-</span> L_emm <span class="sc">%*%</span> beta_mod</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>var_BLUEs_emm <span class="ot">&lt;-</span> L_emm <span class="sc">%*%</span> C_11_emm <span class="sc">%*%</span> <span class="fu">t</span>(L_emm)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(var_BLUEs_emm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>L_emm <span class="ot">&lt;-</span> mm<span class="sc">@</span>linfct <span class="co"># L matrix</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>C_11_emm <span class="ot">&lt;-</span> mm<span class="sc">@</span>V <span class="co"># Variance-covariance of coefficients</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>BLUE_mod <span class="ot">&lt;-</span> L_emm <span class="sc">%*%</span> beta_lm <span class="co"># L beta</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>var_BLUEs_emm <span class="ot">&lt;-</span> L_emm <span class="sc">%*%</span> C_11_emm <span class="sc">%*%</span> <span class="fu">t</span>(L_emm) <span class="co"># L C L'</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(var_BLUEs_emm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.3651484 0.3651484 0.3651484 0.3651484</code></pre>
 </div>
@@ -677,12 +672,16 @@ P value adjustment: tukey method for comparing a family of 4 estimates </code></
 [5,]           0      0      0     1     0    -1
 [6,]           0      0      0     0     1    -1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>BLUEs_diff <span class="ot">&lt;-</span> L_diff <span class="sc">%*%</span> beta_mod</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(BLUEs_diff) <span class="ot">&lt;-</span> diff_mm<span class="sc">$</span>contrasts<span class="sc">@</span>levels<span class="sc">$</span>contrast</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(L_diff) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(BLUEs_diff)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>var_diff <span class="ot">&lt;-</span> L_diff <span class="sc">%*%</span> C_11_emm <span class="sc">%*%</span> <span class="fu">t</span>(L_diff)</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>var_diff <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">4</span>) <span class="co"># Notice how now there are covariances between the levels, since they have one of the genotypes in common</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that the columns for the intercept and the blocks don’t contribute to the variance of the differences (all zeros).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>BLUEs_diff <span class="ot">&lt;-</span> L_diff <span class="sc">%*%</span> beta_lm</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(BLUEs_diff) <span class="ot">&lt;-</span> diff_mm<span class="sc">$</span>contrasts<span class="sc">@</span>levels<span class="sc">$</span>contrast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(L_diff) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(BLUEs_diff)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>var_diff <span class="ot">&lt;-</span> L_diff <span class="sc">%*%</span> C_11_emm <span class="sc">%*%</span> <span class="fu">t</span>(L_diff)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>var_diff <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        g1 - g2 g1 - g3 g1 - g4 g2 - g3 g2 - g4 g3 - g4
 g1 - g2  0.2667  0.1333  0.1333 -0.1333 -0.1333  0.0000
@@ -692,12 +691,30 @@ g2 - g3 -0.1333  0.1333  0.0000  0.2667  0.1333 -0.1333
 g2 - g4 -0.1333  0.0000  0.1333  0.1333  0.2667  0.1333
 g3 - g4  0.0000 -0.1333  0.1333 -0.1333  0.1333  0.2667</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>SE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(var_diff))</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>avg_diff <span class="ot">&lt;-</span> <span class="fu">mean</span>(SE)</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>avg_diff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average standard error of the differences between two genotype means.</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>SE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(var_diff))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>avg_diff <span class="ot">&lt;-</span> <span class="fu">mean</span>(SE)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>avg_diff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5163978</code></pre>
+</div>
+</div>
+<p>Importantly, since <span class="math inline">\(\boldsymbol{L}_{diff}\)</span> only contains <span class="math inline">\(1\)</span> and <span class="math inline">\(-1\)</span>, and as mentioned before, the intercept and the block don’t contribute to the estimation, we can calculate the variance of the differences by simply using the subset of <span class="math inline">\(\boldsymbol{C_{11}}\)</span> that involves the genotypes (or the factor of interest).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>C_11g <span class="ot">&lt;-</span> C_11[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]                <span class="co"># Subset of C</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">diag</span>(C_11g)                       <span class="co"># Difference with the baseline level</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">outer</span>(d, d, <span class="st">"+"</span>) <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> C_11g      <span class="co"># var(a-b) = var(a) + var(b) - 2cov(a,b)</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>vd <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="fu">length</span>(d) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">length</span>(d) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>vd[<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> D</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>vd[<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> vd[<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> d</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(vd) <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>vd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          [,1]      [,2]      [,3]      [,4]
+[1,]        NA 0.2666667 0.2666667 0.2666667
+[2,] 0.2666667        NA 0.2666667 0.2666667
+[3,] 0.2666667 0.2666667        NA 0.2666667
+[4,] 0.2666667 0.2666667 0.2666667        NA</code></pre>
 </div>
 </div>
 

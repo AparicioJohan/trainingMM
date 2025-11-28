@@ -15,7 +15,7 @@ library(gt)
 library(kableExtra)
 ```
 
-In the previous chapter, we introduced how linear models are fitted and how coefficients are estimated. However, these coefficients depend on how categorical factors are encoded in the design matrix (for example, using the first level as a reference). As a result, they are not directly expressed in the units of the response variable. In this section, we show how to recover **estimated marginal means (EMMs)**—also known as **least-squares means**—from the model coefficients, along with their variances.
+In the previous chapter, we introduced how linear models are fitted and how coefficients are estimated. However, these coefficients depend on how categorical factors are encoded in the design matrix (for example, using the first level as a reference). As a result, they are not directly expressed in the units of the response variable. In this section, we show in more detail how to recover **estimated marginal means (EMMs)**—also known as **least-squares means**—from the model coefficients, along with their variances.
 
 ## 1) Estimating coefficients
 
@@ -42,8 +42,8 @@ beta
 Let's start by using a scalar form to derive the estimated marginal means: 
 
 ```{r}
-EMM_g1 <- beta[1] + sum(beta[2:3])/3
-EMM_b1 <- beta[1] + sum(beta[4:6])/4 
+EMM_g1 <- beta[1] + sum(beta[2:3]) / 3
+EMM_b1 <- beta[1] + sum(beta[4:6]) / 4
 ```
 
 Which mathematically represent the following operations
@@ -56,28 +56,28 @@ $$EMM(b_1) = \mu + \frac{1}{4}\hat\beta_{g_1} + \frac{1}{4}\hat\beta_{g_2} + \fr
 Then, for the remaining levels
 
 ```{r}
-EMM_b2 <- beta[1] + sum(beta[4:6])/4 + beta[2]
-EMM_b3 <- beta[1] + sum(beta[4:6])/4 + beta[3]
+EMM_b2 <- beta[1] + sum(beta[4:6]) / 4 + beta[2]
+EMM_b3 <- beta[1] + sum(beta[4:6]) / 4 + beta[3]
 
-EMM_g2 <- beta[1] + sum(beta[2:3])/3  + beta[4]
-EMM_g3 <- beta[1] + sum(beta[2:3])/3  + beta[5]
-EMM_g4 <- beta[1] + sum(beta[2:3])/3  + beta[6]
+EMM_g2 <- beta[1] + sum(beta[2:3]) / 3 + beta[4]
+EMM_g3 <- beta[1] + sum(beta[2:3]) / 3 + beta[5]
+EMM_g4 <- beta[1] + sum(beta[2:3]) / 3 + beta[6]
 
 EMM <- matrix(c(EMM_b1, EMM_b2, EMM_b3, EMM_g1, EMM_g2, EMM_g3, EMM_g4), ncol = 1)
-rownames(EMM) <- c('b1', 'b2', 'b3', 'g1', 'g2', 'g3', 'g4')
+rownames(EMM) <- c("b1", "b2", "b3", "g1", "g2", "g3", "g4")
 EMM
 ```
 ## 3) Marginal means (matrix form)
 
 Now let's explore the matrix form. Specifically, we will make use of 
-the $L$ matrix to compute all desired values simultaneously, so that:
+the $\boldsymbol{L}$ matrix to compute all desired values simultaneously, so that:
 
-$$EMM(\boldsymbol{g}) = L\hat{\boldsymbol{\beta}}$$
+$$EMM(\boldsymbol{g}) = \boldsymbol{L}\hat{\boldsymbol{\beta}}$$
 
-The $L$ matrix represents the levels we want to compute. For example, if we want to 
+The $\boldsymbol{L}$ matrix represents the levels we want to compute. For example, if we want to 
 extract the EMMs of the genotypes, we should include the intercept, the fraction 
 of each block level that we have to add to the mean, and the levels that we want to 
-compute from the genotypes. Notice how L has as many rows as levels are in the factor to be solved.
+compute from the genotypes. Notice how $\boldsymbol{L}$ has as many rows as levels are in the factor to be solved.
 
 ```{r}
 L <- cbind(
@@ -140,8 +140,8 @@ Similarly, to obtain the EMM of each block we would do
 ```{r}
 L2 <- cbind(
   matrix(1, nrow = n_b, ncol = 1), # Intercept
-  matrix(rbind(0, diag(nrow = n_b - 1)), nrow = n_b, ncol = n_b - 1), # Average block
-  matrix(1 / n_g, nrow = n_b, ncol = n_g - 1)
+  matrix(rbind(0, diag(nrow = n_b - 1)), nrow = n_b, ncol = n_b - 1),
+  matrix(1 / n_g, nrow = n_b, ncol = n_g - 1) # Average genotype
 )
 L2
 ```
@@ -158,22 +158,22 @@ cbind(EMM, rbind(EMM_b, EMM_g))
 ```
 ## 4) Variance-covariance (SE)
 
-Now let's compute the variance and the SE of the EMMS. We know that $EMMs = L\hat\beta$, 
+Now let's compute the variance and the SE of the EMMS. We know that $EMMs = \boldsymbol{L\hat\beta}$, 
 thus
 
-$$Var(L\hat\beta) = LVar(\hat\beta) L^T = LC_{11} L^T$$
+$$Var(\boldsymbol{L\hat\beta}) = \boldsymbol{L}Var(\boldsymbol{\hat\beta}) \boldsymbol{L^T} = \boldsymbol{LC_{11} L^T}$$
 
 We will discuss more in detail
 about the Coefficient Matrix once we start digging into Linear Mixed Models. 
-For now, we will just say that $C_{ii}$ corresponds to $Var(\hat\beta)$, so
+For now, we will just say that $\boldsymbol{C_{11}}$ corresponds to $Var(\boldsymbol{\hat\beta})$, so
 
 ```{r}
-# Compute the errors to compute sigma^2 
+# Compute the errors to compute sigma^2
 y_hat <- X %*% beta
 errors <- y - y_hat
 SSE <- sum(errors^2)
 sigma_2 <- SSE / (n - 6)
-C_11 <- solve(t(X)%*%X) * sigma_2
+C_11 <- solve(t(X) %*% X) * sigma_2
 C_11
 ```
 
@@ -197,20 +197,21 @@ data.frame(
 
 ## 5) Using `lm` and `emmeans`
 
-We can also use `lm` to fit the model and extract the coefficients and `emmeans` to retrieve the estimated marginal means. The function `emmeans` does the job automatically but it also returns the $L$ and $C_{11}$ matrices used, so we can explore them.
+We can also use `lm` to fit the model and extract the coefficients and `emmeans` to retrieve the estimated marginal means. The function `emmeans` does the job automatically but it also returns the $\boldsymbol{L}$ and $\boldsymbol{C_{11}}$ matrices used, so we can explore them.
 
 ```{r}
 mod <- lm(formula = yield ~ 1 + block + gen, data = data)
-beta_mod <- coef(mod)
-mod
+beta_lm <- coef(mod)
+beta_lm
 
+# Marginal means
 mm <- emmeans(mod, ~gen)
 mm
-L_emm <- mm@linfct
-C_11_emm <- mm@V
 
-BLUE_mod <- L_emm %*% beta_mod
-var_BLUEs_emm <- L_emm %*% C_11_emm %*% t(L_emm)
+L_emm <- mm@linfct # L matrix
+C_11_emm <- mm@V # Variance-covariance of coefficients
+BLUE_mod <- L_emm %*% beta_lm # L beta
+var_BLUEs_emm <- L_emm %*% C_11_emm %*% t(L_emm) # L C L'
 sqrt(diag(var_BLUEs_emm))
 ```
 
@@ -225,30 +226,35 @@ diff_mm$contrasts
 
 L_diff <- diff_mm$contrasts@linfct
 L_diff # See how L now links more than 1 genotype per row
+```
 
-BLUEs_diff <- L_diff %*% beta_mod
+Note that the columns for the intercept and the blocks don't contribute to the 
+variance of the differences (all zeros).
+
+```{r}
+BLUEs_diff <- L_diff %*% beta_lm
 rownames(BLUEs_diff) <- diff_mm$contrasts@levels$contrast
-
+```
+```{r}
 rownames(L_diff) <- rownames(BLUEs_diff)
 var_diff <- L_diff %*% C_11_emm %*% t(L_diff)
-var_diff |> round(4) # Notice how now there are covariances between the levels, since they have one of the genotypes in common
-SE <- sqrt(diag(var_diff))
+var_diff |> round(4)
 
+# Average standard error of the differences between two genotype means.
+SE <- sqrt(diag(var_diff))
 avg_diff <- mean(SE)
 avg_diff
 ```
 
+Importantly, since $\boldsymbol{L}_{diff}$ only contains $1$ and $-1$, and as mentioned before, the intercept and the block don't contribute to the estimation, we can calculate the variance of the differences by simply using the subset of $\boldsymbol{C_{11}}$ that involves the genotypes (or the factor of interest).
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+C_11g <- C_11[4:6, 4:6]                # Subset of C
+d <- diag(C_11g)                       # Difference with the baseline level
+D <- outer(d, d, "+") - 2 * C_11g      # var(a-b) = var(a) + var(b) - 2cov(a,b)
+vd <- matrix(NA, length(d) + 1, length(d) + 1)
+vd[-1, -1] <- D
+vd[-1, 1] <- vd[1, -1] <- d
+diag(vd) <- NA
+vd
+```
