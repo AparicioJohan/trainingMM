@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>google/pages/00_start_lm.html</loc>
-    <lastmod>2025-11-28T16:28:47.838Z</lastmod>
+    <lastmod>2025-11-30T02:19:06.227Z</lastmod>
   </url>
   <url>
     <loc>google/index.html</loc>
@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>google/pages/01_predict_LM.html</loc>
-    <lastmod>2025-11-28T17:20:26.481Z</lastmod>
+    <lastmod>2025-11-30T02:19:06.229Z</lastmod>
   </url>
   <url>
     <loc>google/pages/02_QR_decomp.html</loc>
@@ -42,6 +42,6 @@
   </url>
   <url>
     <loc>google/pages/08_Parametrizations.html</loc>
-    <lastmod>2025-11-10T17:25:43.872Z</lastmod>
+    <lastmod>2025-11-30T02:23:42.123Z</lastmod>
   </url>
 </urlset>

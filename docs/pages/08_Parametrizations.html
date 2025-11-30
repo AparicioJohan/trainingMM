@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-11-10">
+<meta name="dcterms.date" content="2025-11-29">
 
 <title>Parametrizations – trainingMM</title>
 <style>
@@ -37,10 +37,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-01bf821d34ede30856b0c0e7e2988940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -69,9 +69,7 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
-
 <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -292,13 +290,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#breeding-parametrization" id="toc-breeding-parametrization" class="nav-link active" data-scroll-target="#breeding-parametrization">1) Breeding Parametrization</a>
+  <li><a href="#diploid-theory" id="toc-diploid-theory" class="nav-link active" data-scroll-target="#diploid-theory">Diploid Theory</a>
   <ul class="collapse">
-  <li><a href="#breeding-values-u" id="toc-breeding-values-u" class="nav-link" data-scroll-target="#breeding-values-u">Breeding Values (<span class="math inline">\(u\)</span>)</a></li>
-  <li><a href="#dominance-deviations-operatornamev" id="toc-dominance-deviations-operatornamev" class="nav-link" data-scroll-target="#dominance-deviations-operatornamev">Dominance Deviations (<span class="math inline">\(\operatorname{v}\)</span>)</a></li>
-  </ul></li>
+  <li><a href="#breeding-parametrization" id="toc-breeding-parametrization" class="nav-link" data-scroll-target="#breeding-parametrization">1) Breeding Parametrization</a></li>
   <li><a href="#genotypic-parametrization" id="toc-genotypic-parametrization" class="nav-link" data-scroll-target="#genotypic-parametrization">2) Genotypic Parametrization</a></li>
-  <li><a href="#correspondence" id="toc-correspondence" class="nav-link" data-scroll-target="#correspondence">3) Correspondence</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">3) Summary</a></li>
+  </ul></li>
+  <li><a href="#autoteraploid-theory" id="toc-autoteraploid-theory" class="nav-link" data-scroll-target="#autoteraploid-theory">Autoteraploid Theory</a></li>
   </ul>
 </nav>
     </div>
@@ -318,7 +316,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 10, 2025</p>
+      <p class="date">November 29, 2025</p>
     </div>
   </div>
   
@@ -330,11 +328,16 @@ window.Quarto = {
 </header>
 
 
-<p>Let’s assume the following model</p>
+<blockquote class="blockquote">
+<p>In this chapter we will go through the derivation and assumptions of the two most common parametrizations to model additivity and dominance for both diploids and autotetraploid species. Please, refer to <a href="https://academic.oup.com/genetics/article/195/4/1223/5935377?login=false">Vitezica et al, 2013</a> and <a href="https://doi.org/10.1534/genetics.118.300685">Endelman et al, 2018</a> for further explanations.</p>
+</blockquote>
+<section id="diploid-theory" class="level1">
+<h1>Diploid Theory</h1>
+<p>Let’s begin by defining the following model</p>
 <p><span class="math display">\[
-y = \mu + Zu + Zd + \varepsilon
+y = \mu + Ta + Xd + \varepsilon
 \]</span></p>
-<p>Consider now the genetic value of a genotype for one locus</p>
+<p>The frequencies and genetic values of each possible genotype for a single locus under Hardy-Weinberg equilibrium can be defined as</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-striped caption-top table-sm small" data-quarto-postprocess="true">
@@ -344,7 +347,6 @@ y = \mu + Zu + Zd + \varepsilon
 <th style="text-align: left;" data-quarto-table-cell-role="th">Genotype</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">Frequency</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">Value</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">u</th>
 </tr>
 </thead>
 <tbody>
@@ -352,19 +354,16 @@ y = \mu + Zu + Zd + \varepsilon
 <td style="text-align: left;">$A_1A_1$</td>
 <td style="text-align: left;">$q^2$</td>
 <td style="text-align: left;">$- a$</td>
-<td style="text-align: left;">$2q\alpha$</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">$A_1A_2$</td>
 <td style="text-align: left;">$2pq$</td>
 <td style="text-align: left;">$d$</td>
-<td style="text-align: left;">$(q - p)\alpha$</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">$A_2A_2$</td>
 <td style="text-align: left;">$p^2$</td>
 <td style="text-align: left;">$a$</td>
-<td style="text-align: left;">$-2p\alpha$</td>
 </tr>
 </tbody>
 </table>
@@ -372,163 +371,53 @@ y = \mu + Zu + Zd + \varepsilon
 
 </div>
 </div>
-<p>Then, the genotypic values can be expressed as</p>
-<p><span class="math display">\[
-G_{A_1, A_1} = -a
-\]</span> <span class="math display">\[
-G_{A_1, A_2} = d
-\]</span> <span class="math display">\[
-G_{A_2, A_2} = a
-\]</span></p>
-<p>Then, the genetic mean of the population under HWE equals</p>
+<p>Then, the genetic mean of the population under both parametrizations equals</p>
 <p><span class="math display">\[
 \begin{align*}
 \mu_G &amp;= \sum (\text{value} \times \text{frequency}) = \\
-     &amp;= P_{A_1, A_1}G_{A_1, A_1} + P_{A_1, A_2}G_{A_1, A_2} + P_{A_2, A_2}G_{A_2, A_2}\\
+     &amp;= P_{A_1, A_1}*G_{A_1, A_1} + P_{A_1, A_2}*G_{A_1, A_2} + P_{A_2, A_2}*G_{A_2, A_2}\\
      &amp;= p^2(-a) + 2pq(d) + q^2(a) \\
      &amp;= a(p^2 - q^2) + 2pqd \\
      &amp;= a((p - q)(p + q)) + 2pqd \\
      &amp;= a(p - q) + 2pqd
 \end{align*} \\
 \]</span></p>
-<section id="breeding-parametrization" class="level1">
-<h1>1) Breeding Parametrization</h1>
-<p>Under the Breeding Parametrization</p>
+<section id="breeding-parametrization" class="level2">
+<h2 class="anchored" data-anchor-id="breeding-parametrization">1) Breeding Parametrization</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Theory</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Proofs</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>This approach separate the Genotypic Value (<span class="math inline">\(G\)</span>) of an individual into the breeding value (<span class="math inline">\(u\)</span>) and dominance deviations (<span class="math inline">\(v\)</span>)</p>
 <p><span class="math display">\[
 G = \mu_G + u + v
 \]</span></p>
-<section id="breeding-values-u" class="level2">
-<h2 class="anchored" data-anchor-id="breeding-values-u">Breeding Values (<span class="math inline">\(u\)</span>)</h2>
-<p>Where <span class="math inline">\(u\)</span> is the Breeding Value and <span class="math inline">\(v\)</span> is the dominance deviation. The <span class="math inline">\(u\)</span> of an individual is defined as a function of the additive substitution effect <span class="math inline">\(\alpha\)</span>. This parameter is computed as the difference of the alleles substitution effects, which represent the mean deviation from the population mean of those individuals which received this particular allele from one parent and the second allele at random from the population. Therefore</p>
-<p><span class="math display">\[
-\alpha_A = \mu_A - \mu
-\]</span> <span class="math display">\[
-\alpha_a = \mu_a - \mu
-\]</span></p>
-<p>Consider the average effect of Allele <span class="math inline">\(A\)</span></p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-striped caption-top table-sm small" data-quarto-postprocess="true">
-<caption>Genotypic Values For a Loxus</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">Allele.from.other.Parent</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">Probability</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">Genotype</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">A</td>
-<td style="text-align: left;">$p$</td>
-<td style="text-align: left;">$Aa$</td>
-<td style="text-align: left;">$a$</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">a</td>
-<td style="text-align: left;">$q$</td>
-<td style="text-align: left;">$aa$</td>
-<td style="text-align: left;">$d$</td>
-</tr>
-</tbody>
-</table>
-
-
-</div>
-</div>
-<p>And the average effect of Allele <span class="math inline">\(a\)</span></p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-striped caption-top table-sm small" data-quarto-postprocess="true">
-<caption>Genotypic Values For a Loxus</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">Allele.from.other.Parent</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">Probability</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">Genotype</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">A</td>
-<td style="text-align: left;">$p$</td>
-<td style="text-align: left;">$Aa$</td>
-<td style="text-align: left;">$d$</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">a</td>
-<td style="text-align: left;">$q$</td>
-<td style="text-align: left;">$aa$</td>
-<td style="text-align: left;">$-a$</td>
-</tr>
-</tbody>
-</table>
-
-
-</div>
-</div>
-<p>Then</p>
-<p><span class="math display">\[
-\mu_A = dp + dq
-\]</span> <span class="math display">\[
-\mu_a = dp - aq
-\]</span></p>
-<p>Thus</p>
+<section id="breeding-values-u" class="level4">
+<h4 class="anchored" data-anchor-id="breeding-values-u">Breeding Values (<span class="math inline">\(u\)</span>)</h4>
+<p>This value is defined as a function of the additive substitution effect <span class="math inline">\(\alpha\)</span>. This parameter is computed as the difference of the alleles substitution effects, which represent the mean deviation from the population mean of the individuals receiving this particular allele from one parent and the second allele at random from the population.</p>
 <p><span class="math display">\[
 \begin{align*}
-\alpha_A &amp;= ap + dq - (a(p - q) + 2pqd) \\
-         &amp;= ap + dq - ap + aq - 2pqd \\
-         &amp;= q(a - 2pd + d) \\
-         &amp;= q(a + d(-2p + 1)) \\
-         &amp;= q(a + d(-2p + p + q)) \\
-         &amp;= q(a + d(q - p))
+\alpha &amp;=  a + d(q - p)
 \end{align*}
-\]</span></p>
-<p><span class="math display">\[
-\begin{align*}
-\alpha_a &amp;= ap + dq - (a(p - q) + 2pqd) \\
-         &amp;= dp - aq - ap + aq - 2pqd \\
-         &amp;= p(-a + d(-2q + 1)) \\
-         &amp;= -p(a + d(2q - (p + q))) \\
-         &amp;= -p(a + d(q - p))
-\end{align*}
-\]</span></p>
-<p>Now we can solve</p>
-<p><span class="math display">\[
-\begin{align*}
-\alpha &amp;= q(a + d(q - p)) - (-p(a - d(q + p)))\\
-       &amp;= a + d(q - p)
-\end{align*}
-\]</span></p>
-<p>We can also express the allele substitution effects of each allele in terms of <span class="math inline">\(\alpha\)</span></p>
-<p><span class="math display">\[
-\alpha_A = q(a + d(q - p)) = q\alpha
-\]</span> <span class="math display">\[
-\alpha_a = -p(a + d(q - p)) = -p\alpha
 \]</span></p>
 <p>Thus, for a single locus with two alleles</p>
 <p><span class="math display">\[
-\mathbf{u} =
+u =
 \begin{cases}
-    (2 - 2p)\alpha = 2q\alpha\\
+    (0 - 2p)\alpha = -2p\alpha\\
     (1 - 2p)\alpha = (q - p)\alpha\\
-    (0 - 2p)\alpha = -2p\alpha
+    (2 - 2p)\alpha = 2q\alpha\\
 \end{cases}
 \]</span></p>
-<p>So, the breeding values of a set of individuals is <span class="math inline">\(\mathbf{u} = \mathbf{Z}\alpha = \mathbf{Z}a + \mathbf{Z}(q - p)d\)</span> where <span class="math inline">\(\mathbf{Z}\)</span> is the centered marker matrix</p>
+<p>So, the breeding values of a set of individuals is <span class="math inline">\(\mathbf{u} = \mathbf{Z}\alpha = \mathbf{Z}a + \mathbf{Z}(q - p)d\)</span> where <span class="math inline">\(\mathbf{Z}\)</span> is the centered marker matrix, so that <span class="math inline">\(\mathbf{Z} = (z_1...z_n)\)</span> including all markers is identical to <span class="math inline">\(\mathbf{T}\)</span> but centered. Then</p>
 <p><span class="math display">\[
-\mathbf{Z} =
+z_i =
 \begin{cases}
-    2q, &amp; \text{for } A_1A_1\\
+    -2p, &amp; \text{for } A_1A_1\\
     q - p, &amp; \text{for } A_1A_2\\
-    -2p, &amp; \text{for } A_2A_2
+     2q, &amp; \text{for } A_2A_2
 \end{cases}
-\]</span></p>
-</section>
-<section id="dominance-deviations-operatornamev" class="level2">
-<h2 class="anchored" data-anchor-id="dominance-deviations-operatornamev">Dominance Deviations (<span class="math inline">\(\operatorname{v}\)</span>)</h2>
+\]</span> #### Dominance Deviations</p>
 <p>Alternatively, the dominance deviations can be computed as the difference between the actual genotypic value and the genotypic value predicted from the sum of the average effects</p>
 <p><span class="math display">\[
 \begin{align*}
@@ -538,7 +427,181 @@ v_{ij} &amp;= G_{ij} - \hat{G}_{ij} \\
              &amp;= G_{ij} - (\mu_G + \alpha_i + \alpha_j) \\
              &amp;= G_{ij} - \mu_G - u_{ij}
 \end{align*}
-\]</span> So, assuming that</p>
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+v =
+\begin{cases}
+    - 2p^2d \\
+    2pqd\\
+    - 2q^2d
+\end{cases}
+\]</span></p>
+<p>In summary, <span class="math inline">\(\mathbf{v} = \mathbf{W}d\)</span>, where <span class="math inline">\(W = (w_1...w_n)\)</span> is not <span class="math inline">\(\mathbf{X}\)</span> in the model and</p>
+<p><span class="math display">\[
+w_i =
+\begin{cases}
+    - 2p^2,  &amp; \text{for } A_1A_1\\\\
+    2pq,  &amp; \text{for } A_1A_2\\\\
+    -2q^,  &amp; \text{for } A_2A_2\\
+\end{cases}
+\]</span></p>
+<p>Besides that, it is important to note that the expected Value of both <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> equals 0. Under this parametrization, we will assume that there is no covariance between additive and dominance, and therefore we can also express the genetic variance for a single locus simply as</p>
+<p><span class="math display">\[
+\operatorname{var}(G) = \operatorname{var}(A) + \operatorname{var}(D)  
+\]</span></p>
+<p>Where</p>
+<p><span class="math display">\[
+\operatorname{var}(A) = 2pq[a + d(1-p)]^2 + (2pqd)^2
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{var}(D) = (2pqd)^2
+\]</span></p>
+<p>Besides that, if we assume that <span class="math inline">\(a \sim N(0, \sigma^2_a)\)</span> and <span class="math inline">\(d \sim N(0, \sigma^2_d)\)</span>, and that <span class="math inline">\(\sigma_A^2 = 2pq\big(\sigma_a^2 + (q - p)^2\sigma_d^2\big)\)</span></p>
+<p><span class="math display">\[
+\begin{align*}
+\operatorname{cov}(\mathbf{u})
+&amp;=\operatorname{cov}(\mathbf{Z}\alpha) \\
+&amp;= \operatorname{var}(\mathbf{Z}(\mathbf{a} + \mathbf{d}(p-q))) \\
+&amp;= \mathbf{ZZ'}\operatorname{var}(\mathbf{a}) + \mathbf{ZZ'}(p-q)^2\operatorname{var}(\mathbf{d}) \\
+  &amp;=  \mathbf{ZZ'}\sigma^2_a + \mathbf{ZZ'}(p-q)^2\sigma^2_d \\
+&amp;= \mathbf{ZZ'} \big(\sigma_a^2 + (p-q)^2 \sigma_d^2\big) \\
+&amp;= \mathbf{ZZ'} \frac{\sigma_A^2}{2pq} \\
+&amp;= \frac{\mathbf{ZZ'}}{2pq} \, \sigma_A^2 \\
+&amp;= \mathbf{G} \, \sigma_A^2
+\end{align*}
+\]</span></p>
+<p>Which equals the VanRaden method to compute the Additive Genomic Relationship Matrix. A similar Derivation can be made for dominance deviations, considering that <span class="math inline">\(\operatorname{\sigma^2_D} = (2pq)^2\sigma^2_d\)</span></p>
+<p><span class="math display">\[
+\begin{align*}
+\operatorname{cov}(\mathbf{v})
+&amp;= \operatorname{var}(\mathbf{W}\mathbf{d}) \\
+&amp;= \mathbf{WW'} \, \sigma_d^2 \\
+&amp;= \frac{\mathbf{WW'}}{(2pq)^2} \, \sigma_D^2 \\
+&amp;= \mathbf{D} \, \sigma_D^2
+\end{align*}
+\]</span></p>
+</section>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<ol type="1">
+<li>Allele substitution effects</li>
+</ol>
+<p>The allele substitution are by definition the differrence between the mean of the population carrying the allele and the overall population mean. Thus</p>
+<p><span class="math display">\[
+\alpha_{A_1} = \mu_{A_1} - \mu
+\]</span> <span class="math display">\[
+\alpha_{A_2} = \mu_{A_2} - \mu
+\]</span></p>
+<p>So we need to compute <span class="math inline">\(\mu_{A_1}\)</span> and <span class="math inline">\(\mu_{A_2}\)</span></p>
+<p>Let’s consider then the average effect of Allele <span class="math inline">\({A_1}\)</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-striped caption-top table-sm small" data-quarto-postprocess="true">
+<caption>Genotypic Values For a Loxus</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Allele.from.other.Parent</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Probability</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Genotype</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">$A_1$</td>
+<td style="text-align: left;">$p$</td>
+<td style="text-align: left;">$A_1A_1$</td>
+<td style="text-align: left;">$a$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">$A_2$</td>
+<td style="text-align: left;">$q$</td>
+<td style="text-align: left;">$A_1A_2$</td>
+<td style="text-align: left;">$d$</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p>And the average effect of Allele <span class="math inline">\(A_2\)</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-striped caption-top table-sm small" data-quarto-postprocess="true">
+<caption>Genotypic Values For a Loxus</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Allele.from.other.Parent</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Probability</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Genotype</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">$A_1$</td>
+<td style="text-align: left;">$p$</td>
+<td style="text-align: left;">$A_1A_2$</td>
+<td style="text-align: left;">$d$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">$A_2$</td>
+<td style="text-align: left;">$q$</td>
+<td style="text-align: left;">$A_2A_2$</td>
+<td style="text-align: left;">$-a$</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p>We can simply compute the subpopulations means as</p>
+<p><span class="math display">\[
+\mu_{A_1} = ap + dq
+\]</span> <span class="math display">\[
+\mu_{A_2} = dp - aq
+\]</span></p>
+<p>We can solve now the allele substitution effects taking into account that the population mean <span class="math inline">\(\mu = a(p - q) + 2pqd\)</span></p>
+<p><span class="math display">\[
+\begin{align*}
+\alpha_{A_1} &amp;= ap + dq - (a(p - q) + 2pqd) \\
+         &amp;= ap + dq - ap + aq - 2pqd \\
+         &amp;= q(a - 2pd + d) \\
+         &amp;= q(a + d(-2p + 1)) \\
+         &amp;= q(a + d(-2p + p + q)) \\
+         &amp;= q(a + d(q - p))
+\end{align*}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align*}
+\alpha_{A_2} &amp;= ap + dq - (a(p - q) + 2pqd) \\
+         &amp;= dp - aq - ap + aq - 2pqd \\
+         &amp;= p(-a + d(-2q + 1)) \\
+         &amp;= -p(a + d(2q - (p + q))) \\
+         &amp;= -p(a + d(q - p))
+\end{align*}
+\]</span></p>
+<p>Now, if <span class="math inline">\(\alpha = \alpha_{A_1} - \alpha_{A_2}\)</span>, then</p>
+<p><span class="math display">\[
+\begin{align*}
+\alpha &amp;= q(a + d(q - p)) - (-p(a - d(q + p)))\\
+       &amp;= a + d(q - p)
+\end{align*}
+\]</span></p>
+<p>Finally, we can express the allele substitution effects of each allele in terms of <span class="math inline">\(\alpha\)</span></p>
+<p><span class="math display">\[
+\alpha_{A_1} = q(a + d(q - p)) = q\alpha
+\]</span></p>
+<p><span class="math display">\[
+\alpha_{A_2} = -p(a + d(q - p)) = -p\alpha
+\]</span></p>
+<ol start="2" type="1">
+<li>Dominance Deviations</li>
+</ol>
+<p>Consider first that <span class="math inline">\(v = G - (\mu + u)\)</span>. Then, following the information shown below</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-striped caption-top table-sm small" data-quarto-postprocess="true">
@@ -553,22 +616,22 @@ v_{ij} &amp;= G_{ij} - \hat{G}_{ij} \\
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">aa</td>
+<td style="text-align: left;">$A_1A_1$</td>
 <td style="text-align: left;">q^2</td>
-<td style="text-align: left;">m - a</td>
-<td style="text-align: left;">$2q\alpha$</td>
+<td style="text-align: left;">- a</td>
+<td style="text-align: left;">$-2p\alpha$</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Aa</td>
+<td style="text-align: left;">$A_1A_2$</td>
 <td style="text-align: left;">2pq</td>
-<td style="text-align: left;">m + d</td>
+<td style="text-align: left;">d</td>
 <td style="text-align: left;">$(q - p)\alpha$</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">AA</td>
+<td style="text-align: left;">$A_2A_2$</td>
 <td style="text-align: left;">p^2</td>
-<td style="text-align: left;">m + a</td>
-<td style="text-align: left;">$-2p\alpha$</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: left;">$2q\alpha$</td>
 </tr>
 </tbody>
 </table>
@@ -580,11 +643,12 @@ v_{ij} &amp;= G_{ij} - \hat{G}_{ij} \\
 <p><span class="math display">\[
 \begin{align*}
 v_{A_1, A_1}
-&amp;= a - \big(a(p-q) + 2pq d\big) -2q\alpha \\
-&amp;= a -ap + aq -2pqd -2q(a+ d(q-p))\\
-&amp;= a -ap + aq -2pqd -2aq -2q^2d + 2pqd \\
-&amp;= a - ap -aq -2q^2d \\
-&amp;= -2q^2d
+&amp;= -a - (a(p - q) + 2pqd) - (-2p\alpha) \\
+    &amp;= -a -ap + aq - 2pqd + 2p(a + d(q - p )) \\
+    &amp;= -a -ap + aq - 2pqd + 2pa + 2pdq - 2p^2d \\
+    &amp;= -a + aq + pa - 2p^2d \\
+    &amp;= -a + a(p + q) - 2p^2d \\
+    &amp;= - 2p^2d \\
 \end{align*}
 \]</span></p>
 <p><span class="math display">\[
@@ -601,33 +665,17 @@ v_{A_1, A_2}
 \]</span></p>
 <p><span class="math display">\[
 \begin{align*}
-v_{A_2, A_2} &amp;= -a - (a(p - q) + 2pqd) - (-2p\alpha) \\
-    &amp;= -a -ap + aq - 2pqd + 2p(a + d(q - p )) \\
-    &amp;= -a -ap + aq - 2pqd + 2pa + 2pdq - 2p^2d \\
-    &amp;= -a + aq + pa - 2p^2d \\
-    &amp;= -a + a(p + q) - 2p^2d \\
-    &amp;= - 2p^2d \\
+v_{A_2, A_2} &amp;= a - \big(a(p-q) + 2pq d\big) -2q\alpha \\
+&amp;= a -ap + aq -2pqd -2q(a+ d(q-p))\\
+&amp;= a -ap + aq -2pqd -2aq -2q^2d + 2pqd \\
+&amp;= a - ap -aq -2q^2d \\
+&amp;= -2q^2d
 \end{align*}
 \]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-\mathbf{v} =
-\begin{cases}
-    -2q^2d\\
-    2pqd\\
-    - 2p^2d
-\end{cases}
-\]</span></p>
-<p>In summary, <span class="math inline">\(\mathbf{v} = \mathbf{W}d\)</span>, where <span class="math inline">\(W\)</span> is the centered marker matrix</p>
-<p><span class="math display">\[
-W =
-\begin{cases}
-    -2q^2,  &amp; \text{for } A_1A_1\\\\
-    2pq,  &amp; \text{for } A_1A_2\\\\
-    - 2p^2,  &amp; \text{for } A_2A_2\\
-\end{cases}
-\]</span></p>
-<p>Besides that, it is important to note that</p>
+<ol start="3" type="1">
+<li>Expectations</li>
+</ol>
+<p>Let’s prove why the expectations of the breeding values and the dominance deviations equals 0.</p>
 <p><span class="math display">\[
 \begin{align*}
 E(u) &amp;= p^2(2q\alpha) + 2pq(q-p)\alpha + q^2(-2p\alpha) \\
@@ -642,10 +690,11 @@ E(v) &amp;= p^2(-2q^2d) + 2pq2pqd + q^2(-2p^2d) \\
   &amp;= 0
 \end{align*}
 \]</span></p>
-<p>Therefore, we can described genetic variance as</p>
+<ol start="4" type="1">
+<li>Variances</li>
+</ol>
+<p>Following the properties of the variance, we can define the additive and dominance variance as follows</p>
 <p><span class="math display">\[
-\operatorname{var}(G) = \operatorname{var}(A) + \operatorname{var}(D)  
-\]</span> <span class="math display">\[
 \begin{align*}
 \operatorname{var}(A) &amp;= \operatorname{var}(u) = E[(u−E(u))^2]=E(u^2)− \cancel{[E(u)]^2} \\
   &amp;= p^2(2q\alpha)^2 + 2pq((q-p)\alpha)^2 + q^2(-2p\alpha)^2\\
@@ -665,89 +714,86 @@ E(v) &amp;= p^2(-2q^2d) + 2pq2pqd + q^2(-2p^2d) \\
   &amp;= 4p^2q^2d^2 = (2pqd)^2
 \end{align*}
 \]</span></p>
-<p>Therefore</p>
-<p><span class="math display">\[
-\operatorname{var}(G) = 2pq[a + d(1-p)]^2 + (2pqd)^2
-\]</span></p>
-<p>As you can see, this parametrization assumes that there is no covariance between the additive and dominance, that is, that they are independent. Besides that, if we assume that <span class="math inline">\(a \sim N(0, \sigma^2_a)\)</span> and <span class="math inline">\(d \sim N(0, \sigma^2_d)\)</span>, then</p>
-<p><span class="math display">\[
-\begin{align*}
-\operatorname{cov}(\mathbf{u}) &amp;= \operatorname{var}(\mathbf{Z}\alpha) \\
-  &amp;= \operatorname{var}(\mathbf{Z}(\mathbf{a} + \mathbf{d}(p-q))) \\
-  &amp;= \mathbf{ZZ'}\operatorname{var}(\mathbf{a}) + \mathbf{ZZ'}(p-q)^2\operatorname{var}(\mathbf{d}) \\
-  &amp;=  \mathbf{ZZ'}\sigma^2_a + \mathbf{ZZ'}(p-q)^2\sigma^2_d
-\end{align*}
-\]</span></p>
-<p>Taking into account that</p>
-<p><span class="math display">\[
-\begin{aligned}
-\sigma_A^2 &amp;= \operatorname{Var}(\mathbf{u})
-= E\big[(\mathbf{Z} a + \mathbf{Z}(q - p)d)^2\big] \\
-&amp;= E[\mathbf{Z}^2]\,E[\mathbf{a}^2] + 2(q - p)E[\mathbf{Z}^2]\,E[\mathbf{a} \mathbf{d}] + (q - p)^2 E[\mathbf{Z}^2]\,E[\mathbf{d}^2] \\
-&amp;= E[\mathbf{Z}^2]\big(\sigma_a^2 + (q - p)^2\sigma_d^2\big) \\
-\end{aligned}
-\]</span></p>
-<p>And given that</p>
-<p><span class="math display">\[
-\begin{align*}
-E[\mathbf{Z}^2] &amp;= p^2(2q)^2 + 2pq(q - p)^2 + q^2(2p)^2 \\[6pt]
-&amp;= 4p^2q^2 + 2pq(q^2 - 2pq + p^2) + 4p^2q^2 \\[6pt]
-&amp;= 8p^2q^2 + 2pq(p^2 + q^2 - 2pq) \\[6pt]
-&amp;= 2pq(p^2 + q^2 + 4pq - 2pq) = 2pq \\[6pt]
-\end{align*}
-\]</span></p>
-<p>We can solve</p>
-<p><span class="math display">\[
-\sigma_A^2 = 2pq\big(\sigma_a^2 + (q - p)^2\sigma_d^2\big) ;\\
-\frac{\sigma_A^2}{2pq} = (\sigma_a^2 + (q - p)^2\sigma_d^2\big)
-\]</span></p>
-<p>So that finally</p>
-<p><span class="math display">\[
-\begin{align*}
-\operatorname{cov}(\mathbf{u})
-&amp;= \mathbf{ZZ'} \big(\sigma_a^2 + (p-q)^2 \sigma_d^2\big) \\
-&amp;= \mathbf{ZZ'} \frac{\sigma_A^2}{2pq} \\
-&amp;= \frac{\mathbf{ZZ'}}{2pq} \, \sigma_A^2 \\
-&amp;= \mathbf{G} \, \sigma_A^2
-\end{align*}
-\]</span></p>
-<p>A similar Derivation can be made for dominance</p>
-<p><span class="math display">\[
-\operatorname{\sigma^2_D} = (2pq)^2\sigma^2_d
-\]</span></p>
-<p><span class="math display">\[
-\begin{align*}
-\operatorname{cov}(\mathbf{v})
-&amp;= \operatorname{var}(\mathbf{W}\mathbf{d}) \\
-&amp;= \mathbf{WW'} \, \sigma_d^2 \\
-&amp;= \frac{\mathbf{WW'}}{(2pq)^2} \, \sigma_D^2 \\
-&amp;= \mathbf{D} \, \sigma_D^2
-\end{align*}
-\]</span></p>
+</div>
+</div>
+</div>
 </section>
-</section>
-<section id="genotypic-parametrization" class="level1">
-<h1>2) Genotypic Parametrization</h1>
-<p>Another alternative is to define the genotypic value as</p>
+<section id="genotypic-parametrization" class="level2">
+<h2 class="anchored" data-anchor-id="genotypic-parametrization">2) Genotypic Parametrization</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Theory</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Proofs</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<section id="pure-additive-values" class="level4">
+<h4 class="anchored" data-anchor-id="pure-additive-values">Pure additive values</h4>
+<p>A different approach is to define the genotypic value as</p>
 <p><span class="math display">\[
 G = E(G) + u^* + v^*
 \]</span></p>
-<p>Where <span class="math inline">\(u^*\)</span> and <span class="math inline">\(v^*\)</span> are no longer the breeding values and dominance deviations but pure additive and pure additive values. Therefore</p>
+<p>Where <span class="math inline">\(u^*\)</span> and <span class="math inline">\(v^*\)</span> are no longer the breeding values and dominance deviations but pure additive and pure additive values. Given that we aim to partition the effects in pure additive and pure dominance effects, we will no longer have dominance with <span class="math inline">\(u^*\)</span>. An easy way to summarize this is to remove <span class="math inline">\(d\)</span> from <span class="math inline">\(\alpha\)</span>, so that <span class="math inline">\(\alpha = a\)</span>. then, we can substitute to obtain</p>
 <p><span class="math display">\[
-u^*_{A_1, A_1} = 2qa \\
-\]</span> <span class="math display">\[
-u^*_{A_1, A_2} = (q-p)a \\
-\]</span> <span class="math display">\[
-u^*_{A_2, A_2} = -2pa
+u^* =
+\begin{cases}
+    -2pa\\
+    (q-p)a\\
+    2qa
+\end{cases}
 \]</span></p>
-<p>Which equals the <span class="math inline">\(Z\)</span> matrix as in the Breeding parametrization. And the pure dominance values are derived then as</p>
+<p>See how still, the covariate equals the <span class="math inline">\(Z\)</span> matrix as in the Breeding parametrization. Then, we can express <span class="math inline">\(u^* = \mathbf{Z}a\)</span>.</p>
+</section>
+<section id="pure-dominance-values" class="level4">
+<h4 class="anchored" data-anchor-id="pure-dominance-values">Pure dominance values</h4>
+<p>The pure dominance values are derived by substracting the population mean, and the pure additive values to the genotypic values. Therefore</p>
+<p><span class="math display">\[
+v^* =
+\begin{cases}
+    -2pqd\\
+    d(1 -2pq)\\
+    -2pqd
+\end{cases}
+\]</span></p>
+<p>So that <span class="math inline">\(\mathbf{v^*} = \mathbf{H}d\)</span> where</p>
+<p><span class="math display">\[
+\mathbf{H} =
+\begin{cases}
+    -2pqd,  &amp; \text{for } A_1A_1\\\\
+    (1 -2pq)d,  &amp; \text{for } A_1A_2\\\\
+    -2pqd,  &amp; \text{for } A_2A_2\\
+\end{cases}
+\]</span></p>
+<p>It is important to notice that <span class="math inline">\(H \neq W\)</span>. However, it can be proved that the expected values of <span class="math inline">\(u^*\)</span> and <span class="math inline">\(v^*\)</span> is still <span class="math inline">\(0\)</span>. Now, the genetic variance equals</p>
+<p><span class="math display">\[
+\operatorname{var}(G) = 2pqa^2 + 2pq[ 1 - 2pq ]d^2
+\]</span></p>
+<p>And the covariances between additive values are computed as</p>
 <p><span class="math display">\[
 \begin{align*}
+\operatorname{cov}(\mathbf{u^*}) &amp;= \mathbf{ZZ'}\sigma^2_{a} \\
+  &amp;=  \frac{\mathbf{ZZ'}}{2pq}\sigma^2_{A^*} \\
+  &amp;= \mathbf{G}\sigma^2_{A^*}
+\end{align*}
+\]</span></p>
+<p>Notice that the Additive GRM follows the same definition for both parametrizations. Let’s show how this is not the case for the Dominance GRM</p>
+<p><span class="math display">\[
+\begin{align*}
+\operatorname{cov}(\mathbf{v^*}) &amp;= \mathbf{HH'}\sigma^2_{d} \\
+  &amp;=  \frac{\mathbf{HH'}}{2pq(1 - 2pq)}\sigma^2_{D^*} \\
+  &amp;= \mathbf{D^*}\sigma^2_{D^*}
+\end{align*}
+\]</span></p>
+</section>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<ol type="1">
+<li>Pure Dominance Values</li>
+</ol>
+<p>Under the genotypic parametrization, <span class="math inline">\(v^*\)</span> are computed as <span class="math inline">\(v\)</span> in the breeding parametrization, although now, by definition <span class="math inline">\(v^* = G - (\mu + u^*)\)</span>. Despite the population mean remains the same, now <span class="math inline">\(u^* \neq u\)</span>, so</p>
+<p><span class="math display">\[
+  \begin{align*}
 v^*_{A_1A_1}
-&amp;= a - \big(a(p-q) + 2pq d\big) -2qa \\
-&amp;= a - ap + aq -2pqd -2qa \\
-&amp;= a -ap -2pqd -qa \\
-&amp;= a -a(p + 1) -2pqd \\
+&amp;= -a - \big(a(p-q) + 2pq d\big) + 2pa \\
+&amp;= -a -ap + aq -2pqd + 2pa \\
+&amp;= -a + a(p + q) -2pqd \\
 &amp;= -2pqd
 \end{align*}
 \]</span></p>
@@ -760,118 +806,79 @@ v^*_{A_1A_2}
 \end{align*}
 \]</span></p>
 <p><span class="math display">\[
-\begin{align*}
+  \begin{align*}
 v^*_{A_2A_2}
-&amp;= -a - \big(a(p-q) + 2pq d\big) + 2pa \\
-&amp;= -a -ap + aq -2pqd + 2pa \\
-&amp;= -a + a(p + q) -2pqd \\
+&amp;= a - \big(a(p-q) + 2pq d\big) -2qa \\
+&amp;= a - ap + aq -2pqd -2qa \\
+&amp;= a -ap -2pqd -qa \\
+&amp;= a -a(p + 1) -2pqd \\
 &amp;= -2pqd
 \end{align*}
 \]</span></p>
-<p>So that <span class="math inline">\(\mathbf{v} = \mathbf{H}d\)</span> where</p>
-<p><span class="math display">\[
-\mathbf{H} =
-\begin{cases}
-    -2pqd,  &amp; \text{for } A_1A_1\\\\
-    (1 -2pq)d,  &amp; \text{for } A_1A_2\\\\
-    -2pqd,  &amp; \text{for } A_2A_2\\
-\end{cases}
-\]</span></p>
-<p>And therefore <span class="math inline">\(H \neq W\)</span>. Besides that,</p>
+<ol start="2" type="1">
+<li>Expectations</li>
+</ol>
+<p>The expectation of <span class="math inline">\(u^*\)</span> and <span class="math inline">\(v^*\)</span> still equal 0</p>
 <p><span class="math display">\[
 \begin{align*}
 E(u^*) &amp;= p^2(2qa) + 2pq(q-p)a + q(-2pa) \\
-  &amp;= 2p^2qa + 2pq^2a - 2p^2qa -2pq^2a\\
-  &amp;= 0\\
+&amp;= 2p^2qa + 2pq^2a - 2p^2qa -2pq^2a\\
+&amp;= 0\\
 \end{align*}
 \]</span></p>
 <p><span class="math display">\[
 \begin{align*}
-E(u^*) &amp;= p^2(-2pqd) + 2pq((1-2pq)d) + q(-2pqd) \\
-  &amp;= -2p^2qd + 2pqd - 4p^2q^2d -2pq^2d\\
-  &amp;= 2pqd(-p^2 + 1 - 2pq - q^2)\\
-  &amp;= 2pqd(-1 + 1) = 0
+E(v^*) &amp;= p^2(-2pqd) + 2pq((1-2pq)d) + q(-2pqd) \\
+&amp;= -2p^2qd + 2pqd - 4p^2q^2d -2pq^2d\\
+&amp;= 2pqd(-p^2 + 1 - 2pq - q^2)\\
+&amp;= 2pqd(-1 + 1) = 0
+\end{align*}
+\]</span></p>
+<ol start="3" type="1">
+<li>Variances</li>
+</ol>
+<p>By definition, the variances under the genotypic parametrization can be defined as</p>
+<p><span class="math display">\[
+  \begin{align*}
+Var(A^*) = \sigma^2_{A^*} &amp;= E(u^{*2}) - \cancel{E(u^*)^2} \\
+&amp;= p^2(2qa)^2 + 2pq((q-p)a)^2 + q^2(-2pa)^2 \\
+&amp;= 4p^2q^2a^2 + 2pq(q-p)^2a^2 + 4p^2q^2a^2 \\
+&amp;= 2pqa^2(2pq + (q-p)^2 + 2pq) \\
+&amp;= 2pqa^2(q^2 + p^2 +2pq)\\
+&amp;= 2pqa^2
 \end{align*}
 \]</span></p>
 <p><span class="math display">\[
 \begin{align*}
-Var(A^*) = \sigma^2_{A^*} &amp;= E(u^{*2}) + \cancel{E(u^*)^2} \\
-    &amp;= p^2(2qa)^2 + 2pq((q-p)a)^2 + q^2(-2pa)^2 \\
-    &amp;= 4p^2q^2a^2 + 2pq(q-p)^2a^2 + 4p^2q^2a^2 \\
-    &amp;= 2pqa^2(2pq + (q-p)^2 + 2pq) \\
-    &amp;= 2pqa^2(q^2 + p^2 +2pq)\\
-    &amp;= 2pqa^2
-\end{align*}
-\]</span> <span class="math display">\[
-\begin{align*}
-Var(D^*) = \sigma^2_{D^*} &amp;= E(v^{*2}) + \cancel{E(v^*)^2} \\
+Var(D^*) = \sigma^2_{D^*} &amp;= E(v^{*2}) - \cancel{E(v^*)^2} \\
 &amp;= p^2\big(-2pq\,d)^2 \;+\; 2pq((1-2pq)\,d)^2 \;+\; q^2(-2pq\,d)^2 \\
 &amp;= d^2[ p^2( -2pq )^2 \;+\; 2pq(1-2pq)^2 \;+\; q^2( -2pq )^2\\
-&amp;= d^2[ 4p^4q^2 \;+\; 2pq(1 - 4pq + 4p^2q^2) \;+\; 4p^2q^4] \\
-&amp;= d^2[ 4p^2q^2(p^2+q^2) \;+\; 2pq(1 - 4pq + 4p^2q^2)] \\
-&amp;= 2pq[ 2pq(p^2+q^2) \;+\; (1 - 4pq + 4p^2q^2)]d^2\\
-&amp;= 2pq[ 2pq(1-2pq) \;+\; 1 - 4pq + 4p^2q^2 ] d^2\\
-&amp;= 2pq[ (2pq - 4p^2q^2) \;+\; (1 - 4pq + 4p^2q^2)d^2]d^2 \\
-&amp;= 2pq[ 1 - 2pq ]d^2 \\
-\end{align*}
+        &amp;= d^2[ 4p^4q^2 \;+\; 2pq(1 - 4pq + 4p^2q^2) \;+\; 4p^2q^4] \\
+        &amp;= d^2[ 4p^2q^2(p^2+q^2) \;+\; 2pq(1 - 4pq + 4p^2q^2)] \\
+        &amp;= 2pq[ 2pq(p^2+q^2) \;+\; (1 - 4pq + 4p^2q^2)]d^2\\
+        &amp;= 2pq[ 2pq(1-2pq) \;+\; 1 - 4pq + 4p^2q^2 ] d^2\\
+        &amp;= 2pq[ (2pq - 4p^2q^2) \;+\; (1 - 4pq + 4p^2q^2)d^2]d^2 \\
+        &amp;= 2pq[ 1 - 2pq ]d^2 \\
+        \end{align*}
 \]</span></p>
-<p>Therefore</p>
-<p><span class="math display">\[
-\begin{align*}
-\operatorname{cov}(\mathbf{u^*}) &amp;= \mathbf{ZZ'}\sigma^2_{a} \\
-  &amp;=  \frac{\mathbf{ZZ'}}{2pq}\sigma^2_{A^*} \\
-  &amp;= \mathbf{G}\sigma^2_{A^*}
-\end{align*}
-\]</span></p>
-<p>Which equals <span class="math inline">\(\operatorname{cov}(\mathbf{u})\)</span>. However</p>
-<p><span class="math display">\[
-\begin{align*}
-\operatorname{cov}(\mathbf{v^*}) &amp;= \mathbf{HH'}\sigma^2_{d} \\
-  &amp;=  \frac{\mathbf{HH'}}{2pq(1 - 2pq)}\sigma^2_{D^*} \\
-  &amp;= \mathbf{D^*}\sigma^2_{D^*}
-\end{align*}
-\]</span></p>
-<p>Notice that <span class="math inline">\(\mathbf{D^*} \neq \mathbf{D}\)</span>. Therefore, the breeding (or classical) and the genotypic models are equivalent models to explain the data (y) but their interpretation must be different. Let’s show the differences for the Dominance Covariance Matrix as explained in <a href="https://academic.oup.com/genetics/article/195/4/1223/5935377?login=false">Vitezica et al, 2013</a>.</p>
-<p>Imagine <span class="math inline">\(p = 0.7\)</span> and <span class="math inline">\(\sigma^2_d = 1\)</span> and three individuals with the three possible genotypes</p>
-<p><span class="math display">\[
-W = \begin{bmatrix}
--2q^2 \\ 2pq \\ -2p^2
-\end{bmatrix} = \begin{bmatrix}
--0.18 \\ 0.42 \\ -0.98
-\end{bmatrix}
-\]</span></p>
-<p><span class="math display">\[
-\operatorname{cov}(\mathbf{v})
-= \frac{\mathbf{WW'}}{\cancel{(2pq)^2}} \cancel{\sigma_D^2}
-=
-\begin{bmatrix}
-0.03 &amp; -0.08 &amp; 0.18 \\
--0.08 &amp; 0.18 &amp; -0.41 \\
-0.18 &amp; -0.41 &amp; 0.96
-\end{bmatrix}
-\]</span></p>
-<p>On the other side</p>
-<p><span class="math display">\[
-H = \begin{bmatrix}
--2pq \\ (1-2pq)d \\ -2pqd
-\end{bmatrix} = \begin{bmatrix}
--0.42 \\ 0.58 \\ -0.42
-\end{bmatrix}
-\]</span></p>
-<p><span class="math display">\[
-\operatorname{cov}(\mathbf{v^*})
-= \frac{\mathbf{HH'}}{\cancel{2pq(1-2pq)}} \cancel{\sigma_{D^*}^2}
-=
-\begin{bmatrix}
-0.18 &amp; -0.24  &amp; 0.18 \\
--0.24 &amp; 0.34 &amp; -0.24 \\
-0.18 &amp; -0.24  &amp; 0.18
-\end{bmatrix}
-\]</span></p>
+</div>
+</div>
+</div>
 </section>
-<section id="correspondence" class="level1">
-<h1>3) Correspondence</h1>
-<p>Briefly, the additive and dominance variances for each model are</p>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">3) Summary</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Theory</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Proofs</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>Briefly, <span class="math inline">\(\operatorname{cov}(\mathbf{u^*}) = \operatorname{cov}(\mathbf{u})\)</span>, but <span class="math inline">\(\operatorname{cov}(\mathbf{v^*}) \neq \operatorname{cov}(\mathbf{v})\)</span>, given that <span class="math inline">\(\mathbf{D^*} \neq \mathbf{D}\)</span>. Besides, given that <span class="math inline">\(\sigma^2_A + \sigma^2_D = \sigma^2_{A^*} + \sigma^2_{D^*}\)</span>. THus, both approaches explains the data but their interpretation must be different.</p>
+<p>Finally, we wanted to highlight that from the practical point of view, t he conversion from the genotypic to the breeding values is easy, given that we can use <span class="math inline">\(a\)</span>, <span class="math inline">\(d\)</span> estimated from the model and the allelic frequencies <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> from the original marker matrix to build <span class="math inline">\(\alpha = a + d(q - p)\)</span>. Then we should simply multiply <span class="math inline">\(Z\alpha\)</span> to obtain <span class="math inline">\(u\)</span></p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<ol type="1">
+<li>Variance correspondence</li>
+</ol>
+<p>Takin into account that</p>
 <p><span class="math display">\[
 \begin{align*}
 \sigma^2_A &amp;= 2pq \, \sigma_a^2 + 2pq (q - p)^2 \, \sigma_d^2 \\
@@ -884,27 +891,136 @@ H = \begin{bmatrix}
 <p><span class="math display">\[
 \begin{align*}
 \sigma^2_A + \sigma^2_D &amp;= 2pq\sigma^2_a + 2pq(q-p)^2\sigma^2_d + (2pq)^2\sigma^2_d \\
-  &amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(q-p)^2 + (2pq)^2)\\
-  &amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(q^2 + q^2 -2pq) + 4p^2q^2) \\
-  &amp;= 2pq\sigma^2_a + \sigma^2_d(2pq^3 + 2p^3q -4p^2q^2 + 4p^2q^2) \\
-  &amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(q^2 + p^3))\\
-  &amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(1-2pq)) \\
-  &amp;= 2pq(\sigma^2_a + \sigma^2_d(1-2pq)
+&amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(q-p)^2 + (2pq)^2)\\
+&amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(q^2 + q^2 -2pq) + 4p^2q^2) \\
+&amp;= 2pq\sigma^2_a + \sigma^2_d(2pq^3 + 2p^3q -4p^2q^2 + 4p^2q^2) \\
+&amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(q^2 + p^3))\\
+&amp;= 2pq\sigma^2_a + \sigma^2_d(2pq(1-2pq)) \\
+&amp;= 2pq(\sigma^2_a + \sigma^2_d(1-2pq)
 \end{align*}
 \]</span></p>
 <p><span class="math display">\[
 \begin{align*}
 \sigma^2_{A^*} + \sigma^2_{D^*} &amp;= 2pq \, \sigma_a^2 + 2pq (1 - 2pq) \, \sigma_d^2 \\
-  &amp;= 2pq(\sigma^2_a + \sigma^2_d(1-2pq)
+&amp;= 2pq(\sigma^2_a + \sigma^2_d(1-2pq)
 \end{align*}
 \]</span></p>
-<p>Which means that <span class="math inline">\(\sigma^2_A + \sigma^2_D = \sigma^2_{A^*} + \sigma^2_{D^*}\)</span>. Additionally, if <span class="math inline">\(p = q = 0.5\)</span></p>
+<p>And therefore</p>
+<p><span class="math display">\[
+\sigma^2_A + \sigma^2_D = \sigma^2_{A^*} + \sigma^2_{D^*} = 2pq(\sigma^2_a + \sigma^2_d(1-2pq)
+\]</span></p>
+<p>Which means that both parametrizations are equivalents</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="autoteraploid-theory" class="level1">
+<h1>Autoteraploid Theory</h1>
+<p>The theoretical derivation that allows to partition variance into additive and dominance has been made under the breeding framework. No derivation has been published to partition genetic values into pure additive and pure dominance effect in polyploids.</p>
+<p>The increased level of complexity because of the enhanced number of possible alleles is illustrated in the definition of the genotypic value. Not only the number of additive effects is increased but also the amount of interactions between alleles. Disregarding trigenic and quadrigenic effect, it can be defined as</p>
+<p><span class="math display">\[
+G_{ijkl} = \alpha_i + \alpha_j + \alpha_k + \alpha_l +  \beta_{ij} +
+\beta_{ik} + \beta_{il} + \beta_{jk} + \beta_{jl} + \beta_{kl}
+\]</span></p>
+<p>Again, the residuals from the regression equation for additive effects <span class="math inline">\(y_{ijkl} = G_{ijkl} - (\mu + \alpha_i + \alpha_j + \alpha_k + \alpha_l)\)</span> is what we call the dominance deviations.</p>
+<p>As stated in <a href="https://doi.org/10.1534/genetics.118.300685">Endelman et al, 2018</a>, the breeding value (BV) of an individual is defined as twice the mean genotypic value of its progeny relative to the population mean. Under the model assumptions, all six possible gene pairs for tetraploid genotype ijkl have equal frequency in its gametes which leads to the following expression</p>
+<p><span class="math display">\[
+BV_{ijkl} = 2[\frac{1}{6}(G_{ij..} + G_{ik..} + G_{il..} + G_{jk..} + G_{jl..} + G_{kl..}) - \mu]
+\]</span></p>
+<p>Taking into account that, as previously explained</p>
+<p><span class="math display">\[
+\beta_{ij} = G_{ij} - \mu - alpha_i - alpha_j
+\]</span></p>
+<p>We can solve for <span class="math inline">\(G_{ij} = \beta_{ij} + \alpha_i + \alpha_j + \mu\)</span>. Therefore</p>
 <p><span class="math display">\[
 \begin{align*}
-\sigma^2_A  &amp;= 2pq\sigma^2_a + \cancel{2pq(q-p)^2\sigma^2_d} = 2p^2\sigma^2_a = \sigma^2_{A^*}
+BV_{ijkl}
+&amp;= 2\left[\frac{1}{6}\Big(
+(\beta_{ij} + \alpha_i + \alpha_j + \mu) +
+(\beta_{ik} + \alpha_i + \alpha_k + \mu) +
+(\beta_{il} + \alpha_i + \alpha_l + \mu) \right.\\
+&amp;\qquad\qquad\left.+
+(\beta_{jk} + \alpha_j + \alpha_k + \mu) +
+(\beta_{jl} + \alpha_j + \alpha_l + \mu) +
+(\beta_{kl} + \alpha_k + \alpha_l + \mu)
+\Big) - \mu \right] \\[6pt]
+&amp;= 2\left[\frac{1}{6}\Big(
+6\mu + 3(\alpha_i + \alpha_j + \alpha_k + \alpha_l)
++ \beta_{ij} + \beta_{ik} + \beta_{il}
++ \beta_{jk} + \beta_{jl} + \beta_{kl}
+\Big) - \mu \right] \\[6pt]
+&amp;= (\alpha_i + \alpha_j + \alpha_k + \alpha_l)
++ \frac{1}{3}\left(
+\beta_{ij} + \beta_{ik} + \beta_{il}
++ \beta_{jk} + \beta_{jl} + \beta_{kl}
+\right) \\[6pt]
+&amp;= u + \frac{1}{3}v .
 \end{align*}
 \]</span></p>
-<p>This identities allow for conversion between parametrizations.</p>
+<p>Therefore, the breeding value equals the total additive value <span class="math inline">\(u\)</span> plus 1/3 of the total digenic dominance <span class="math inline">\(v\)</span>.</p>
+<p>Based on a series of equations developed in the cited article, the equation <span class="math inline">\(0 = \sum_k p_k\beta_{ik}\)</span> yield the following two equalities</p>
+<p><span class="math display">\[
+p\beta_{BB} + q\beta_{Bb} = 0
+\]</span></p>
+<p><span class="math display">\[
+p\beta_{Bb} + q\beta_{bb} = 0
+\]</span></p>
+<p>To solve this system of equation, the parameter <span class="math inline">\(\beta = \beta_{Bb} - \frac{1}{2}(\beta_{bb} + \beta_{BB})\)</span> is introduced, producing the following set of equalities</p>
+<p><span class="math display">\[
+\beta_{bb} = -2p^2\beta
+\]</span></p>
+<p><span class="math display">\[
+\beta_{Bb} = 2pq\beta
+\]</span></p>
+<p><span class="math display">\[
+\beta_{BB} = -2q^2\beta
+\]</span></p>
+<p>Thus, if we calculate the dominance deviation for the five possible genotypes of an autoetraploid (aaaa, Aaaa, AAaa, AAAa, AAAA) by examining all digenic interactions and we substitute based on the previous equations</p>
+<p><span class="math display">\[
+v =
+\begin{cases}
+v_{aaaa} = 6\beta_{bb} = -12p^2\beta \\[6pt]
+v_{Aaaa} = 3\beta_{bb} + 3\beta_{Bb} = -6p^2\beta + 6pq\beta \\[6pt]
+v_{AAaa} = \beta_{bb} + 4\beta_{Bb} + \beta_{BB} = -2p^2\beta + 8pq\beta - 2q^2\beta \\[6pt]
+v_{AAAa} = 3\beta_{BB} + 3\beta_{Bb} = -6q^2\beta + 6pq\beta \\[6pt]
+v_{AAAA} = 6\beta_{BB} = -12q^2\beta
+\end{cases}
+\]</span></p>
+<p>If we substitute <span class="math inline">\(q\)</span> by <span class="math inline">\((p - 1)\)</span> we will obtain the following simplification</p>
+<p><span class="math display">\[
+v =
+\begin{cases}
+v_{aaaa} = \beta(-12p^2)\\
+v_{Aaaa} = \beta(-12p^2 + 6p)\\
+v_{AAaa} = \beta(-12p^2 + 12p -2)\\
+v_{AAAa} = \beta(-12p^2 + 18p -6)\\
+v_{AAAA} = \beta(-12p^2 + 24p - 12)\\
+\end{cases}
+\]</span></p>
+<p>This expression can be generalized to any ploidy and dosage such that</p>
+<p><span class="math display">\[
+v = [-2\binom{\phi}{2}p^2 + 2p(\phi - 1)X -X(X-1)]\beta = Q\beta
+\]</span></p>
+<p>Notice that, for a diploid specie, following the recent derivation</p>
+<p><span class="math display">\[
+v_{\phi = 2} =
+\begin{cases}
+v_{aa} = -2p^2\\
+v_{Aa} = 2pq)\\
+v_{aa} = -2q^2
+\end{cases}
+\]</span></p>
+<p>The digenic dominance matrix Dij is defined similarly as the covariance between dominance values relative to the dominance genetic variance, based on the expectation with respect to <span class="math inline">\(b \sim N(0, \sigma^2_{\beta})\)</span></p>
+<p><span class="math display">\[
+D_{ij} = \sigma_D^{-2}cov[v_i, v_j] = \sigma_D^{-2}cov[Q_i\beta, Q_j\beta] = \sigma_D^{-2}\sigma_{\beta}^{-2}Q_iQ_j
+\]</span> <span class="math display">\[
+\sigma^2_D = E[v^2] - E[v]^2 = E[v^2] = \binom{\phi}{2} 4\, p^2 q^2 \, \beta^2
+\]</span></p>
+<p>Therefore, the correct scaling of the Digenic Dominanc GRM is the following one</p>
+<p><span class="math display">\[
+\mathbf{D} = \frac{\mathbf{QQ^T}}{\binom{\phi}{2} \sum_k 4\, p_k^2 q_k^2}
+\]</span></p>
 
 
 </section>
@@ -992,8 +1108,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1104,7 +1218,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
