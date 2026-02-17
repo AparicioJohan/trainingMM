@@ -41,12 +41,14 @@ website:
             text: Other software
       - section: "Starting LMM"
         contents:
-          - href: pages/03_LMM.html
-            text: Mixed models
           - href: pages/05_MVN.html
             text: Multivariate Normal
+          - href: pages/03_LMM.html
+            text: Mixed model by hand
           - href: pages/06_Heritabilities.html
             text: Heritability
+          - href: pages/03.1_predict_LMM.html
+            text: Predictions in LMM
           - href: pages/99_404.html
             text: Outliers LMM
       - section: "Parametrizations"

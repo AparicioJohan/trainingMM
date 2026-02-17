@@ -1,0 +1,157 @@
+---
+title: "Predict LMM"
+date: "last-modified"
+echo: true 
+warning: false 
+message: false
+---
+
+## Overview
+
+This document illustrates prediction in a **linear mixed model (LMM)** for a simple **RCBD** example:
+
+- 4 genotypes (random)
+- 3 blocks (fixed)
+- 12 observations
+
+We:
+1. Read the data and define design matrices
+2. Estimate variance components from ANOVA (method-of-moments)
+3. Build Mixed Model Equations (MME)
+4. Solve for fixed effects and BLUPs
+5. Compute predicted values and standard errors for genotype means
+6. Compute reliability
+
+```{r}
+#| echo: FALSE
+library(tidyverse)
+library(emmeans)
+library(lme4)
+library(MASS)
+library(LMMsolver)
+library(agriutilities)
+library(ggpubr)
+library(gt)
+```
+
+```{r}
+data <- read.csv("../data/example_1.csv") |>
+  mutate(gen = as.factor(gen), block = as.factor(block))
+head(data)
+str(data)
+
+n <- 12
+n_blks <- 3
+n_gens <- 4
+```
+
+
+### Variance components
+
+```{r}
+mod <- lm(formula = yield ~ 1 + block + gen, data = data)
+aov_table <- as.data.frame(anova(mod))
+aov_table
+
+mse_g <- aov_table["gen", "Mean Sq"]
+var_e <- aov_table["Residuals", "Mean Sq"]
+var_g <- (mse_g - var_e) / n_blks
+var_g
+```
+
+### Design matrices and MME
+
+```{r}
+X <- model.matrix(yield ~ 1 + block, data)
+Z <- model.matrix(yield ~ -1 + gen, data)
+y <- matrix(data[, "yield"]) |> na.omit()
+print(X)
+print(y)
+
+G <- diag(x = var_g, nrow = n_gens)
+R <- diag(x = var_e, nrow = n)
+V <- Z %*% G %*% t(Z) + R
+
+# Mixed Model Equations
+C11 <- t(X) %*% chol2inv(chol(R)) %*% X
+C12 <- t(X) %*% chol2inv(chol(R)) %*% Z
+C21 <- t(Z) %*% chol2inv(chol(R)) %*% X
+C22 <- t(Z) %*% chol2inv(chol(R)) %*% Z + solve(G)
+
+# Coefficient matrix (LHS)
+C <- as.matrix(
+  rbind(
+    cbind(C11, C12),
+    cbind(C21, C22)
+  )
+)
+
+# RHS
+rhs <- rbind(
+  t(X) %*% solve(R) %*% y,
+  t(Z) %*% solve(R) %*% y
+)
+
+# Solution
+C_inv <- chol2inv(chol(C))
+rownames(C_inv) <- colnames(C_inv) <- rownames(C)
+print(round(C_inv, 4))
+ans <- C_inv %*% rhs
+ans
+```
+
+### Reliability random genotypic effect
+
+```{r}
+PEV <- C_inv[4:7, 4:7]
+r2_u <- 1 - diag(PEV) / var_g
+r2_u
+```
+
+
+### Linear combination of Fixed and Random Effects
+
+```{r}
+# L
+L <- cbind(
+  matrix(1, nrow = n_gens, ncol = 1),                   # Intercept
+  matrix(1 / n_blks, nrow = n_gens, ncol = n_blks - 1), # Average block
+  diag(n_gens)                                          # Identity for gens
+)
+L
+
+# Prediction
+pv <- L %*% ans
+pv
+
+# Standard Error
+sse2 <- L %*% C_inv %*% t(L)
+sse2
+std <- sqrt(diag(sse2))
+std
+data.frame("predicted.values" = pv, std)
+```
+
+### Reliability linear combination
+
+```{r}
+# w = Lb + Mu
+var_uhat <- G - PEV
+var_beta <- (C_inv[1:3, 1:3])
+cov_ubeta <- -C_inv[4:7, 1:3]
+
+L <- cbind(
+  matrix(1, nrow = n_gens, ncol = 1),                   # Intercept
+  matrix(1 / n_blks, nrow = n_gens, ncol = n_blks - 1)  # Average block
+)
+M <- diag(n_gens)
+var_what <- L %*% var_beta %*% t(L) + M %*% var_uhat %*% t(M)
+var_w <- M %*% G %*% t(M)
+cov_wwhat <- M %*% cov_ubeta %*% t(L) + M %*% var_uhat %*% t(M)
+r2_w <- diag(cov_wwhat)^2 / (diag(var_w) * diag(var_what))
+r2_w
+
+data.frame("predicted.values" = pv, std, r2_w, r2_u) |>
+  gt()
+```
+
