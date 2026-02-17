@@ -3,9 +3,7 @@ library(emmeans)
 library(lme4)
 library(MASS)
 library(asreml)
-library(LMMsolver)
-library(agriutilities)
-library(ggpubr)
+library(lme4breeding)
 
 # RCBD
 # 4 gens
@@ -19,6 +17,15 @@ str(data)
 n <- 12
 n_blks <- 3
 n_gens <- 4
+
+# lme4breeding ------------------------------------------------------------
+
+ans1 <- lmeb(yield ~ 1 + (1 | gen) + block, data = data, dateWarning = FALSE)
+vc <- VarCorr(ans1)
+print(vc, comp = c("Variance"))
+condVarMat <- condVarRotated(ans1)
+
+getMME(ans1)$Ci
 
 # Variance components -----------------------------------------------------
 
@@ -70,9 +77,9 @@ print(C_inv)
 ans <- C_inv %*% rhs
 ans
 
-# -------------------------------------------------------------------------
-# Linear combination of Fixed and Random Effects
-# -------------------------------------------------------------------------
+
+predict(object = ans1, classify="gen", PEV = TRUE)
+
 
 # L
 L <- cbind(
@@ -81,74 +88,23 @@ L <- cbind(
   diag(n_gens)                                          # Identity for gens
 )
 L
-
 # predicted.value
 pv <- L %*% ans
 pv
 
 # std.error
 sse2 <- L %*% C_inv %*% t(L)
-sse2
 std <- sqrt(diag(sse2))
 std
-data.frame("predicted.values" = pv, std)
-
-# r2 linear combination w = Lb + Mu
-pev <- C_inv[4:7, 4:7]
-var_uhat <- G - pev
-var_beta <- (C_inv[1:3, 1:3])
-cov_ubeta <- -C_inv[4:7, 1:3]
-
-L <- cbind(
-  matrix(1, nrow = n_gens, ncol = 1),                   # Intercept
-  matrix(1 / n_blks, nrow = n_gens, ncol = n_blks - 1)  # Average block
-)
-M <- diag(n_gens)
-var_what <- L %*% var_beta %*% t(L) + M %*% var_uhat %*% t(M)
-var_w <- M %*% G %*% t(M)
-cov_wwhat <- M %*% cov_ubeta %*% t(L) + M %*% var_uhat %*% t(M)
-
-r2_w <- diag(cov_wwhat)^2 / (diag(var_w) * diag(var_what))
-
-1 - diag(pev) / var_g
 
 # -------------------------------------------------------------------------
-# EMM block ---------------------------------------------------------------
-# -------------------------------------------------------------------------
-
-# L
-L <- cbind(
-  matrix(1, nrow = n_blks, ncol = 1),                   # Intercept
-  matrix(rbind(0, diag(nrow = n_blks - 1)), nrow = n_blks, ncol = n_blks - 1)                           # Identity for gens
-)
-L
-
-# predicted.value
-pv_b <- L %*% ans[1:3]
-pv_b
-
-# std.error
-sse2_b <- L %*% C_inv[1:3, 1:3] %*% t(L)
-sse2_b
-std_b <- sqrt(diag(sse2_b))
-std_b
-data.frame("predicted.values" = pv_b, std_b)
-
-# Check -------------------------------------------------------------------
 
 asreml.options(Cfixed = TRUE)
 mod_asr <- asreml(fixed = y ~ 1 + block, random = ~gen, data = data)
 
 # EMM blocks
-pv_b_asrml <- predict(mod_asr, classify = "block", vcov = TRUE)$pval
+pv_b_asrml <- predict(mod_asr, classify = "gen", only = "gen", vcov = TRUE)$pval
 pv_b_asrml
 
-# BLUPs genotype
-pv_asrml <- predict(mod_asr, classify = "gen", vcov = TRUE)$pval
-pv_asrml
-predict(mod_asr, classify = "gen", only = "gen")
-C_inv[4:7, 4:7] |> diag() |> sqrt()
 
-# C11
-C_inv[1:3, 1:3]
-mod_asr$Cfixed
+diag(C_inv[4:7, 4:7]) |> sqrt()

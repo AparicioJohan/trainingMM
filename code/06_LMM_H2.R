@@ -97,6 +97,9 @@ G - G %*% t(Z) %*% P %*% Z %*% G
 # V(u - u_hat) = C_22-
 C_inv[4:7, 4:7]
 
+# Cov (b - b_hat, u - u_hat)
+-1 * solve(t(X) %*% V_inv %*% X) %*% t(X) %*% V_inv %*% Z %*% G
+
 # lme4breeding ------------------------------------------------------------
 
 # library(lme4breeding)

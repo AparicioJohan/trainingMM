@@ -159,7 +159,7 @@ var_g / (var_g + var_e / n_blks)
 
 mme_f <- asreml(
   fixed = yield ~ gen,
-  random = ~ block,
+  random = ~block,
   data = data
 )
 
@@ -168,7 +168,7 @@ blues <- predict(mme_f, classify = "gen")$pvals |>
 blups <- predict(mme, classify = "gen")$pvals |>
   transmute(gen, blup = predicted.value)
 
-lm( formula = blup ~ blue , data =  full_join(blues, blups))
+lm(formula = blup ~ blue, data = full_join(blues, blups))
 
 full_join(blues, blups) |>
   ggplot(aes(x = blue, y = blup)) +
@@ -184,7 +184,7 @@ library(dplyr)
 library(tidyr)
 library(purrr)
 
-vc_g <- summary(mme)$varcomp['vm(gen, A)', "component"] # VC genotype main effect
+vc_g <- summary(mme)$varcomp["vm(gen, A)", "component"] # VC genotype main effect
 G_true <- A * vc_g
 rownames(G_true) <- colnames(G_true) <- mme$G.param[[1]][[2]]$levels
 id <- rownames(G_true)
@@ -229,3 +229,27 @@ mix
 ranef(mix)
 as.data.frame(VarCorr(mix))
 vcov(mix)
+
+vars <- data.frame(VarCorr(mix))[, c(1, 4)]
+Va <- vars[1, 2]
+Ve <- vars[3, 2]
+
+dtab <- Dtable(mix)
+dtab$include[2] <- 1
+print(dtab)
+
+pans <- predict.lmeb(mix, hyperTable = dtab, classify = "gen", usePEV = TRUE)
+pans
+
+pans$pvals$std.error^2
+
+attr(ranef(mix), "condVarMat") |>
+  as.matrix() |>
+  round(4)
+round(C_inv, 5)
+round(pans$condVarMat, 5)
+
+G - G %*% t(Z) %*% solve(V) %*% Z %*% G
+
+Ci <- lme4breeding::getMME(mix)$Ci
+round(Ci, 2)
