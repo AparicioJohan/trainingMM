@@ -1,0 +1,170 @@
+---
+title: "Pedigree BLUP"
+format: html
+---
+
+```{r}
+#| echo: false
+#| warning: false
+library(tidyverse)
+library(emmeans)
+library(lme4)
+library(MASS)
+library(LMMsolver)
+library(ggpubr)
+library(polyBreedR)
+library(kinship2)
+```
+
+
+```{r}
+# RCBD
+# 4 gens
+# 3 blocks
+# 12 observations
+data <- read.csv("../data/example_1.csv") |>
+  mutate(gen = as.factor(gen), block = as.factor(block))
+head(data)
+
+n <- 12
+n_blks <- 3
+n_gens <- 4
+g_lvls <- levels(data$gen)
+
+# Pedigree
+ped <- data.frame(
+  id = g_lvls,
+  p1 = c(NA, NA, "g2", "g3"),
+  p2 = c(NA, NA, "g1", "g1")
+)
+```
+
+```{r}
+#| echo: FALSE
+id <- ped$id
+dadid <- ped$p1
+momid <- ped$p2
+is_mom <- id %in% momid
+is_dad <- id %in% dadid
+sex <- ifelse(is_mom, 2L, ifelse(is_dad, 1L, 2L))
+obj <- pedigree(id = id, dadid = dadid, momid = momid, sex = sex)
+plot(obj)
+```
+
+### Additive relationship matrix
+
+```{r}
+A <- A_mat(ped, ploidy = 2)
+A
+```
+
+### Variance components
+
+```{r}
+#| echo: false
+#| warning: false
+library(asreml)
+```
+
+
+```{r}
+asreml.options(Cfixed = TRUE, maxit = 50, trace = 0)
+mme <- asreml(fixed = yield ~ 1, random = ~ vm(gen, A) + block, data = data)
+mme$coefficients$random
+
+var_comps <- summary(mme)$varcomp
+var_g <- var_comps[2, 1]
+var_b <- var_comps[1, 1]
+var_e <- var_comps[3, 1]
+```
+
+### Reconstructing MME
+
+```{r}
+X <- model.matrix(yield ~ 1, data)
+Zb <- model.matrix(yield ~ -1 + block, data)
+Zg <- model.matrix(yield ~ -1 + gen, data)
+Z <- cbind(Zb, Zg)
+y <- matrix(data[, "yield"])
+
+Gb <- diag(x = var_b, nrow = n_blks)
+Gg <- A * var_g
+G <- bdiag(Gb, Gg)
+R <- diag(x = var_e, nrow = n)
+V <- Z %*% G %*% t(Z) + R
+
+# Mixed Model Equations
+C11 <- t(X) %*% chol2inv(chol(R)) %*% X
+C12 <- t(X) %*% chol2inv(chol(R)) %*% Z
+C21 <- t(Z) %*% chol2inv(chol(R)) %*% X
+C22 <- t(Z) %*% chol2inv(chol(R)) %*% Z + solve(G)
+
+# Coefficient matrix (LHS)
+C <- as.matrix(
+  rbind(
+    cbind(C11, C12),
+    cbind(C21, C22)
+  )
+)
+
+# RHS
+rhs <- rbind(
+  t(X) %*% solve(R) %*% y,
+  t(Z) %*% solve(R) %*% y
+)
+
+# Solution
+C_inv <- ginv(C)
+rownames(C_inv) <- colnames(C_inv) <- rownames(C)
+print(round(C_inv, 3))
+ans <- C_inv %*% rhs
+ans
+
+# PEV = C22_g
+C22_g <- C_inv[5:8, 5:8]
+C22_g
+```
+
+### Reliability
+
+```{r}
+PEV_gi <- diag(C22_g)
+var_gi <- diag(Gg)
+r2_g <- 1 - PEV_gi / var_gi
+r2_g
+```
+
+```{r}
+# Linear combination w = Lb + Mu
+var_uhat <- G - C_inv[-1, -1]
+var_beta <- C_inv[1, 1]
+cov_ubeta <- -matrix(C_inv[-1, 1], nrow = 7, ncol = 1)
+
+L <- cbind(matrix(1, nrow = n_gens, ncol = 1)) # Intercept
+M <- cbind(
+  matrix(0, nrow = 4, ncol = 3),               # No block
+  diag(n_gens)                                 # Genotype 
+)
+var_what <- L %*% var_beta %*% t(L) + M %*% var_uhat %*% t(M)
+var_w <- M %*% G %*% t(M)
+cov_wwhat <- M %*% cov_ubeta %*% t(L) + M %*% var_uhat %*% t(M)
+r2_w <- diag(cov_wwhat)^2 / (diag(var_w) * diag(var_what))
+r2_w
+```
+
+
+### Predictions
+
+```{r}
+# g
+pp <- predict(mme, classify = "vm(gen, A)", only = "vm(gen, A)", sed = TRUE, vcov = TRUE)
+as.data.frame(pp$pvals) # Solution
+pp$vcov # C22_g
+pp$sed^2 # vd_BLUP_mat
+
+# mu + g
+lc <- predict(mme, classify = "gen", sed = TRUE, vcov = TRUE)
+as.data.frame(lc$pvals)
+lc$vcov
+lc$sed^2
+```

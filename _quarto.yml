@@ -49,8 +49,8 @@ website:
             text: Heritability
           - href: pages/03.1_predict_LMM.html
             text: Predictions in LMM
-          - href: pages/99_404.html
-            text: Outliers LMM
+          - href: pages/07_PBLUP.html
+            text: Pedigree BLUP
       - section: "Parametrizations"
         contents:
           - href: pages/08_Parametrizations.html

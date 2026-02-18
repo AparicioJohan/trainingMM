@@ -15,12 +15,13 @@ This document illustrates prediction in a **linear mixed model (LMM)** for a sim
 - 12 observations
 
 We:
-1. Read the data and define design matrices
-2. Estimate variance components from ANOVA (method-of-moments)
-3. Build Mixed Model Equations (MME)
-4. Solve for fixed effects and BLUPs
-5. Compute predicted values and standard errors for genotype means
-6. Compute reliability
+
+  1. Read the data and define design matrices
+  2. Estimate variance components from ANOVA (method-of-moments)
+  3. Build Mixed Model Equations (MME)
+  4. Solve for fixed effects and BLUPs
+  5. Compute predicted values and standard errors for genotype means
+  6. Compute reliability
 
 ```{r}
 #| echo: FALSE
@@ -137,7 +138,7 @@ data.frame("predicted.values" = pv, std)
 ```{r}
 # w = Lb + Mu
 var_uhat <- G - PEV
-var_beta <- (C_inv[1:3, 1:3])
+var_beta <- C_inv[1:3, 1:3]
 cov_ubeta <- -C_inv[4:7, 1:3]
 
 L <- cbind(
@@ -152,6 +153,7 @@ r2_w <- diag(cov_wwhat)^2 / (diag(var_w) * diag(var_what))
 r2_w
 
 data.frame("predicted.values" = pv, std, r2_w, r2_u) |>
+  mutate_if(is.numeric, round, 3) |> 
   gt()
 ```
 
