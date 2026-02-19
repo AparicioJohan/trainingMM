@@ -10,7 +10,7 @@ website:
 
   page-footer:
     right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
-    left: "&copy; UW-Madison, 2025"
+    left: "&copy; UW-Madison, 2026"
 
   sidebar:
     # logo: "images/openscapes_hex.png"

@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-02-17">
+<meta name="dcterms.date" content="2026-02-19">
 
 <title>Linear Mixed Models – trainingMM</title>
 <style>
@@ -326,7 +326,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#estimating-variance-components" id="toc-estimating-variance-components" class="nav-link" data-scroll-target="#estimating-variance-components">Estimating variance components</a></li>
   <li><a href="#design-matrices" id="toc-design-matrices" class="nav-link" data-scroll-target="#design-matrices">Design matrices</a></li>
-  <li><a href="#hendersons-equations" id="toc-hendersons-equations" class="nav-link" data-scroll-target="#hendersons-equations">Henderson’s equations</a></li>
+  <li><a href="#hendersons-equations-inverting-c" id="toc-hendersons-equations-inverting-c" class="nav-link" data-scroll-target="#hendersons-equations-inverting-c">Henderson’s equations (Inverting <span class="math inline">\(C\)</span>)</a></li>
+  <li><a href="#alternative-solution-inverting-v" id="toc-alternative-solution-inverting-v" class="nav-link" data-scroll-target="#alternative-solution-inverting-v">Alternative solution (Inverting <span class="math inline">\(V\)</span>)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -347,7 +348,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 17, 2026</p>
+      <p class="date">February 19, 2026</p>
     </div>
   </div>
   
@@ -382,23 +383,23 @@ window.Quarto = {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n_blks <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>n_gens <span class="ot">&lt;-</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The most common way to obtain BLUEs and BLUPs is to solve the Henderson’s Equations. To do so, first, we need to estimate the variances of the random components. Later on, we will show how to do so using Restricted Maximum Likelihood (REML), but for now we will use the methods of moments. So, let’s assume the following model</p>
-<p><span class="math display">\[y = \mu + b + g + \epsilon, \text{where } g \sim N(0, I\sigma^2_g) \text{ and } \epsilon \sim N(0, I\sigma^2_e)\]</span></p>
+<p>The most common way to obtain BLUEs and BLUPs is to solve the Henderson’s Equations. To do so, first, we need to estimate the variances of the random components. Later on, we will show how to do it using Restricted Maximum Likelihood (REML), but for now we will use the methods of moments. So, let’s assume the following model</p>
+<p><span class="math display">\[\mathbf{y} = \mathbf{1}_n\mu + \mathbf{Xb} + \mathbf{Zg} + \mathbf{e}, \text{where } \mathbf{g} \sim N(0, \underbrace{\mathbf{I\sigma^2_g}}_{\mathbf{G}} ) \text{ and } \mathbf{e} \sim N(0, \underbrace{\mathbf{I\sigma^2_e}}_{\mathbf{R}})\]</span></p>
 <p>which can be also expressed as:</p>
-<p><span class="math display">\[y = X\beta + Zu + \epsilon = \begin{bmatrix}
+<p><span class="math display">\[\mathbf{y = X\beta + Zu + e} = \begin{bmatrix}
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
-\end{bmatrix} \beta +
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
+\end{bmatrix} \boldsymbol{\beta} +
   \begin{bmatrix}
 1 \ 0 \ 0 \ 0 \\
 1 \ 0 \ 0 \ 0 \\
@@ -412,11 +413,37 @@ window.Quarto = {
 0 \ 0 \ 0 \ 1 \\
 0 \ 0 \ 0 \ 1 \\
 0 \ 0 \ 0 \ 1 \\
-\end{bmatrix}u + \epsilon \]</span></p>
+\end{bmatrix}\mathbf{u} + \mathbf{e} \]</span></p>
+<p>And <span class="math inline">\(\mathbf{G}, \mathbf{R} \text{ and } \mathbf{V}\)</span>, would be:</p>
+<p><span class="math display">\[\mathbf{G}  = \mathbf{\sigma^2_g I} = \sigma^2_\mathbf{g}
+\begin{bmatrix}
+1 \ 0 \ 0 \ 0\\
+0 \ 1 \ 0 \ 0\\
+0 \ 0 \ 1 \ 0\\
+0 \ 0 \ 0 \ 1\\
+\end{bmatrix}\]</span></p>
+<p><span class="math display">\[\mathbf{R}  = \mathbf{\sigma^2_e I} = \sigma^2_\mathbf{e}
+\begin{bmatrix}
+1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \\
+0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \\
+\end{bmatrix}\]</span></p>
+<p><span class="math display">\[\mathbf{V}  = Var(\mathbf{y}) = Var(\mathbf{X}\boldsymbol{\beta} + \mathbf{Zu + e}) = Var(\mathbf{Zu}) + Var(\mathbf{e}) = \mathbf{ZV(u)Z^T + R = ZGZ^T + R}\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[\mathbf{y} \sim N(\boldsymbol{X\beta}, \mathbf{ZGZ^T + R})\]</span></p>
 <section id="estimating-variance-components" class="level3">
 <h3 class="anchored" data-anchor-id="estimating-variance-components">Estimating variance components</h3>
 <p>In the methods of moments, the variances can be calculated<br>
-<span class="math display">\[\sigma^2_g = \frac{MSE - \sigma^2_\epsilon}{n_{blocks}}\]</span></p>
+<span class="math display">\[\sigma^2_\mathbf{g} = \frac{MSE - \sigma^2_\mathbf{e}}{n_{blocks}}\]</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> block <span class="sc">+</span> gen, <span class="at">data =</span> data)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>aov_table <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">anova</span>(mod))</span>
@@ -435,39 +462,13 @@ Residuals  6   2.40    0.40      NA          NA</code></pre>
 <pre><code>[1] 0.6033333</code></pre>
 </div>
 </div>
-<p>Next, we need to build the design matrices and the variance covariances <span class="math inline">\(\mathbf{G}, \mathbf{R} \text{ and } \mathbf{V}\)</span>, where:</p>
-<p><span class="math display">\[G  = \sigma^2_g I = \sigma^2_g
-\begin{bmatrix}
-1 \ 0 \ 0 \ 0\\
-0 \ 1 \ 0 \ 0\\
-0 \ 0 \ 1 \ 0\\
-0 \ 0 \ 0 \ 1\\
-\end{bmatrix}\]</span></p>
-<p><span class="math display">\[R  = \sigma^2_\epsilon I = \sigma^2_\epsilon
-\begin{bmatrix}
-1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \\
-0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \\
-\end{bmatrix}\]</span></p>
-<p><span class="math display">\[V  = Var(y) = Var(X\beta + Zu + \epsilon) = V(Zu) + V(\epsilon) = ZV(u)Z^T + R = ZGZ^T + R\]</span></p>
-<p>Thus, we can express the model as</p>
-<p><span class="math display">\[y \sim N(X\beta, ZGZ^T + R) \text{ or } y \sim MVN(\mu, V)\]</span></p>
 </section>
 <section id="design-matrices" class="level3">
 <h3 class="anchored" data-anchor-id="design-matrices">Design matrices</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(yield <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> block, data)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(yield <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> gen, data)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(data[, <span class="st">"yield"</span>]) <span class="sc">|&gt;</span> <span class="fu">na.omit</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(data[, <span class="st">"yield"</span>])</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   (Intercept) block2 block3
@@ -510,18 +511,18 @@ attr(,"contrasts")$block
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> Z <span class="sc">%*%</span> G <span class="sc">%*%</span> <span class="fu">t</span>(Z) <span class="sc">+</span> R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="hendersons-equations" class="level3">
-<h3 class="anchored" data-anchor-id="hendersons-equations">Henderson’s equations</h3>
+<section id="hendersons-equations-inverting-c" class="level3">
+<h3 class="anchored" data-anchor-id="hendersons-equations-inverting-c">Henderson’s equations (Inverting <span class="math inline">\(C\)</span>)</h3>
 <p>Now we have all we need to solve:</p>
 <p><span class="math display">\[
   \underbrace{\begin{bmatrix}
-    X^T R^{-1} X &amp; X^T R^{-1} Z \\
-    Z^T R^{-1} X &amp; Z^T R^{-1} Z + G^{-1}
+    \mathbf{X^T R^{-1} X} &amp; \mathbf{X^T R^{-1} Z} \\
+    \mathbf{Z^T R^{-1} X} &amp; \mathbf{Z^T R^{-1} Z + G^{-1}}
     \end{bmatrix}}_{\boldsymbol{C}} \begin{bmatrix}
 \hat\beta\\ \hat u
 \end{bmatrix} = \underbrace{\begin{bmatrix}
-  X^T R^{-1} y \\
-  Z^T R^{-1} y
+\mathbf{X^T R^{-1} y} \\
+  \mathbf{Z^T R^{-1} y}
   \end{bmatrix}}_{\boldsymbol{RHS}}
 \]</span></p>
 <p>And therefore</p>
@@ -547,17 +548,20 @@ C_{21} &amp; C_{22}
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cbind</span>(C21, C22)</span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># RHS</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>rhs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y,</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>C_inv <span class="ot">&lt;-</span> <span class="fu">chol2inv</span>(<span class="fu">chol</span>(C))</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(C_inv) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(C_inv) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(C)</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(C_inv, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(C)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># RHS</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rhs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>C_inv <span class="ot">&lt;-</span> <span class="fu">chol2inv</span>(<span class="fu">chol</span>(C))</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(C_inv) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(C_inv) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(C)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(C_inv, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            (Intercept) block2 block3   geng1   geng2   geng3   geng4
 (Intercept)      0.2508   -0.1   -0.1 -0.1508 -0.1508 -0.1508 -0.1508
@@ -568,8 +572,8 @@ geng2           -0.1508    0.0    0.0  0.1235  0.2327  0.1235  0.1235
 geng3           -0.1508    0.0    0.0  0.1235  0.1235  0.2327  0.1235
 geng4           -0.1508    0.0    0.0  0.1235  0.1235  0.1235  0.2327</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ans <span class="ot">&lt;-</span> C_inv <span class="sc">%*%</span> rhs</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ans <span class="ot">&lt;-</span> C_inv <span class="sc">%*%</span> rhs</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  [,1]
 (Intercept)  8.5000000
@@ -581,27 +585,37 @@ geng3       -0.5323529
 geng4        0.8599548</code></pre>
 </div>
 </div>
+</section>
+<section id="alternative-solution-inverting-v" class="level3">
+<h3 class="anchored" data-anchor-id="alternative-solution-inverting-v">Alternative solution (Inverting <span class="math inline">\(V\)</span>)</h3>
 <p>BLUEs and BLUPs can also be calculated separately as follows:</p>
 <p><span class="math display">\[
-  \hat \beta = (X^TV^{-1}X)^{-1}X^TV^{-1}y
+  \boldsymbol{\hat{\beta}} = \mathbf{(X^T V^{-1} X)^{-1} X^T V^{-1} y}
 \]</span></p>
-<p>These are the generalized forms. Let’s show how would <span class="math inline">\(\hat \beta\)</span> be calculated using <span class="math inline">\(V = \sigma^2_\epsilon I\)</span></p>
+<p>These are the generalized forms. Let’s show how would <span class="math inline">\(\boldsymbol{\hat \beta}\)</span> be calculated using <span class="math inline">\(\mathbf{V = \sigma^2_e I}\)</span></p>
 <p><span class="math display">\[
-\beta = \sigma^2_\epsilon(X^TX)^{-1} \frac{X^Ty}{\sigma^2_\epsilon} = (X^TX)^{-1}X^Ty
+  \boldsymbol{\hat{\beta}} = \mathbf{\sigma^2_e(X^T X)^{-1} \frac{X^T y}{\sigma^2_e}} = \mathbf{(X^T X)^{-1}X^T y}
 \]</span></p>
-<p>This looks familiar right? It’s pure Ordinary Least Squares.</p>
 <p>Respectively, for BLUPs:</p>
 <p><span class="math display">\[
-  \hat u = GZ^TV^{-1}(y-X\hat\beta)
+  \mathbf{\hat u} = \mathbf{GZ^T V^{-1}(y-X \boldsymbol{\hat{\beta})}}
 \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>V_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(V)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>betas <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> V_inv <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> V_inv <span class="sc">%*%</span> y</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> G <span class="sc">%*%</span> <span class="fu">t</span>(Z) <span class="sc">%*%</span> V_inv <span class="sc">%*%</span> (y <span class="sc">-</span> X <span class="sc">%*%</span> betas)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(u) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(Z)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">rbind</span>(betas, u)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(m) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rownames</span>(betas), <span class="fu">rownames</span>(u))</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>m </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(V)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12 12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>V_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(V)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># BLUEs</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>betas <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> V_inv <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> V_inv <span class="sc">%*%</span> y</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># BLUPs</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> G <span class="sc">%*%</span> <span class="fu">t</span>(Z) <span class="sc">%*%</span> V_inv <span class="sc">%*%</span> (y <span class="sc">-</span> X <span class="sc">%*%</span> betas)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(u) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(Z)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">rbind</span>(betas, u)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(m) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rownames</span>(betas), <span class="fu">rownames</span>(u))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>m </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  [,1]
 (Intercept)  8.5000000
@@ -1055,7 +1069,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© UW-Madison, 2025</p>
+<p>© UW-Madison, 2026</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

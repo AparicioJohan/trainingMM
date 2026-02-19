@@ -35,27 +35,27 @@ n_gens <- 4
 
 The most common way to obtain BLUEs and BLUPs is to solve the Henderson's Equations.
 To do so, first,  we need to estimate the variances of the random components. 
-Later on, we will show how to do so using Restricted Maximum Likelihood (REML), 
+Later on, we will show how to do it using Restricted Maximum Likelihood (REML), 
 but for now we will use the methods of moments. So, let's assume the following model
 
-$$y = \mu + b + g + \epsilon, \text{where } g \sim N(0, I\sigma^2_g) \text{ and } \epsilon \sim N(0, I\sigma^2_e)$$
+$$\mathbf{y} = \mathbf{1}_n\mu + \mathbf{Xb} + \mathbf{Zg} + \mathbf{e}, \text{where } \mathbf{g} \sim N(0, \underbrace{\mathbf{I\sigma^2_g}}_{\mathbf{G}} ) \text{ and } \mathbf{e} \sim N(0, \underbrace{\mathbf{I\sigma^2_e}}_{\mathbf{R}})$$
   
   which can be also expressed as:
   
-$$y = X\beta + Zu + \epsilon = \begin{bmatrix}
+$$\mathbf{y = X\beta + Zu + e} = \begin{bmatrix}
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
 1 \ 0 \ 0 \\
-0 \ 1 \ 0 \\
-0 \ 0 \ 1 \\
-\end{bmatrix} \beta + 
+1 \ 1 \ 0 \\
+1 \ 0 \ 1 \\
+\end{bmatrix} \boldsymbol{\beta} + 
   \begin{bmatrix}
 1 \ 0 \ 0 \ 0 \\
 1 \ 0 \ 0 \ 0 \\
@@ -69,29 +69,11 @@ $$y = X\beta + Zu + \epsilon = \begin{bmatrix}
 0 \ 0 \ 0 \ 1 \\
 0 \ 0 \ 0 \ 1 \\
 0 \ 0 \ 0 \ 1 \\
-\end{bmatrix}u + \epsilon $$
-  
-### Estimating variance components
-  
-  In the methods of moments, the variances can be calculated  
-$$\sigma^2_g = \frac{MSE - \sigma^2_\epsilon}{n_{blocks}}$$
-  
-```{r}
-mod <- lm(formula = yield ~ 1 + block + gen, data = data)
-aov_table <- as.data.frame(anova(mod))
-aov_table
+\end{bmatrix}\mathbf{u} + \mathbf{e} $$
 
-mse_g <- aov_table["gen", "Mean Sq"]
-var_e <- aov_table["Residuals", "Mean Sq"]
-var_g <- (mse_g - var_e) / n_blks
-var_g
-```
-
-
-Next, we need to build the design matrices and the variance covariances
-$\mathbf{G}, \mathbf{R} \text{ and } \mathbf{V}$, where:
+And $\mathbf{G}, \mathbf{R} \text{ and } \mathbf{V}$, would be:
   
-  $$G  = \sigma^2_g I = \sigma^2_g 
+  $$\mathbf{G}  = \mathbf{\sigma^2_g I} = \sigma^2_\mathbf{g} 
 \begin{bmatrix}
 1 \ 0 \ 0 \ 0\\
 0 \ 1 \ 0 \ 0\\
@@ -99,7 +81,7 @@ $\mathbf{G}, \mathbf{R} \text{ and } \mathbf{V}$, where:
 0 \ 0 \ 0 \ 1\\
 \end{bmatrix}$$
   
-  $$R  = \sigma^2_\epsilon I = \sigma^2_\epsilon 
+  $$\mathbf{R}  = \mathbf{\sigma^2_e I} = \sigma^2_\mathbf{e} 
 \begin{bmatrix}
 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
 0 \ 1 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \\
@@ -114,19 +96,36 @@ $\mathbf{G}, \mathbf{R} \text{ and } \mathbf{V}$, where:
 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \ 0 \\
 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 0 \ 1 \\
 \end{bmatrix}$$
-  
-  $$V  = Var(y) = Var(X\beta + Zu + \epsilon) = V(Zu) + V(\epsilon) = ZV(u)Z^T + R = ZGZ^T + R$$
-  
-  Thus, we can express the model as 
 
-$$y \sim N(X\beta, ZGZ^T + R) \text{ or } y \sim MVN(\mu, V)$$
+
+  $$\mathbf{V}  = Var(\mathbf{y}) = Var(\mathbf{X}\boldsymbol{\beta} + \mathbf{Zu + e}) = Var(\mathbf{Zu}) + Var(\mathbf{e}) = \mathbf{ZV(u)Z^T + R = ZGZ^T + R}$$
+  
+Therefore
+
+$$\mathbf{y} \sim N(\boldsymbol{X\beta}, \mathbf{ZGZ^T + R})$$
+  
+### Estimating variance components
+  
+  In the methods of moments, the variances can be calculated  
+$$\sigma^2_\mathbf{g} = \frac{MSE - \sigma^2_\mathbf{e}}{n_{blocks}}$$
+  
+```{r}
+mod <- lm(formula = yield ~ 1 + block + gen, data = data)
+aov_table <- as.data.frame(anova(mod))
+aov_table
+
+mse_g <- aov_table["gen", "Mean Sq"]
+var_e <- aov_table["Residuals", "Mean Sq"]
+var_g <- (mse_g - var_e) / n_blks
+var_g
+```
 
 ### Design matrices
 
 ```{r}
 X <- model.matrix(yield ~ 1 + block, data)
 Z <- model.matrix(yield ~ -1 + gen, data)
-y <- matrix(data[, "yield"]) |> na.omit()
+y <- matrix(data[, "yield"])
 print(X)
 print(y)
 
@@ -135,19 +134,19 @@ R <- diag(x = var_e, nrow = n)
 V <- Z %*% G %*% t(Z) + R
 ```
 
-### Henderson's equations
+### Henderson's equations (Inverting $C$)
 
 Now we have all we need to solve:
 
 $$ 
   \underbrace{\begin{bmatrix}
-    X^T R^{-1} X & X^T R^{-1} Z \\
-    Z^T R^{-1} X & Z^T R^{-1} Z + G^{-1}
+    \mathbf{X^T R^{-1} X} & \mathbf{X^T R^{-1} Z} \\
+    \mathbf{Z^T R^{-1} X} & \mathbf{Z^T R^{-1} Z + G^{-1}}
     \end{bmatrix}}_{\boldsymbol{C}} \begin{bmatrix}
 \hat\beta\\ \hat u
 \end{bmatrix} = \underbrace{\begin{bmatrix}
-  X^T R^{-1} y \\
-  Z^T R^{-1} y
+ \mathbf{X^T R^{-1} y} \\
+  \mathbf{Z^T R^{-1} y}
   \end{bmatrix}}_{\boldsymbol{RHS}}
 $$
   
@@ -177,6 +176,7 @@ C <- as.matrix(
     cbind(C21, C22)
   )
 )
+dim(C)
 
 # RHS
 rhs <- rbind(
@@ -192,33 +192,38 @@ ans <- C_inv %*% rhs
 ans
 ```
 
+### Alternative solution (Inverting $V$)
+
 BLUEs and BLUPs can also be calculated separately as follows:
 
 $$ 
-  \hat \beta = (X^TV^{-1}X)^{-1}X^TV^{-1}y
+  \boldsymbol{\hat{\beta}} = \mathbf{(X^T V^{-1} X)^{-1} X^T V^{-1} y}
 $$
   
-These are the generalized forms. Let's show how would $\hat \beta$ be calculated
-using $V = \sigma^2_\epsilon I$
+These are the generalized forms. Let's show how would $\boldsymbol{\hat \beta}$ be calculated
+using $\mathbf{V = \sigma^2_e I}$
 
 $$
-\beta = \sigma^2_\epsilon(X^TX)^{-1} \frac{X^Ty}{\sigma^2_\epsilon} = (X^TX)^{-1}X^Ty
+  \boldsymbol{\hat{\beta}} = \mathbf{\sigma^2_e(X^T X)^{-1} \frac{X^T y}{\sigma^2_e}} = \mathbf{(X^T X)^{-1}X^T y}
 $$
-
-This looks familiar right? It's pure Ordinary Least Squares. 
 
 Respectively, for BLUPs:
 
 $$ 
-  \hat u = GZ^TV^{-1}(y-X\hat\beta)
+  \mathbf{\hat u} = \mathbf{GZ^T V^{-1}(y-X \boldsymbol{\hat{\beta})}}
 $$
   
   
 ```{r}
+dim(V)
 V_inv <- solve(V)
+
+# BLUEs
 betas <- solve(t(X) %*% V_inv %*% X) %*% t(X) %*% V_inv %*% y
+# BLUPs
 u <- G %*% t(Z) %*% V_inv %*% (y - X %*% betas)
 rownames(u) <- colnames(Z)
+# Solution
 m <- rbind(betas, u)
 rownames(m) <- c(rownames(betas), rownames(u))
 m 

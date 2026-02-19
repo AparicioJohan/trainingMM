@@ -8,11 +8,11 @@ This webpage is **under development**.
 
 Our goal is to build a collection of resources that use **R code** and **mathematical explanations** to make concepts in statistical modeling easier to understand.  
 
-We will begin with the basics of **linear models**, and progressively extend toward more advanced **mixed models**, which are widely applied in plant breeding, animal breeding, and many other fields.  
+We will begin with the basics of **linear models**, and progressively extend toward more advanced **linear mixed models**, which are widely applied in plant and animal breeding.
 
 ## What to Expect
 
 - **Hands-on examples**: R scripts that you can run and adapt.  
 - **Step-by-step math**: showing how model equations connect to code.  
-- **Conceptual explanations**: to make sense of linear models and linear mixed models.  
+- **Conceptual explanations**: to make sense of linear models, linear mixed models and quantitative genetics.  
 
