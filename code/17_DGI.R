@@ -9,7 +9,7 @@ library(tidyverse)
 
 # ------- Prepare Data -------
 set.seed(9)
-load('~/Downloads/Data_Exercise2026.RData')
+load('data/Data_Exercise2026.RData')
 n <- 400
 t <- 2
 traits <- c('GY', 'Height')
