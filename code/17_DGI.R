@@ -104,8 +104,23 @@ for (i in uids) {
   Vi <- var_uhat[idx, idx]
   V[[i]] <- Vi / n
 }
-V <- Reduce("+", V)
+V <- solve(Reduce("+", V))
 dimnames(V) <- list(traits, traits)
+P2 <- Gamma2 <- V
+H2 <- diag(sqrt(diag(sigma_g)))
+dimnames(H2) <- list(traits, traits)
+U2 <- chol(P2) %*% solve(Gamma2) %*% H2
+Q2 <- crossprod(U2)
+z2 <- d * intensity / sqrt(as.numeric(crossprod(d, Q2 %*% d)))
+# z <- z * diag(H)
+b2 <- (solve(Gamma2) %*% H2 %*% z2) / intensity
+b2 <- b2 / sqrt(sum(b2^2))
+desired_results2 <- data.frame(
+  traits = traits,
+  response = z2,
+  coefficients = b2
+)
+desired_results2
 
 # ------- Compute quadmat -------
 P <- Gamma <- B
@@ -116,6 +131,7 @@ Q <- crossprod(U)
 intensity <- 1
 round(V, 3)
 round(B, 3)
+round(solve(V), 3)
 
 # ------- Obtain desired gain index -------
 d <- c(1, 1)
