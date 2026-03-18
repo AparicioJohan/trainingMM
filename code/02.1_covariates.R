@@ -1,6 +1,7 @@
 library(tidyverse)
 library(emmeans)
 library(lme4)
+library(asreml)
 
 # RCBD
 # 4 gens
@@ -41,3 +42,17 @@ EMM_2 <- L_2 %*% mm_2@bhat
 var_EMM_2 <- L_2 %*% C_2 %*% t(L_2)
 se_EMM_2 <- sqrt(diag(var_EMM_2))
 data.frame(EMM_2, var_EMM_2 = diag(var_EMM_2), se_EMM_2)
+
+# ASREML
+asreml.options(trace = 0, Cinv = TRUE)
+mod_asr1 <- asreml(fixed = yield ~ 1 + covariate + gen, data = data)
+mod_asr1$Cinv
+mod_asr2 <- asreml(fixed = yield ~ 1 + covariate_s + gen, data = data)
+mod_asr2$Cinv
+
+predict(mod_asr1, classify = "gen", ignore = "covariate")$pvals |> data.frame()
+predict(mod_asr1, classify = "gen")$pvals |> data.frame()
+
+
+predict(mod_asr2, classify = "gen", ignore = "covariate_s")$pvals |> data.frame()
+predict(mod_asr2, classify = "gen")$pvals |> data.frame()
