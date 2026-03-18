@@ -6,7 +6,7 @@
   </url>
   <url>
     <loc>google/index.html</loc>
-    <lastmod>2026-02-19T15:11:55.827Z</lastmod>
+    <lastmod>2026-02-26T11:08:39.314Z</lastmod>
   </url>
   <url>
     <loc>google/pages/01_predict_LM.html</loc>
@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>google/pages/03_LMM.html</loc>
-    <lastmod>2026-02-19T16:04:34.151Z</lastmod>
+    <lastmod>2026-02-26T11:08:39.315Z</lastmod>
   </url>
   <url>
     <loc>google/pages/05_MVN.html</loc>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>google/pages/06_Heritabilities.html</loc>
-    <lastmod>2025-11-10T17:25:43.872Z</lastmod>
+    <lastmod>2026-02-26T11:08:32.521Z</lastmod>
   </url>
   <url>
     <loc>google/pages/08_Parametrizations.html</loc>
@@ -51,5 +51,9 @@
   <url>
     <loc>google/pages/07_PBLUP.html</loc>
     <lastmod>2026-02-18T03:40:21.068Z</lastmod>
+  </url>
+  <url>
+    <loc>google/pages/10_DGI.html</loc>
+    <lastmod>2026-03-12T11:26:46.874Z</lastmod>
   </url>
 </urlset>
