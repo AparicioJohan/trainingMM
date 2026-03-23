@@ -1,0 +1,599 @@
+---
+title: "Untitled"
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| warning: false
+rm(list = ls())
+library(viridis)
+library(sommer)
+library(ggforce)
+library(AGHmatrix)
+library(StageWise)
+library(CVXR)
+library(asreml)
+library(tidyverse)
+```
+
+# Theoretical Background
+
+Selecting individuals, both for product development and parental selection, based
+on multiple traits is a rather common practice in plant breeding. That
+selection is typically done based on an index that summarises all available information 
+for a genotype into a single value. 
+
+A selection index for $t$ standardized traits is defined as 
+
+$$
+\mathbf{I} = \sum_{k = 1}^tb_ky_k = \mathbf{b}'\mathbf{y}
+$$
+
+where $b$ represents the index coeffficients. Typically, it is assumed that 
+$\sigma_I^2 = 1$, thus
+
+$$
+\operatorname{var}(\mathbf{b'y}) = \mathbf{b'}\operatorname{var}(\mathbf{y})\mathbf{b} = \mathbf{b'Pb}
+$$
+
+Under the multitrait framework, $\operatorname{var}(\mathbf{y})$ refers to the 
+phenotypic variance covariance matrix between traits so that 
+$P_{jk} = \operatorname{cov}(y_j, y_k)$. The response to truncation selection  on the 
+index follows the breeders equation so that
+
+$$
+R_{g_j} = \frac{i}{\sigma_I}\operatorname{cov}(g_j, I) = i\sum_{k = 1}^t\operatorname{cov}(g_j, y_k)b_k = i\sum_{k = 1}^t\Gamma_{jk} b_k
+$$
+
+It is important to notice that under BLUP selection, the formulation 
+of the index changes to 
+
+$$
+\mathbf{I} = \sum_{k = 1}^tb_k\hat{g}_k = \mathbf{b}'\mathbf{\hat{g}}
+$$
+
+Therefore, the variance of the index now represents $\sigma_I^2 = 1 = \mathbf{b'}\operatorname{var}(\mathbf{\hat{g}})\mathbf{b}$
+so that $P_{jk} = \operatorname{cov}(\hat{g}_j, \hat{g}_k)$. Additionally, 
+the response would be defined as 
+
+$$
+R_{g_j} = i\sum_{k = 1}^t\operatorname{cov}(g_j, \hat{g}_k)b_k = i\sum_{k = 1}^t\Gamma_{jk} b_k
+$$
+
+In this particular case, given the properties of the BLUP 
+$\operatorname{var}(\hat{\mathbf{g}}) = \operatorname{cov}(\mathbf{g}, \hat{\mathbf{g}})$, 
+$\Gamma_{jk} = \operatorname{cov}(g_j, \hat{g}_k) = P_{jk}$
+
+An standardize response for each trait can be obtained by mutiplying by the 
+inverse of a diagonal matrix $H$ of the genetic standard deviations
+
+$$
+x = i\mathbf{H}^{-1}\mathbf{\Gamma b}
+$$
+
+From where we can solve for the index to obtain that
+
+$$
+\mathbf{b} = i^{-1}\mathbf{\Gamma}^{-1} \mathbf{H x} 
+$$
+
+# Desired Gain Index
+
+The desired gains coefficients represent the vector of standardize response that 
+we would like to achive for each of the traits of interest. However, normally these
+gains cannot be achieved, since the resopnse must satisfy that $\mathbf{b'Pb} = 1$
+and therefore the following equation
+
+$$
+\begin{align}
+i^{-1} \, \mathbf{x}^\top \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Gamma}^{-1} \mathbf{H} \mathbf{x} \, i^{-1} &= 1 \\
+i^{-2} \, \mathbf{x}^\top \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Gamma}^{-1} \mathbf{H} \mathbf{x} &= 1 \\
+\mathbf{x}^\top \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Gamma}^{-1} \mathbf{H} \mathbf{x} &= i^2 \\
+\mathbf{x}^\top \mathbf{Q} \mathbf{x} &= i^2
+\end{align}
+$$
+
+The equation above $\mathbf{Q} = \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Gamma}^{-1} \mathbf{H}$ represents the matrix representation of an ellipsoide (high dimensional ellipse). 
+The shape and surface of the ellipse (if only 2 traits are considered) is 
+determined by the intensity of selection, the correlation between traits the heritability
+and the accuracy of each one of them.
+
+The response thus represents the intersection between a vector director (the desired vector)
+and an ellipse (or ellipsoide). This, mathematically, is obtained as follows
+
+First, the response is defined as the desired vector times a proportionality constant 
+$t$ 
+
+$$
+\mathbf{x} = t\mathbf{d}
+$$
+
+Then, we substitute in the constraint equation and obtain
+
+$$
+(t\mathbf{d})'\mathbf{Q}t\mathbf{d} = i^2 \\
+t^2\mathbf{d}'\mathbf{Qd} = i^2 \\
+t = \frac{i}{\sqrt{\mathbf{d}'\mathbf{Qd}}}
+$$
+
+And therefore, the maximized response is given by $\mathbf{x} = \frac{i}{\sqrt{\mathbf{d}'\mathbf{Qd}}} \mathbf{d}$, 
+which represents where does the vector of desired gains touch the surface of the ellipse. 
+
+# Genetic Merit
+
+A different approach is to specify the relative importance of genetic gains for 
+each trait, which is known as the economic weights or merit coefficients.  The
+merit function is defined as follows. 
+
+$$
+M = \sum_{k = 1}^t a_k(\frac{g_k}{\sigma_{gk}}) = \mathbf{a'H^{-1}g}
+$$
+
+Now, the merit coefficients measure not the genetic gains but its value. The goal is then 
+to maximize the correlation between the merit or genotypic worth and the Index, 
+agiain, subkject to $\sigma^2_I = 1$. Therefore, the quantity to be maximized is 
+
+$$
+\begin{align}
+\operatorname{cov}(\mathbf{M, I}) 
+&= \operatorname{cov}(\mathbf{a'H^{-1}g}, \mathbf{b'y}) \\
+&= \mathbf{a'H^{-1}}\operatorname{cov}(\mathbf{g}, \mathbf{g})\mathbf{b}' \\
+&= \mathbf{a'H^{-1}} \mathbf{\Gamma b'}
+\end{align}
+$$
+
+Thus, the optimization problem can be defined as
+
+$$
+\begin{aligned}
+\text{maximize} \quad & \mathbf{a'H^{-1} \Gamma b'} \\
+\text{subject to} \quad & \mathbf{b' P b = 1}
+\end{aligned}
+$$
+
+We can obtain the Lagrange and then solve for b by taking its partial derivative and 
+equating to 0 so that
+
+$$
+\begin{aligned}
+\mathcal{L}(\mathbf{b}, \lambda) 
+&= \mathbf{a'H^{-1} \Gamma b'} - \frac{\lambda}{2} (\mathbf{b' P b} - 1) \\[2mm]
+\frac{\partial \mathcal{L}}{\partial \mathbf{b}} 
+&= \mathbf{\Gamma' H^{-1} a} - \lambda \mathbf{P b} = \mathbf{0} \\[1mm]
+\mathbf{P b} 
+&= \frac{1}{\lambda} \mathbf{\Gamma' H^{-1} a} \\[1mm]
+\mathbf{b} 
+&= \frac{1}{\lambda} \mathbf{P^{-1} \Gamma' H^{-1} a}
+\end{aligned}
+$$
+
+If we substitute this $b$ values into the Index equation, we would obtain that
+
+$$
+I_{SH} = \mathbf{a'H^{-1}\Gamma P^{-1}y} = \frac{\mathbf{a'H^{-1}\hat{\mathbf{g}}}}{\lambda}
+$$
+
+Additionally, if we substitute in the constraint
+
+$$
+\begin{align*}
+\mathbf{b' P b} &= 1 \\[1mm]
+\mathbf{\frac{1}{\lambda} a' H^{-1} \Gamma P^{-1} P P^{-1} \Gamma H^{-1} a \frac{1}{\lambda}} &= 1 \\[1mm]
+\frac{\mathbf{a' H^{-1} \Gamma P^{-1} \Gamma H^{-1} a}}{\lambda^2} &= 1 \\[1mm]
+\frac{1}{\lambda} &= \frac{1}{\sqrt{\mathbf{a' Q^{-1} a}}}
+\end{align*}
+$$
+
+We can now subsitute that into the coefficients 
+
+$$
+\mathbf{b} = \frac{1}{\lambda} \mathbf{P^{-1} \Gamma' H^{-1} a} 
+= \frac{\mathbf{P^{-1} \Gamma' H^{-1} a}}{\sqrt{\mathbf{a' Q^{-1} a}}}
+$$
+
+
+# Exercise
+
+We will use data from the UW Madison potato breeding program. The data
+contains measurements for several traits for 176 individuals. We will run the analysis
+only for Yield and average_GC, for which the phenotypic covariance is around -0.33
+
+```{r}
+traits <- c('yield', 'average_GC')
+pheno <- read.csv('../data/example_2.csv') |> 
+  na.omit() |> 
+  select(uid, row, range, gen, traits) |> 
+  mutate(
+    across(all_of(traits), \(x) as.numeric(scale(x))), 
+    across(c(gen, uid), as.factor)
+  )
+head(pheno)
+```
+
+
+To obtain $\mathbf{P}$ and $\mathbf{\Gamma}$ we need to fit the following 
+multitrait model
+
+$$
+\mathbf{y} = \mathbf{\mu} + \mathbf{X \beta} + \mathbf{Z g} + \mathbf{\varepsilon}
+$$
+
+assuming that $\mathbf{g} \sim MVN(0, \mathbf{G})$, 
+$\mathbf{\varepsilon} \sim MVN(0, \mathbf{R})$ and $\mathbf{y} \sim MVN(\mathbf{X \beta}, \mathbf{V})$, 
+where $\mathbf{G} = \mathbf{I}_n \otimes \mathbf{\Sigma_g}$ and 
+$\mathbf{R} = \mathbf{I}_{nt} \otimes \mathbf{\Sigma_e}$.
+
+
+We will use asreml and sommer to estimates the variance-covariance matrices 
+$\mathbf{\Sigma_g}$ and $\mathbf{\Sigma_e}$. For the genetic correlation we will 
+assume and unstructure variance covariance matrix, meaning that the model will estimate
+$n*(n+2)/2$ paremeters. In this case, it will estimate a variance for each of the traits plus 
+a covaraince components between them. For the residuals, sommer (at least `mmes`)
+does not allow to estimate covariances between the errors for the different traits. 
+Thus, a diagonal matrix will be used. For asreml, an additional unstructured matrix
+will be employed. 
+
+highlight the importance of estimating the correlation 
+between error amongst traits and how does the choice of that variance covariance matrix
+determine the estimation of the additive correlation between traits. 
+
+```{r}
+mod <- asreml(
+  fixed = cbind(yield, average_GC) ~ trait, 
+  random = ~ us(trait):gen,
+  residual = ~ id(units):us(trait),
+  verbose = F, 
+  data = pheno
+)
+
+sigma_g <- matrix(0, nrow = 2, ncol = 2)
+sigma_g[upper.tri(sigma_g)] <- summary(mod)$varcomp[2, 1]
+sigma_g[lower.tri(sigma_g, diag = T)] <- summary(mod)$varcomp[1:3, 1]
+
+sigma_e <- matrix(0, nrow = 2, ncol = 2)
+sigma_e[upper.tri(sigma_e)] <- summary(mod)$varcomp[6, 1]
+sigma_e[lower.tri(sigma_e, diag = T)] <- summary(mod)$varcomp[5:7, 1]
+
+dimnames(sigma_g) <- dimnames(sigma_e) <- list(traits, traits)
+cov2cor(sigma_g)
+cov2cor(sigma_e)
+```
+
+```{r}
+#| warning: false
+
+pheno_long <- pheno |>  
+  pivot_longer(
+    cols = traits,
+    names_to = 'trait',
+    values_to = 'value'
+    ) |>
+  arrange(trait) |>
+  mutate(across(c(trait, gen, uid), as.factor))
+
+mod_sommer <- mmes(
+  fixed = value ~ trait,
+  random = ~ vsm(usm(trait), ism(gen)),
+  rcov = ~ vsm(dsm(trait), ism(units)),
+  data = pheno_long,
+  verbose = F
+)
+sommer_sigma_g <- cov2cor(mod_sommer$theta$`vsm(usm(trait), ism(gen`)
+sommer_sigma_e <- cov2cor(mod_sommer$theta$units)
+dimnames(sommer_sigma_g) <- dimnames(sommer_sigma_e) <- list(traits, traits)
+cov2cor(sommer_sigma_g)
+cov2cor(sommer_sigma_e)
+```
+
+Now we will reconstruct all the necessary matrices to show how to compute 
+$\mathbf{P}$ and $\mathbf{\Gamma}$. Firstwe will compute $\mathbf{G}$, 
+$\mathbf{R}$ and $\mathbf{V}$ and then used it to compute the Prediction Error
+Variance (PEV) and the marginal variance of the BLUPs ($\operatorname{var}(\hat{\mathbf{g}})$)
+
+```{r}
+n <- n_distinct(pheno$gen)
+t <- n_distinct(traits)
+ids <- unique(pheno$gen)
+names_G <- as.vector(outer(traits, ids, paste, sep = ":"))
+
+y <- as.matrix(pheno_long[, 'value'], ncol = 1)
+G <- diag(nrow = n) %x% sigma_g 
+Z <- model.matrix(~ -1 + gen:trait, pheno_long)
+X <- model.matrix(~ trait, pheno_long)
+R <- diag(nrow(pheno)) %x% sigma_e 
+V <- Z%*%G%*%t(Z) + R
+V_inv <- solve(V)
+P <- V_inv - V_inv %*%X%*%solve(t(X)%*%V_inv%*%X)%*%t(X)%*%V_inv
+
+C11 <- t(X) %*% solve(R) %*% X 
+C12 <- t(X) %*% solve(R) %*% Z
+C21 <- t(Z) %*% solve(R) %*% X 
+C22 <- t(Z) %*% solve(R) %*% Z + solve(G)
+
+C <- rbind(
+  cbind(C11, C12), 
+  cbind(C21, C22)
+)
+C_inv <- solve(C)
+rhs <- rbind(
+  t(X) %*% solve(R) %*% y, 
+  t(Z) %*% solve(R) %*% y
+)
+ans <- C_inv %*% rhs
+
+PEV <- G - G%*%t(Z)%*%P%*%Z%*%G
+var_uhat <- G - PEV
+```
+
+
+As mentioned above,$\mathbf{\Gamma}$ represents the genotypic variance covariance
+matrix between traits (meaning, its a $t \times t$ matrix). If only random effects are
+considered, it is computed  as described by  [Legarra 2016](https://www.sciencedirect.com/science/article/pii/S0040580915000830?via%3Dihub)
+and [Endelman 2023](https://pubmed.ncbi.nlm.nih.gov/36949348/)
+
+$$
+E[V_y] = \overline{\operatorname{diag}(\mathbf{L})} - \overline{L_{..}}
+$$
+
+where $\mathbf{L}$ represents the marginal variance of BLUPs with genotypes nested
+traits. However, right now the information in the marginal variance matrix is organized with 
+traits nested genotypes, meaning that the diagonal is composed of $n$ $t \times t$ 
+variance covariance matrices each genotype for the two traits 
+
+$$
+\operatorname{var}(\hat{\mathbf{g}}) = 
+\begin{bmatrix}
+M_{g_1} & \cdots & M_{g_1g_n} \\
+\vdots & \ddots & \vdots \\
+M_{g_ng_1} & \cdots & M_{g_n}
+\end{bmatrix} = 
+\begin{bmatrix}
+\underbrace{
+\begin{bmatrix}
+\sigma^2_{t_1} & \sigma_{t_1 t_2} \\
+\sigma_{t_2 t_1} & \sigma^2_{t_2}
+\end{bmatrix}
+}_{g_1}
+& \cdots & M_{g_1g_n} \\
+\vdots & \ddots & \vdots \\
+M_{g_ng_1} & \cdots & 
+\underbrace{
+\begin{bmatrix}
+\sigma^2_{t_1} & \sigma_{t_1 t_2} \\
+\sigma_{t_2 t_1} & \sigma^2_{t_2}
+\end{bmatrix}
+}_{g_n}
+\end{bmatrix}
+$$
+
+
+The reason why this happens is because of how we computed $\mathbf{G}$ 
+taking into account the kronecker product properties
+
+$$
+\mathbf{G} = \mathbf{I_n} \otimes \mathbf{\Sigma_g}
+=
+\mathbf{I_n} \otimes
+\begin{bmatrix}
+\Sigma_{g,11} & \Sigma_{g,12} \\
+\Sigma_{g,21} & \Sigma_{g,22} 
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbf{\Sigma_g} & 0 & \cdots & 0 \\
+0 & \mathbf{\Sigma_g} & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \mathbf{\Sigma_g}
+\end{bmatrix}
+$$
+
+The same structure is thus found for $\operatorname{var}(\mathbf{\hat{g}})$ 
+In summary
+
+```{r}
+names <- as.vector(outer(traits, unique(pheno$gen), paste, sep = ":"))
+dimnames(G) <- dimnames(var_uhat) <- list(names, names)
+var_uhat[1:2, 1:2]
+var_uhat[3:4, 3:4]
+```
+
+Therefore, we need to rearrange the matrix to compute the population covariance
+
+```{r}
+nt <- nrow(var_uhat)
+idx <- split(1:nt, f = rep(1:t, times = n))
+B <- matrix(0, ncol = t, nrow = t)
+for (i in 1:t) {
+  for (j in i:t) {
+    idxi <- idx[[i]]
+    idxj <- idx[[j]]
+    L <- var_uhat[idxi, idxj]
+    B[i, j] <- B[j, i] <- mean(diag(L)) - mean(L)
+  }
+}
+dimnames(B) <- list(traits, traits)
+P <- Gamma <- B # P equals Gamma since we are working under BLUP
+H <- diag(sqrt(diag(sigma_g)))
+dimnames(H) <- list(traits, traits)
+Gamma
+```
+
+As stated in StageWise documentation, the quadratic matrix can be computed 
+as  $\mathbf{Q} = \mathbf{U}'\mathbf{U}$, where $\mathbf{U} = \mathbf{R} \mathbf{\Gamma}^{-1} \mathbf{H}$ 
+and $\mathbf{R}$ is the upper triangular cholesky factor of $\mathbf{P}$. Therefore
+
+```{r}
+U <- chol(P) %*% solve(Gamma) %*% H 
+Q <- crossprod(U)
+Q
+```
+
+## Desired
+
+Now we only need to define our desired gains to obtain the maximal response given 
+our ellipse. Let's imagine we want to simultaneously advance both traits despite
+its negative correlation
+
+```{r}
+#| warning: false
+desired <- c(1, 0)
+intensity <- 1
+x.opt <- desired * intensity/sqrt(crossprod(desired, Q%*%desired)) # apply dimensionality constraint
+b <- (solve(Gamma) %*% H %*% x.opt)/intensity #substitute response to solve for coefficients
+b <- b/sqrt(sum(b^2)) # normalize vector
+desired_results <- data.frame(
+  traits = traits, 
+  response = x.opt, 
+  coefficients = b
+)
+desired_results
+```
+
+We can additionally plot the selection tradeoff. The dot represent the response, 
+while the dashed line represents the direction of the desired gain vector. 
+
+```{r}
+eg <- eigen(Q[1:2, 1:2])
+lens <- intensity / sqrt(eg$values)
+angle <- atan(eg$vectors[2, 2] / eg$vectors[1, 2])
+p1 <- ggplot() +
+  geom_ellipse(
+    aes(x0 = 0, y0 = 0, a = lens[2], b = lens[1], angle = angle)
+  ) +
+  coord_fixed() +
+  theme_bw() +
+  xlab(traits[1]) +
+  ylab(traits[2]) +
+  geom_segment(
+    aes(
+      x = 0,
+      y = 0,
+      xend = x.opt[[1]],
+      yend = x.opt[[2]]
+    ),
+    col = "red",
+    lty = 2
+  ) +
+  geom_point(
+    aes(
+      x = x.opt[[1]],
+      y = x.opt[[2]]
+    ),
+    col = "red"
+  )
+
+p1
+```
+
+
+## Merit
+
+To show the differences between the two approaches, we will use the same 
+coefficients but following the Merit function. Therefore we will obtain the 
+maximized response and from there the coefficients
+
+```{r}
+#| warning: false
+merit <- c(1, 0)
+x <- Variable(t)
+constraints <- list(quad_form(x, Q) <= intensity^2)
+v <- matrix(merit, nrow = 1)
+objective <- Maximize(v %*% x)
+problem <- Problem(objective, constraints)
+result <- solve(problem)
+x <- as.numeric(result$getValue(x))
+b <- (solve(Gamma) %*% H %*% x) / intensity
+b <- b / sqrt(sum(b^2))
+merit_results <- data.frame(
+  traits = traits,
+  response = x,
+  coefficients = b
+)
+merit_results
+
+x2 <- merit * intensity / sqrt(as.numeric(crossprod(merit, Q %*% merit)))
+p2 <- ggplot() +
+  geom_ellipse(aes(x0 = 0, y0 = 0, a = lens[2], b = lens[1], angle = angle)) +
+  coord_fixed() +
+  theme_bw() +
+  xlab(traits[1]) +
+  ylab(traits[2]) +
+  geom_segment(
+    aes(x = 0, y = 0, xend = x2[[1]], yend = x2[[2]]),
+    col = "red",
+    lty = 2
+  ) +
+  geom_point(aes(x = x2[[1]], y = x2[[2]]), col = "red") +
+  geom_segment(
+    aes(x = 0, y = 0, xend = x[[1]], yend = x[[2]]),
+    col = "blue"
+  ) +
+  geom_point(aes(x = x[[1]], y = x[[2]]), col = "blue")
+
+p2
+```
+
+# Selection
+
+Based on those estimates, we can extract the BLUPs, build the Indeces and
+perform truncation selection based on it. See how depending on the index 
+the individuals selected vary.
+
+```{r}
+blups <- as.matrix(ans[grep('gen', rownames(ans), value = T), ]) |> 
+  as.data.frame() |> 
+  rownames_to_column('gen') |> 
+  mutate(
+    gen = gsub('^gen', '', gen),
+    gen = gsub('trait', '', gen)) |> 
+  separate(gen, into = c('gen', 'trait'), sep = ':') |> 
+  arrange(trait, gen) |> 
+  rename(blup = V1)
+
+I_desired <- list()
+for (i in seq_along(unique(blups$trait))){
+  trait_tmp <- unique(blups$trait)[i]
+  b_tmp <- desired_results |> filter(traits == trait_tmp) |>  pull(coefficients)
+  I_desired[[i]] <- blups |>  filter(trait == trait_tmp) |> pull(blup) * b_tmp
+}
+I_desired <- Reduce('+', I_desired)
+
+I_merit <- list()
+for (i in seq_along(unique(blups$trait))){
+  trait_tmp <- unique(blups$trait)[i]
+  b_tmp <- merit_results |> filter(traits == trait_tmp) |>  pull(coefficients)
+  I_merit[[i]] <- blups |>  filter(trait == trait_tmp) |> pull(blup) * b_tmp
+}
+I_merit <- Reduce('+', I_merit)
+
+plot_df <- blups |> 
+  pivot_wider(names_from = trait, values_from = blup) 
+plot_df <- cbind(plot_df, I_desired, I_merit) |> 
+  pivot_longer(col = c(I_desired, I_merit), names_to = 'Index', values_to = 'value')
+
+ggplot(plot_df, aes(x = average_GC, y = yield, color = value)) + 
+  geom_point() +
+  scale_color_viridis_c(option = "plasma") +
+  theme_bw() + 
+  facet_grid(.~Index)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
