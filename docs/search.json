@@ -673,22 +673,45 @@
   {
     "objectID": "pages/10_Index.html",
     "href": "pages/10_Index.html",
-    "title": "Untitled",
+    "title": "Multitrait Selection Indeces",
     "section": "",
-    "text": "Online License checked out Mon Mar 23 17:19:49 2026"
+    "text": "Online License checked out Wed Mar 25 14:02:39 2026",
+    "crumbs": [
+      "Advanced LMM",
+      "Selection Indeces"
+    ]
   },
   {
     "objectID": "pages/10_Index.html#desired",
     "href": "pages/10_Index.html#desired",
-    "title": "Untitled",
+    "title": "Multitrait Selection Indeces",
     "section": "Desired",
-    "text": "Desired\nNow we only need to define our desired gains to obtain the maximal response given our ellipse. Let’s imagine we want to simultaneously advance both traits despite its negative correlation\n\ndesired &lt;- c(1, 0)\nintensity &lt;- 1\nx.opt &lt;- desired * intensity/sqrt(crossprod(desired, Q%*%desired)) # apply dimensionality constraint\nb &lt;- (solve(Gamma) %*% H %*% x.opt)/intensity #substitute response to solve for coefficients\nb &lt;- b/sqrt(sum(b^2)) # normalize vector\ndesired_results &lt;- data.frame(\n  traits = traits, \n  response = x.opt, \n  coefficients = b\n)\ndesired_results\n\n               traits  response coefficients\nyield           yield 0.4300688    0.8374175\naverage_GC average_GC 0.0000000   -0.5465637\n\n\nWe can additionally plot the selection tradeoff. The dot represent the response, while the dashed line represents the direction of the desired gain vector.\n\neg &lt;- eigen(Q[1:2, 1:2])\nlens &lt;- intensity / sqrt(eg$values)\nangle &lt;- atan(eg$vectors[2, 2] / eg$vectors[1, 2])\np1 &lt;- ggplot() +\n  geom_ellipse(\n    aes(x0 = 0, y0 = 0, a = lens[2], b = lens[1], angle = angle)\n  ) +\n  coord_fixed() +\n  theme_bw() +\n  xlab(traits[1]) +\n  ylab(traits[2]) +\n  geom_segment(\n    aes(\n      x = 0,\n      y = 0,\n      xend = x.opt[[1]],\n      yend = x.opt[[2]]\n    ),\n    col = \"red\",\n    lty = 2\n  ) +\n  geom_point(\n    aes(\n      x = x.opt[[1]],\n      y = x.opt[[2]]\n    ),\n    col = \"red\"\n  )\n\np1"
+    "text": "Desired\nNow we only need to define our desired gains to obtain the maximal response given our ellipse. Let’s imagine we want to simultaneously advance both traits despite its negative correlation\n\ndesired &lt;- c(1, 0)\nintensity &lt;- 1\nx.opt &lt;- desired * intensity/sqrt(crossprod(desired, Q%*%desired)) # apply dimensionality constant\nb &lt;- (solve(Gamma) %*% H %*% x.opt)/intensity #substitute response to solve for coefficients\nb_desired &lt;- b/sqrt(sum(b^2)) # normalize vector\ndesired_results &lt;- data.frame(\n  traits = traits, \n  response = x.opt, \n  coefficients = b_desired\n)\ndesired_results\n\n               traits  response coefficients\nyield           yield 0.4300688    0.8374175\naverage_GC average_GC 0.0000000   -0.5465637\n\n\nWe can additionally plot the selection tradeoff. The dot represent the response, while the dashed line represents the direction of the desired gain vector.\n\neg &lt;- eigen(Q[1:2, 1:2])\nlens &lt;- intensity / sqrt(eg$values)\nangle &lt;- atan(eg$vectors[2, 2] / eg$vectors[1, 2])\np1 &lt;- ggplot() +\n  geom_ellipse(\n    aes(x0 = 0, y0 = 0, a = lens[2], b = lens[1], angle = angle)\n  ) +\n  coord_fixed() +\n  theme_bw() +\n  xlab(traits[1]) +\n  ylab(traits[2]) +\n  geom_segment(\n    aes(\n      x = 0,\n      y = 0,\n      xend = x.opt[[1]],\n      yend = x.opt[[2]]\n    ),\n    col = \"red\",\n    lty = 2\n  ) +\n  geom_point(\n    aes(\n      x = x.opt[[1]],\n      y = x.opt[[2]]\n    ),\n    col = \"red\"\n  )\n\np1",
+    "crumbs": [
+      "Advanced LMM",
+      "Selection Indeces"
+    ]
   },
   {
     "objectID": "pages/10_Index.html#merit",
     "href": "pages/10_Index.html#merit",
-    "title": "Untitled",
+    "title": "Multitrait Selection Indeces",
     "section": "Merit",
-    "text": "Merit\nTo show the differences between the two approaches, we will use the same coefficients but following the Merit function. Therefore we will obtain the maximized response and from there the coefficients\n\nmerit &lt;- c(1, 0)\nx &lt;- Variable(t)\nconstraints &lt;- list(quad_form(x, Q) &lt;= intensity^2)\nv &lt;- matrix(merit, nrow = 1)\nobjective &lt;- Maximize(v %*% x)\nproblem &lt;- Problem(objective, constraints)\nresult &lt;- solve(problem)\nx &lt;- as.numeric(result$getValue(x))\nb &lt;- (solve(Gamma) %*% H %*% x) / intensity\nb &lt;- b / sqrt(sum(b^2))\nmerit_results &lt;- data.frame(\n  traits = traits,\n  response = x,\n  coefficients = b\n)\nmerit_results\n\n               traits  response  coefficients\nyield           yield 0.7923197  1.000000e+00\naverage_GC average_GC 0.6962239 -1.924258e-15\n\nx2 &lt;- merit * intensity / sqrt(as.numeric(crossprod(merit, Q %*% merit)))\np2 &lt;- ggplot() +\n  geom_ellipse(aes(x0 = 0, y0 = 0, a = lens[2], b = lens[1], angle = angle)) +\n  coord_fixed() +\n  theme_bw() +\n  xlab(traits[1]) +\n  ylab(traits[2]) +\n  geom_segment(\n    aes(x = 0, y = 0, xend = x2[[1]], yend = x2[[2]]),\n    col = \"red\",\n    lty = 2\n  ) +\n  geom_point(aes(x = x2[[1]], y = x2[[2]]), col = \"red\") +\n  geom_segment(\n    aes(x = 0, y = 0, xend = x[[1]], yend = x[[2]]),\n    col = \"blue\"\n  ) +\n  geom_point(aes(x = x[[1]], y = x[[2]]), col = \"blue\")\n\np2"
+    "text": "Merit\nTo show the differences between the two approaches, we will use the same coefficients but following the Merit function. Therefore we will obtain the maximized response and from there the coefficients\n\nmerit &lt;- c(1, 0)\nx &lt;- Variable(t)\nconstraints &lt;- list(quad_form(x, Q) &lt;= intensity^2)\nv &lt;- matrix(merit, nrow = 1)\nobjective &lt;- Maximize(v %*% x)\nproblem &lt;- Problem(objective, constraints)\nresult &lt;- solve(problem)\nx &lt;- as.numeric(result$getValue(x))\nb &lt;- (solve(Gamma) %*% H %*% x) / intensity\nb_merit &lt;- b / sqrt(sum(b^2))\nmerit_results &lt;- data.frame(\n  traits = traits,\n  response = x,\n  coefficients = b_merit\n)\nmerit_results\n\n               traits  response  coefficients\nyield           yield 0.7923197  1.000000e+00\naverage_GC average_GC 0.6962239 -3.848515e-15\n\n\nVisually, the dashed red line shows the direction of the merit vector, while the blue line segment is the projection of the point on the ellipsoid that maximizes genetic merit.\n\nx2 &lt;- merit * intensity / sqrt(as.numeric(crossprod(merit, Q %*% merit)))\np2 &lt;- ggplot() +\n  geom_ellipse(aes(x0 = 0, y0 = 0, a = lens[2], b = lens[1], angle = angle)) +\n  coord_fixed() +\n  theme_bw() +\n  xlab(traits[1]) +\n  ylab(traits[2]) +\n  geom_segment(\n    aes(x = 0, y = 0, xend = x2[[1]], yend = x2[[2]]),\n    col = \"red\",\n    lty = 2\n  ) +\n  geom_point(aes(x = x2[[1]], y = x2[[2]]), col = \"red\") +\n  geom_segment(\n    aes(x = 0, y = 0, xend = x[[1]], yend = x[[2]]),\n    col = \"blue\"\n  ) +\n  geom_point(aes(x = x[[1]], y = x[[2]]), col = \"blue\")\n\np2",
+    "crumbs": [
+      "Advanced LMM",
+      "Selection Indeces"
+    ]
+  },
+  {
+    "objectID": "pages/10_Index.html#werner-et-al-2025-bioarxive",
+    "href": "pages/10_Index.html#werner-et-al-2025-bioarxive",
+    "title": "Multitrait Selection Indeces",
+    "section": "Werner et al 2025 (bioarxive)",
+    "text": "Werner et al 2025 (bioarxive)\nIn this article (Werner et al 2025), the authors proposed to compute the Index as \\(I_{DGI} = \\mathbf{d'\\bar{V}^{-1}\\hat{g}}\\), where \\(\\mathbf{\\bar{V}} = \\sum_{i = 1}^v \\mathbf{V}_{ii}/n\\) with \\(\\mathbf{V}_{ii}\\) representing the \\(t \\times t\\) marginal variance covariance matrix of individual \\(i\\). Conceptually, it represent an alternative to compute the population covariance by just averaging all the submatrices in the diagonal of \\(\\operatorname{var}(\\hat{\\mathbf{g}})\\) shown above. They state that ‘We have found that this provides a good approximation to the full selection index for balanced data’. However, the supplementary material in which they prove that is not available. So, let’s test that.\n\nV_w &lt;- matrix(0, t, t)\nfor (i in 1:n) {\n  idx &lt;- ((i - 1) * t + 1):(i * t)\n  V_ii &lt;- var_uhat[idx, idx] / n\n  V_w &lt;- V_w + V_ii\n}\ndimnames(V_w) &lt;- list(traits, traits)\nround(V_w, 3); round(B, 3)\n\n           yield average_GC\nyield      0.293      0.317\naverage_GC 0.317      0.486\n\n\n           yield average_GC\nyield      0.293      0.317\naverage_GC 0.317      0.486\n\n\nThe matrices \\(\\mathbf{\\bar{V}}\\) and \\(\\mathbf{B}\\) are identical. Let’s take a look at the index values, computed as\n\\[\n\\mathbf{I}_{DGI} = \\mathbf{d'(\\bar{V}^{-1} \\otimes I_n)\\hat{\\mathbf{g}}}\n\\]",
+    "crumbs": [
+      "Advanced LMM",
+      "Selection Indeces"
+    ]
   }
 ]

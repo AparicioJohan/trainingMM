@@ -57,6 +57,8 @@ website:
             text: Polyploids and Digenic Dominance
       - section: "Advanced LMM"
         contents:
+          - href: pages/10_Index.html
+            text: Selection Indeces
           - href: pages/99_404.html
             text: Genotype-by-environment
           - href: pages/99_404.html

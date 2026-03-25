@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-03-25">
 
-<title>Untitled – trainingMM</title>
+<title>Multitrait Selection Indeces – trainingMM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,6 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../pages/99_404.html" rel="next">
+<link href="../pages/08_Parametrizations.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -144,7 +147,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Untitled</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/10_Index.html">Advanced LMM</a></li><li class="breadcrumb-item"><a href="../pages/10_Index.html">Selection Indeces</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -287,6 +290,12 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../pages/10_Index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Selection Indeces</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../pages/99_404.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Genotype-by-environment</span></a>
   </div>
@@ -328,6 +337,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#desired" id="toc-desired" class="nav-link" data-scroll-target="#desired">Desired</a></li>
   <li><a href="#merit" id="toc-merit" class="nav-link" data-scroll-target="#merit">Merit</a></li>
+  <li><a href="#werner-et-al-2025-bioarxive" id="toc-werner-et-al-2025-bioarxive" class="nav-link" data-scroll-target="#werner-et-al-2025-bioarxive">Werner et al 2025 (bioarxive)</a></li>
   </ul></li>
   <li><a href="#selection" id="toc-selection" class="nav-link" data-scroll-target="#selection">Selection</a></li>
   </ul>
@@ -336,9 +346,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/10_Index.html">Advanced LMM</a></li><li class="breadcrumb-item"><a href="../pages/10_Index.html">Selection Indeces</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Untitled</h1>
+<h1 class="title">Multitrait Selection Indeces</h1>
 </div>
 
 
@@ -346,6 +356,12 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 25, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -357,45 +373,46 @@ window.Quarto = {
 
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Online License checked out Mon Mar 23 17:19:49 2026</code></pre>
+<pre><code>Online License checked out Wed Mar 25 14:02:39 2026</code></pre>
 </div>
 </div>
 <section id="theoretical-background" class="level1">
 <h1>Theoretical Background</h1>
-<p>Selecting individuals, both for product development and parental selection, based on multiple traits is a rather common practice in plant breeding. That selection is typically done based on an index that summarises all available information for a genotype into a single value.</p>
+<p>Selecting individuals based on multiple traits is a rather common practice in plant breeding, both for product development and parental selection. That selection is typically done based on an index that summarises all available information for a genotype into a single value.</p>
 <p>A selection index for <span class="math inline">\(t\)</span> standardized traits is defined as</p>
 <p><span class="math display">\[
 \mathbf{I} = \sum_{k = 1}^tb_ky_k = \mathbf{b}'\mathbf{y}
 \]</span></p>
-<p>where <span class="math inline">\(b\)</span> represents the index coeffficients. Typically, it is assumed that <span class="math inline">\(\sigma_I^2 = 1\)</span>, thus</p>
+<p>where <span class="math inline">\(\mathbf{b}\)</span> represents the index coefficients. Typically, it is assumed that <span class="math inline">\(\sigma_I^2 = 1\)</span>, thus</p>
 <p><span class="math display">\[
 \operatorname{var}(\mathbf{b'y}) = \mathbf{b'}\operatorname{var}(\mathbf{y})\mathbf{b} = \mathbf{b'Pb}
 \]</span></p>
-<p>Under the multitrait framework, <span class="math inline">\(\operatorname{var}(\mathbf{y})\)</span> refers to the phenotypic variance covariance matrix between traits so that <span class="math inline">\(P_{jk} = \operatorname{cov}(y_j, y_k)\)</span>. The response to truncation selection on the index follows the breeders equation so that</p>
+<p>Under the multitrait framework, <span class="math inline">\(\mathbf{P}\)</span> refers to the variance covariance matrix between the selection unit, in this particular case, phenotypes, so that <span class="math inline">\(P_{jk} = \operatorname{cov}(y_j, y_k)\)</span>. The response to truncation selection on the index follows the breeders equation</p>
 <p><span class="math display">\[
 R_{g_j} = \frac{i}{\sigma_I}\operatorname{cov}(g_j, I) = i\sum_{k = 1}^t\operatorname{cov}(g_j, y_k)b_k = i\sum_{k = 1}^t\Gamma_{jk} b_k
 \]</span></p>
-<p>It is important to notice that under BLUP selection, the formulation of the index changes to</p>
+<p>It is important to notice that when selecting under BLUP, the formulation of the index, the variance of the Index and the response change to</p>
 <p><span class="math display">\[
 \mathbf{I} = \sum_{k = 1}^tb_k\hat{g}_k = \mathbf{b}'\mathbf{\hat{g}}
 \]</span></p>
-<p>Therefore, the variance of the index now represents <span class="math inline">\(\sigma_I^2 = 1 = \mathbf{b'}\operatorname{var}(\mathbf{\hat{g}})\mathbf{b}\)</span> so that <span class="math inline">\(P_{jk} = \operatorname{cov}(\hat{g}_j, \hat{g}_k)\)</span>. Additionally, the response would be defined as</p>
+<p><span class="math display">\[
+\sigma_I^2 = 1 = \mathbf{b'}\operatorname{var}(\mathbf{\hat{g}})\mathbf{b} = \mathbf{b'Pb}
+\]</span></p>
 <p><span class="math display">\[
 R_{g_j} = i\sum_{k = 1}^t\operatorname{cov}(g_j, \hat{g}_k)b_k = i\sum_{k = 1}^t\Gamma_{jk} b_k
 \]</span></p>
-<p>In this particular case, given the properties of the BLUP <span class="math inline">\(\operatorname{var}(\hat{\mathbf{g}}) = \operatorname{cov}(\mathbf{g}, \hat{\mathbf{g}})\)</span>, <span class="math inline">\(\Gamma_{jk} = \operatorname{cov}(g_j, \hat{g}_k) = P_{jk}\)</span></p>
-<p>An standardize response for each trait can be obtained by mutiplying by the inverse of a diagonal matrix <span class="math inline">\(H\)</span> of the genetic standard deviations</p>
+<p>Thus, now <span class="math inline">\(P_{jk} = \operatorname{cov}(\hat{g}_j, \hat{g}_k) = \Gamma_{jk}\)</span>, following the properties of the BLUP (<span class="math inline">\(\operatorname{var}(\mathbf{\hat{g}}) = \operatorname{cov}(\mathbf{g, \hat{g}})\)</span>). Besides, each trait response can be standardized by mutiplying by the inverse of a diagonal matrix <span class="math inline">\(H\)</span> of the genetic standard deviations</p>
 <p><span class="math display">\[
-x = i\mathbf{H}^{-1}\mathbf{\Gamma b}
+\mathbf{x} = i\mathbf{H}^{-1}\mathbf{\Gamma b}
 \]</span></p>
-<p>From where we can solve for the index to obtain that</p>
+<p>We can used the equation above to solve for the coefficients</p>
 <p><span class="math display">\[
 \mathbf{b} = i^{-1}\mathbf{\Gamma}^{-1} \mathbf{H x}
 \]</span></p>
 </section>
 <section id="desired-gain-index" class="level1">
 <h1>Desired Gain Index</h1>
-<p>The desired gains coefficients represent the vector of standardize response that we would like to achive for each of the traits of interest. However, normally these gains cannot be achieved, since the resopnse must satisfy that <span class="math inline">\(\mathbf{b'Pb} = 1\)</span> and therefore the following equation</p>
+<p>The desired gains coefficients represent the vector of standardize response that we would like to achieve for each of the traits of interest. However, the exact desired response is rarely achieved, since it must satisfy that <span class="math inline">\(\sigma^2_I = 1 = \mathbf{b'Pb}\)</span>. If we substitute <span class="math inline">\(\mathbf{b}\)</span> from the previous equation we obtain</p>
 <p><span class="math display">\[
 \begin{align}
 i^{-1} \, \mathbf{x}^\top \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Gamma}^{-1} \mathbf{H} \mathbf{x} \, i^{-1} &amp;= 1 \\
@@ -404,27 +421,36 @@ i^{-2} \, \mathbf{x}^\top \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Ga
 \mathbf{x}^\top \mathbf{Q} \mathbf{x} &amp;= i^2
 \end{align}
 \]</span></p>
-<p>The equation above <span class="math inline">\(\mathbf{Q} = \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Gamma}^{-1} \mathbf{H}\)</span> represents the matrix representation of an ellipsoide (high dimensional ellipse). The shape and surface of the ellipse (if only 2 traits are considered) is determined by the intensity of selection, the correlation between traits the heritability and the accuracy of each one of them.</p>
-<p>The response thus represents the intersection between a vector director (the desired vector) and an ellipse (or ellipsoide). This, mathematically, is obtained as follows</p>
-<p>First, the response is defined as the desired vector times a proportionality constant <span class="math inline">\(t\)</span></p>
+<p>In he equation above <span class="math inline">\(\mathbf{Q} = \mathbf{H} \mathbf{\Gamma}^{-1} \mathbf{P} \mathbf{\Gamma}^{-1} \mathbf{H}\)</span> represents the matrix representation of an ellipsoide (high dimensional ellipse) in <span class="math inline">\(t\)</span> dimensions. The shape and surface of the ellipse (if only 2 traits are considered) is determined by the intensity of selection, the correlation between traits, the heritability and the accuracy of each one of them.</p>
+<p>That ellipse will then determine the response, which geometrically represents the intersection between a vector director (the desired vector) and an ellipse. This, mathematically, is obtained as follows</p>
+<p>First, the response straight is defined as the desired vector times a proportionality constant <span class="math inline">\(l\)</span></p>
 <p><span class="math display">\[
-\mathbf{x} = t\mathbf{d}
+\mathbf{x} = l\mathbf{d}
 \]</span></p>
 <p>Then, we substitute in the constraint equation and obtain</p>
 <p><span class="math display">\[
-(t\mathbf{d})'\mathbf{Q}t\mathbf{d} = i^2 \\
-t^2\mathbf{d}'\mathbf{Qd} = i^2 \\
-t = \frac{i}{\sqrt{\mathbf{d}'\mathbf{Qd}}}
+\begin{align*}
+(l\mathbf{d})'\mathbf{Q}\, l\mathbf{d} &amp;= i^2 \\[1mm]
+l^2 \mathbf{d}' \mathbf{Q} \mathbf{d} &amp;= i^2 \\[1mm]
+l &amp;= \frac{i}{\sqrt{\mathbf{d}' \mathbf{Q} \mathbf{d}}}
+\end{align*}
 \]</span></p>
-<p>And therefore, the maximized response is given by <span class="math inline">\(\mathbf{x} = \frac{i}{\sqrt{\mathbf{d}'\mathbf{Qd}}} \mathbf{d}\)</span>, which represents where does the vector of desired gains touch the surface of the ellipse.</p>
+<p>The maximized response is therefore given by <span class="math inline">\(\mathbf{x} = \frac{i}{\sqrt{\mathbf{d}'\mathbf{Qd}}} \mathbf{d}\)</span>, which represents where the vector of desired gains touch the surface of the ellipse. We will show this later.</p>
 </section>
 <section id="genetic-merit" class="level1">
 <h1>Genetic Merit</h1>
-<p>A different approach is to specify the relative importance of genetic gains for each trait, which is known as the economic weights or merit coefficients. The merit function is defined as follows.</p>
+<p>A different approach is to specify the relative importance of genetic gains for each trait, which is known as the economic weight or merit coefficients. The merit function is defined as follows.</p>
 <p><span class="math display">\[
 M = \sum_{k = 1}^t a_k(\frac{g_k}{\sigma_{gk}}) = \mathbf{a'H^{-1}g}
 \]</span></p>
-<p>Now, the merit coefficients measure not the genetic gains but its value. The goal is then to maximize the correlation between the merit or genotypic worth and the Index, agiain, subkject to <span class="math inline">\(\sigma^2_I = 1\)</span>. Therefore, the quantity to be maximized is</p>
+<p>Now, the merit coefficients measure not the genetic gains but its value. The optimization problem is thus</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{maximize} \quad &amp; \operatorname{cov}(\mathbf{M, I})  \\
+\text{subject to} \quad &amp; \mathbf{b' P b = 1}
+\end{aligned}
+\]</span></p>
+<p>Given that</p>
 <p><span class="math display">\[
 \begin{align}
 \operatorname{cov}(\mathbf{M, I})
@@ -433,14 +459,14 @@ M = \sum_{k = 1}^t a_k(\frac{g_k}{\sigma_{gk}}) = \mathbf{a'H^{-1}g}
 &amp;= \mathbf{a'H^{-1}} \mathbf{\Gamma b'}
 \end{align}
 \]</span></p>
-<p>Thus, the optimization problem can be defined as</p>
+<p>We can write it like</p>
 <p><span class="math display">\[
 \begin{aligned}
-\text{maximize} \quad &amp; \mathbf{a'H^{-1} \Gamma b'} \\
+\text{maximize} \quad &amp; \mathbf{a'H^{-1}} \mathbf{\Gamma b'}  \\
 \text{subject to} \quad &amp; \mathbf{b' P b = 1}
 \end{aligned}
 \]</span></p>
-<p>We can obtain the Lagrange and then solve for b by taking its partial derivative and equating to 0 so that</p>
+<p>We will solve the Lagrange and equate the partial derivtaive with respect to b to 0 to obtain that</p>
 <p><span class="math display">\[
 \begin{aligned}
 \mathcal{L}(\mathbf{b}, \lambda)
@@ -453,11 +479,10 @@ M = \sum_{k = 1}^t a_k(\frac{g_k}{\sigma_{gk}}) = \mathbf{a'H^{-1}g}
 &amp;= \frac{1}{\lambda} \mathbf{P^{-1} \Gamma' H^{-1} a}
 \end{aligned}
 \]</span></p>
-<p>If we substitute this <span class="math inline">\(b\)</span> values into the Index equation, we would obtain that</p>
+<p>Substituting <span class="math inline">\(b\)</span> values into the Index equation and the constraint we obtain</p>
 <p><span class="math display">\[
 I_{SH} = \mathbf{a'H^{-1}\Gamma P^{-1}y} = \frac{\mathbf{a'H^{-1}\hat{\mathbf{g}}}}{\lambda}
 \]</span></p>
-<p>Additionally, if we substitute in the constraint</p>
 <p><span class="math display">\[
 \begin{align*}
 \mathbf{b' P b} &amp;= 1 \\[1mm]
@@ -466,7 +491,7 @@ I_{SH} = \mathbf{a'H^{-1}\Gamma P^{-1}y} = \frac{\mathbf{a'H^{-1}\hat{\mathbf{g}
 \frac{1}{\lambda} &amp;= \frac{1}{\sqrt{\mathbf{a' Q^{-1} a}}}
 \end{align*}
 \]</span></p>
-<p>We can now subsitute that into the coefficients</p>
+<p>Finally, once we now the maximal response we can solve for the coefficients</p>
 <p><span class="math display">\[
 \mathbf{b} = \frac{1}{\lambda} \mathbf{P^{-1} \Gamma' H^{-1} a}
 = \frac{\mathbf{P^{-1} \Gamma' H^{-1} a}}{\sqrt{\mathbf{a' Q^{-1} a}}}
@@ -483,19 +508,8 @@ I_{SH} = \mathbf{a'H^{-1}\Gamma P^{-1}y} = \frac{\mathbf{a'H^{-1}\hat{\mathbf{g}
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(traits), \(x) <span class="fu">as.numeric</span>(<span class="fu">scale</span>(x))), </span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(gen, uid), as.factor)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
-ℹ Please use `all_of()` or `any_of()` instead.
-  # Was:
-  data %&gt;% select(traits)
-
-  # Now:
-  data %&gt;% select(all_of(traits))
-
-See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pheno)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  uid row range          gen      yield average_GC
 1   1   1     1    MSGG190-1  0.2679540  1.1842913
@@ -506,48 +520,63 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
 7   7   7     1    W19031-14  1.2788390  1.1251752</code></pre>
 </div>
 </div>
-<p>To obtain <span class="math inline">\(\mathbf{P}\)</span> and <span class="math inline">\(\mathbf{\Gamma}\)</span> we need to fit the following multitrait model</p>
+<p>To obtain <span class="math inline">\(\mathbf{P}\)</span> and <span class="math inline">\(\mathbf{\Gamma}\)</span> (which in this case are the same, as explained above) we need to fit the following multitrait model</p>
 <p><span class="math display">\[
 \mathbf{y} = \mathbf{\mu} + \mathbf{X \beta} + \mathbf{Z g} + \mathbf{\varepsilon}
 \]</span></p>
-<p>assuming that <span class="math inline">\(\mathbf{g} \sim MVN(0, \mathbf{G})\)</span>, <span class="math inline">\(\mathbf{\varepsilon} \sim MVN(0, \mathbf{R})\)</span> and <span class="math inline">\(\mathbf{y} \sim MVN(\mathbf{X \beta}, \mathbf{V})\)</span>, where <span class="math inline">\(\mathbf{G} = \mathbf{I}_n \otimes \mathbf{\Sigma_g}\)</span> and <span class="math inline">\(\mathbf{R} = \mathbf{I}_{nt} \otimes \mathbf{\Sigma_e}\)</span>.</p>
-<p>We will use asreml and sommer to estimates the variance-covariance matrices <span class="math inline">\(\mathbf{\Sigma_g}\)</span> and <span class="math inline">\(\mathbf{\Sigma_e}\)</span>. For the genetic correlation we will assume and unstructure variance covariance matrix, meaning that the model will estimate <span class="math inline">\(n*(n+2)/2\)</span> paremeters. In this case, it will estimate a variance for each of the traits plus a covaraince components between them. For the residuals, sommer (at least <code>mmes</code>) does not allow to estimate covariances between the errors for the different traits. Thus, a diagonal matrix will be used. For asreml, an additional unstructured matrix will be employed.</p>
-<p>highlight the importance of estimating the correlation between error amongst traits and how does the choice of that variance covariance matrix determine the estimation of the additive correlation between traits.</p>
+<p>assuming that</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{g} &amp;\sim \mathrm{MVN}(0, \mathbf{G}) \\
+\boldsymbol{\varepsilon} &amp;\sim \mathrm{MVN}(0, \mathbf{R}) \\
+\mathbf{y} &amp;\sim \mathrm{MVN}(\mathbf{X\beta}, \mathbf{V})
+\end{aligned}
+\]</span></p>
+<p>and that</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{G} &amp;= \mathbf{I}_n \otimes \boldsymbol{\Sigma}_g \\
+\mathbf{R} &amp;= \mathbf{I}_{nt} \otimes \boldsymbol{\Sigma}_e \\
+\mathbf{V} &amp;= \mathbf{Z G Z'} + \mathbf{R}
+\end{aligned}
+\]</span></p>
+<p>We will use <code>asreml</code> and <code>sommer</code> to estimate the variance-covariance matrices <span class="math inline">\(\mathbf{\Sigma_g}\)</span> and <span class="math inline">\(\mathbf{\Sigma_e}\)</span>. For the genetic correlation we will assume an unstructure variance covariance structure, meaning that the model will estimate estimate a variance per traits plus a covaraince components between them (<span class="math inline">\(t*(t+1)/2\)</span> parameters). For the residuals, sommer (at least <code>mmes</code>) does not allow to estimate covariances between the errors for the different traits, thus, a diagonal matrix will be used. For asreml, an unstructured matrix will be employed.</p>
+<p>Lets compare the estimations</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">asreml</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed =</span> <span class="fu">cbind</span>(yield, average_GC) <span class="sc">~</span> trait, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="sc">~</span> <span class="fu">us</span>(trait)<span class="sc">:</span>gen,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">residual =</span> <span class="sc">~</span> <span class="fu">id</span>(units)<span class="sc">:</span><span class="fu">us</span>(trait),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> F, </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> pheno</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">asreml</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed =</span> <span class="fu">cbind</span>(yield, average_GC) <span class="sc">~</span> trait, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="sc">~</span> <span class="fu">us</span>(trait)<span class="sc">:</span>gen,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">residual =</span> <span class="sc">~</span> <span class="fu">id</span>(units)<span class="sc">:</span><span class="fu">us</span>(trait),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> F, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> pheno</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>ASReml Version 4.2 23/03/2026 17:19:50
+<pre><code>ASReml Version 4.2 25/03/2026 14:02:40
           LogLik        Sigma2     DF     wall
- 1     -196.9051           1.0    384   17:19:50
- 2     -183.1404           1.0    384   17:19:50
- 3     -170.1529           1.0    384   17:19:50
- 4     -164.7082           1.0    384   17:19:50
- 5     -163.8275           1.0    384   17:19:50
- 6     -163.8169           1.0    384   17:19:50
- 7     -163.8166           1.0    384   17:19:50</code></pre>
+ 1     -196.9051           1.0    384   14:02:40
+ 2     -183.1404           1.0    384   14:02:40
+ 3     -170.1529           1.0    384   14:02:40
+ 4     -164.7082           1.0    384   14:02:40
+ 5     -163.8275           1.0    384   14:02:40
+ 6     -163.8169           1.0    384   14:02:40
+ 7     -163.8166           1.0    384   14:02:40</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sigma_g <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sigma_g[<span class="fu">upper.tri</span>(sigma_g)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">2</span>, <span class="dv">1</span>]</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>sigma_g[<span class="fu">lower.tri</span>(sigma_g, <span class="at">diag =</span> T)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>]</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sigma_e <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>sigma_e[<span class="fu">upper.tri</span>(sigma_e)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">6</span>, <span class="dv">1</span>]</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>sigma_e[<span class="fu">lower.tri</span>(sigma_e, <span class="at">diag =</span> T)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span>]</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(sigma_g) <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(sigma_e) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(sigma_g)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sigma_g <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sigma_g[<span class="fu">upper.tri</span>(sigma_g)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>sigma_g[<span class="fu">lower.tri</span>(sigma_g, <span class="at">diag =</span> T)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>sigma_e <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>sigma_e[<span class="fu">upper.tri</span>(sigma_e)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">6</span>, <span class="dv">1</span>]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>sigma_e[<span class="fu">lower.tri</span>(sigma_e, <span class="at">diag =</span> T)] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>varcomp[<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span>]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(sigma_g) <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(sigma_e) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(sigma_g);<span class="fu">cov2cor</span>(sigma_e)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               yield average_GC
 yield      1.0000000  0.6814824
 average_GC 0.6814824  1.0000000</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(sigma_e)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               yield average_GC
 yield      1.0000000  0.2659441
@@ -555,83 +584,113 @@ average_GC 0.2659441  1.0000000</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pheno_long <span class="ot">&lt;-</span> pheno <span class="sc">|&gt;</span>  </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> traits,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">'trait'</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">'value'</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(trait) <span class="sc">|&gt;</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(trait, gen, uid), as.factor))</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>mod_sommer <span class="ot">&lt;-</span> <span class="fu">mmes</span>(</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed =</span> value <span class="sc">~</span> trait,</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="sc">~</span> <span class="fu">vsm</span>(<span class="fu">usm</span>(trait), <span class="fu">ism</span>(gen)),</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">rcov =</span> <span class="sc">~</span> <span class="fu">vsm</span>(<span class="fu">dsm</span>(trait), <span class="fu">ism</span>(units)),</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> pheno_long,</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> F</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pheno_long <span class="ot">&lt;-</span> pheno <span class="sc">|&gt;</span>  </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> traits,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">'trait'</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">'value'</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(trait) <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(trait, gen, uid), as.factor))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>mod_sommer <span class="ot">&lt;-</span> <span class="fu">mmes</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed =</span> value <span class="sc">~</span> trait,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="sc">~</span> <span class="fu">vsm</span>(<span class="fu">usm</span>(trait), <span class="fu">ism</span>(gen)),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">rcov =</span> <span class="sc">~</span> <span class="fu">vsm</span>(<span class="fu">dsm</span>(trait), <span class="fu">ism</span>(units)),</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> pheno_long,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> F</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Version out of date. Please update sommer to the newest version using:
 install.packages('sommer') in a new session
  Use the 'dateWarning' argument to disable the warning message.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sommer_sigma_g <span class="ot">&lt;-</span> <span class="fu">cov2cor</span>(mod_sommer<span class="sc">$</span>theta<span class="sc">$</span><span class="st">`</span><span class="at">vsm(usm(trait), ism(gen</span><span class="st">`</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sommer_sigma_e <span class="ot">&lt;-</span> <span class="fu">cov2cor</span>(mod_sommer<span class="sc">$</span>theta<span class="sc">$</span>units)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(sommer_sigma_g) <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(sommer_sigma_e) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(sommer_sigma_g)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sommer_sigma_g <span class="ot">&lt;-</span> <span class="fu">cov2cor</span>(mod_sommer<span class="sc">$</span>theta<span class="sc">$</span><span class="st">`</span><span class="at">vsm(usm(trait), ism(gen</span><span class="st">`</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sommer_sigma_e <span class="ot">&lt;-</span> <span class="fu">cov2cor</span>(mod_sommer<span class="sc">$</span>theta<span class="sc">$</span>units)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(sommer_sigma_g) <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(sommer_sigma_e) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(sommer_sigma_g);<span class="fu">cov2cor</span>(sommer_sigma_e)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               yield average_GC
 yield      1.0000000  0.8684211
 average_GC 0.8684211  1.0000000</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(sommer_sigma_e)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           yield average_GC
 yield          1          0
 average_GC     0          1</code></pre>
 </div>
 </div>
-<p>Now we will reconstruct all the necessary matrices to show how to compute <span class="math inline">\(\mathbf{P}\)</span> and <span class="math inline">\(\mathbf{\Gamma}\)</span>. Firstwe will compute <span class="math inline">\(\mathbf{G}\)</span>, <span class="math inline">\(\mathbf{R}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> and then used it to compute the Prediction Error Variance (PEV) and the marginal variance of the BLUPs (<span class="math inline">\(\operatorname{var}(\hat{\mathbf{g}})\)</span>)</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">n_distinct</span>(pheno<span class="sc">$</span>gen)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">n_distinct</span>(traits)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> <span class="fu">unique</span>(pheno<span class="sc">$</span>gen)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>names_G <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">outer</span>(traits, ids, paste, <span class="at">sep =</span> <span class="st">":"</span>))</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(pheno_long[, <span class="st">'value'</span>], <span class="at">ncol =</span> <span class="dv">1</span>)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="at">nrow =</span> n) <span class="sc">%x%</span> sigma_g </span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> gen<span class="sc">:</span>trait, pheno_long)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> trait, pheno_long)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">nrow</span>(pheno)) <span class="sc">%x%</span> sigma_e </span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> Z<span class="sc">%*%</span>G<span class="sc">%*%</span><span class="fu">t</span>(Z) <span class="sc">+</span> R</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>V_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(V)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> V_inv <span class="sc">-</span> V_inv <span class="sc">%*%</span>X<span class="sc">%*%</span><span class="fu">solve</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>V_inv<span class="sc">%*%</span>X)<span class="sc">%*%</span><span class="fu">t</span>(X)<span class="sc">%*%</span>V_inv</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>C11 <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> X </span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>C12 <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> Z</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>C21 <span class="ot">&lt;-</span> <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> X </span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>C22 <span class="ot">&lt;-</span> <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> Z <span class="sc">+</span> <span class="fu">solve</span>(G)</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(C11, C12), </span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(C21, C22)</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>C_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(C)</span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>rhs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y, </span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>ans <span class="ot">&lt;-</span> C_inv <span class="sc">%*%</span> rhs</span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>PEV <span class="ot">&lt;-</span> G <span class="sc">-</span> G<span class="sc">%*%</span><span class="fu">t</span>(Z)<span class="sc">%*%</span>P<span class="sc">%*%</span>Z<span class="sc">%*%</span>G</span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>var_uhat <span class="ot">&lt;-</span> G <span class="sc">-</span> PEV</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mod_mmer <span class="ot">&lt;-</span> <span class="fu">mmer</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed =</span> <span class="fu">cbind</span>(yield, average_GC) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="sc">~</span> <span class="fu">vsr</span>(gen, <span class="at">Gtc =</span> <span class="fu">unsm</span>(<span class="dv">2</span>)) ,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rcov=</span> <span class="sc">~</span> <span class="fu">vsr</span>(units, <span class="at">Gtc =</span> <span class="fu">unsm</span>(<span class="dv">2</span>)),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> pheno</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iteration    LogLik     wall    cpu(sec)   restrained
+    1      -169.416   14:2:40      0           0
+    2      -162.514   14:2:40      0           0
+    3      -159.178   14:2:40      0           0
+    4      -158.573   14:2:40      0           0
+    5      -158.556   14:2:40      0           0
+    6      -158.554   14:2:40      0           0
+    7      -158.554   14:2:40      0           0</code></pre>
 </div>
-<p>As mentioned above,<span class="math inline">\(\mathbf{\Gamma}\)</span> represents the genotypic variance covariance matrix between traits (meaning, its a <span class="math inline">\(t \times t\)</span> matrix). If only random effects are considered, it is computed as described by <a href="https://www.sciencedirect.com/science/article/pii/S0040580915000830?via%3Dihub">Legarra 2016</a> and <a href="https://pubmed.ncbi.nlm.nih.gov/36949348/">Endelman 2023</a></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(mod_mmer<span class="sc">$</span>sigma<span class="sc">$</span><span class="st">`</span><span class="at">u:gen</span><span class="st">`</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               yield average_GC
+yield      1.0000000  0.6826778
+average_GC 0.6826778  1.0000000</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(mod_mmer<span class="sc">$</span>sigma<span class="sc">$</span><span class="st">`</span><span class="at">u:units</span><span class="st">`</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               yield average_GC
+yield      1.0000000  0.2652669
+average_GC 0.2652669  1.0000000</code></pre>
+</div>
+</div>
+<p>As it is shown, assuming that the errors are uncorrelated for the two trais on the same experimental unit (plot) is forces the model to explain all the correlation through the additive part, infalting the additive correlations. It is important thus, to properly model residuals too.</p>
+<p>Now we will reconstruct all the necessary matrices to show how to compute <span class="math inline">\(\mathbf{\Gamma}\)</span>. In particular, we will need the marginal variance of the BLUPs (<span class="math inline">\(\operatorname{var}(\hat{\mathbf{g}})\)</span>)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">n_distinct</span>(pheno<span class="sc">$</span>gen)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">n_distinct</span>(traits)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> <span class="fu">unique</span>(pheno<span class="sc">$</span>gen)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>names_G <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">outer</span>(traits, ids, paste, <span class="at">sep =</span> <span class="st">":"</span>))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(pheno_long[, <span class="st">'value'</span>], <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="at">nrow =</span> n) <span class="sc">%x%</span> sigma_g </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> gen<span class="sc">:</span>trait, pheno_long)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> trait, pheno_long)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">nrow</span>(pheno)) <span class="sc">%x%</span> sigma_e </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> Z<span class="sc">%*%</span>G<span class="sc">%*%</span><span class="fu">t</span>(Z) <span class="sc">+</span> R</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>V_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(V)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> V_inv <span class="sc">-</span> V_inv <span class="sc">%*%</span>X<span class="sc">%*%</span><span class="fu">solve</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>V_inv<span class="sc">%*%</span>X)<span class="sc">%*%</span><span class="fu">t</span>(X)<span class="sc">%*%</span>V_inv</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>C11 <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> X </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>C12 <span class="ot">&lt;-</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> Z</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>C21 <span class="ot">&lt;-</span> <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> X </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>C22 <span class="ot">&lt;-</span> <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> Z <span class="sc">+</span> <span class="fu">solve</span>(G)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(C11, C12), </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(C21, C22)</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>C_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(C)</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>rhs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(X) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y, </span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(Z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> y</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>ans <span class="ot">&lt;-</span> C_inv <span class="sc">%*%</span> rhs</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>PEV <span class="ot">&lt;-</span> G <span class="sc">-</span> G<span class="sc">%*%</span><span class="fu">t</span>(Z)<span class="sc">%*%</span>P<span class="sc">%*%</span>Z<span class="sc">%*%</span>G</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>var_uhat <span class="ot">&lt;-</span> G <span class="sc">-</span> PEV</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now, we will use that marginal variance matrix to compute the population covariance matrix <span class="math inline">\(\mathbf{B}\)</span>. If only random effects are considered, it is computed as described by <a href="https://www.sciencedirect.com/science/article/pii/S0040580915000830?via%3Dihub">Legarra 2016</a></p>
 <p><span class="math display">\[
-E[V_y] = \overline{\operatorname{diag}(\mathbf{L})} - \overline{L_{..}}
+\mathbf{B}_{jk} = E[V_y] = \overline{\operatorname{diag}(\mathbf{L})} - \overline{L_{..}}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{L}\)</span> represents the marginal variance of BLUPs with genotypes nested traits. However, right now the information in the marginal variance matrix is organized with traits nested genotypes, meaning that the diagonal is composed of <span class="math inline">\(n\)</span> <span class="math inline">\(t \times t\)</span> variance covariance matrices each genotype for the two traits</p>
+<p>where <span class="math inline">\(\mathbf{L}\)</span> represents the marginal variance of BLUPs with genotypes nested traits. Right now, however, matrix is organized with traits nested genotypes, meaning that the diagonal is composed of <span class="math inline">\(n\)</span> <span class="math inline">\(t \times t\)</span> variance covariance matrices for each genotype</p>
 <p><span class="math display">\[
 \operatorname{var}(\hat{\mathbf{g}}) =
 \begin{bmatrix}
@@ -657,7 +716,7 @@ M_{g_ng_1} &amp; \cdots &amp;
 }_{g_n}
 \end{bmatrix}
 \]</span></p>
-<p>The reason why this happens is because of how we computed <span class="math inline">\(\mathbf{G}\)</span> taking into account the kronecker product properties</p>
+<p>The reason why this happens is because of how we computed <span class="math inline">\(\mathbf{G}\)</span> ( and thus <span class="math inline">\(\operatorname{var}(\mathbf{\hat{g}})\)</span>), taking into account the kronecker product properties</p>
 <p><span class="math display">\[
 \mathbf{G} = \mathbf{I_n} \otimes \mathbf{\Sigma_g}
 =
@@ -674,27 +733,28 @@ M_{g_ng_1} &amp; \cdots &amp;
 0 &amp; 0 &amp; \cdots &amp; \mathbf{\Sigma_g}
 \end{bmatrix}
 \]</span></p>
-<p>The same structure is thus found for <span class="math inline">\(\operatorname{var}(\mathbf{\hat{g}})\)</span> In summary</p>
+<p>In summary</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">outer</span>(traits, <span class="fu">unique</span>(pheno<span class="sc">$</span>gen), paste, <span class="at">sep =</span> <span class="st">":"</span>))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(G) <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(var_uhat) <span class="ot">&lt;-</span> <span class="fu">list</span>(names, names)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>var_uhat[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">outer</span>(traits, <span class="fu">unique</span>(pheno<span class="sc">$</span>gen), paste, <span class="at">sep =</span> <span class="st">":"</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(G) <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(var_uhat) <span class="ot">&lt;-</span> <span class="fu">list</span>(names, names)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>var_uhat[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     yield:MSGG190-1 average_GC:MSGG190-1
-yield:MSGG190-1            0.3538628            0.3568937
-average_GC:MSGG190-1       0.3568937            0.5697422</code></pre>
+<pre><code>                     yield:MSGG190-1 average_GC:MSGG190-1 yield:W19016-2
+yield:MSGG190-1          0.353862806          0.356893731   -0.006617443
+average_GC:MSGG190-1     0.356893731          0.569742214   -0.014095849
+yield:W19016-2          -0.006617443         -0.014095849    0.367455236
+average_GC:W19016-2     -0.005589161         -0.008721287    0.352213574
+                     average_GC:W19016-2
+yield:MSGG190-1             -0.005589161
+average_GC:MSGG190-1        -0.008721287
+yield:W19016-2               0.352213574
+average_GC:W19016-2          0.525589866</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>var_uhat[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                    yield:W19016-2 average_GC:W19016-2
-yield:W19016-2           0.3674552           0.3522136
-average_GC:W19016-2      0.3522136           0.5255899</code></pre>
 </div>
-</div>
-<p>Therefore, we need to rearrange the matrix to compute the population covariance</p>
+<p>Let’s rearrange the matrix to compute <span class="math inline">\(\mathbf{B}\)</span>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">nrow</span>(var_uhat)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">split</span>(<span class="dv">1</span><span class="sc">:</span>nt, <span class="at">f =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>t, <span class="at">times =</span> n))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">split</span>(<span class="dv">1</span><span class="sc">:</span>nt, <span class="at">f =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>t, <span class="at">times =</span> n))  <span class="co">#contains the position for each traits variances </span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> t, <span class="at">nrow =</span> t)</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>t) {</span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> i<span class="sc">:</span>t) {</span>
@@ -706,20 +766,28 @@ average_GC:W19016-2      0.3522136           0.5255899</code></pre>
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(B) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> Gamma <span class="ot">&lt;-</span> B <span class="co"># P equals Gamma since we are working under BLUP</span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>H <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(sigma_g)))</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(H) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>Gamma</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>Gamma</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               yield average_GC
 yield      0.2933634  0.3170480
 average_GC 0.3170480  0.4857651</code></pre>
 </div>
 </div>
-<p>As stated in StageWise documentation, the quadratic matrix can be computed as <span class="math inline">\(\mathbf{Q} = \mathbf{U}'\mathbf{U}\)</span>, where <span class="math inline">\(\mathbf{U} = \mathbf{R} \mathbf{\Gamma}^{-1} \mathbf{H}\)</span> and <span class="math inline">\(\mathbf{R}\)</span> is the upper triangular cholesky factor of <span class="math inline">\(\mathbf{P}\)</span>. Therefore</p>
+<p>Last thing we need to compute the ellipse matrix is <span class="math inline">\(\mathbf{H}\)</span></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">chol</span>(P) <span class="sc">%*%</span> <span class="fu">solve</span>(Gamma) <span class="sc">%*%</span> H </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="fu">crossprod</span>(U)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>Q</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>H <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(sigma_g)))</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(H) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>H</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               yield average_GC
+yield      0.6836008  0.0000000
+average_GC 0.0000000  0.8407621</code></pre>
+</div>
+</div>
+<p>Therefore</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> H<span class="sc">%*%</span><span class="fu">solve</span>(Gamma)<span class="sc">%*%</span>H</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>Q</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               yield average_GC
 yield       5.406599  -4.340037
@@ -730,17 +798,17 @@ average_GC -4.340037   4.939067</code></pre>
 <h2 class="anchored" data-anchor-id="desired">Desired</h2>
 <p>Now we only need to define our desired gains to obtain the maximal response given our ellipse. Let’s imagine we want to simultaneously advance both traits despite its negative correlation</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>desired <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>intensity <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>x.opt <span class="ot">&lt;-</span> desired <span class="sc">*</span> intensity<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">crossprod</span>(desired, Q<span class="sc">%*%</span>desired)) <span class="co"># apply dimensionality constraint</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> (<span class="fu">solve</span>(Gamma) <span class="sc">%*%</span> H <span class="sc">%*%</span> x.opt)<span class="sc">/</span>intensity <span class="co">#substitute response to solve for coefficients</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> b<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">sum</span>(b<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># normalize vector</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>desired_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">traits =</span> traits, </span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> x.opt, </span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">coefficients =</span> b</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>desired_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>desired <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>intensity <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>x.opt <span class="ot">&lt;-</span> desired <span class="sc">*</span> intensity<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">crossprod</span>(desired, Q<span class="sc">%*%</span>desired)) <span class="co"># apply dimensionality constant</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> (<span class="fu">solve</span>(Gamma) <span class="sc">%*%</span> H <span class="sc">%*%</span> x.opt)<span class="sc">/</span>intensity <span class="co">#substitute response to solve for coefficients</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>b_desired <span class="ot">&lt;-</span> b<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">sum</span>(b<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># normalize vector</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>desired_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">traits =</span> traits, </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> x.opt, </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">coefficients =</span> b_desired</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>desired_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               traits  response coefficients
 yield           yield 0.4300688    0.8374175
@@ -749,40 +817,40 @@ average_GC average_GC 0.0000000   -0.5465637</code></pre>
 </div>
 <p>We can additionally plot the selection tradeoff. The dot represent the response, while the dashed line represents the direction of the desired gain vector.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>eg <span class="ot">&lt;-</span> <span class="fu">eigen</span>(Q[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>lens <span class="ot">&lt;-</span> intensity <span class="sc">/</span> <span class="fu">sqrt</span>(eg<span class="sc">$</span>values)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>angle <span class="ot">&lt;-</span> <span class="fu">atan</span>(eg<span class="sc">$</span>vectors[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">/</span> eg<span class="sc">$</span>vectors[<span class="dv">1</span>, <span class="dv">2</span>])</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ellipse</span>(</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">a =</span> lens[<span class="dv">2</span>], <span class="at">b =</span> lens[<span class="dv">1</span>], <span class="at">angle =</span> angle)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(traits[<span class="dv">1</span>]) <span class="sc">+</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(traits[<span class="dv">2</span>]) <span class="sc">+</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="dv">0</span>,</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="dv">0</span>,</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">xend =</span> x.opt[[<span class="dv">1</span>]],</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">yend =</span> x.opt[[<span class="dv">2</span>]]</span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"red"</span>,</span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">lty =</span> <span class="dv">2</span></span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x.opt[[<span class="dv">1</span>]],</span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> x.opt[[<span class="dv">2</span>]]</span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"red"</span></span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>eg <span class="ot">&lt;-</span> <span class="fu">eigen</span>(Q[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>lens <span class="ot">&lt;-</span> intensity <span class="sc">/</span> <span class="fu">sqrt</span>(eg<span class="sc">$</span>values)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>angle <span class="ot">&lt;-</span> <span class="fu">atan</span>(eg<span class="sc">$</span>vectors[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">/</span> eg<span class="sc">$</span>vectors[<span class="dv">1</span>, <span class="dv">2</span>])</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ellipse</span>(</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">a =</span> lens[<span class="dv">2</span>], <span class="at">b =</span> lens[<span class="dv">1</span>], <span class="at">angle =</span> angle)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(traits[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(traits[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="dv">0</span>,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="dv">0</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">xend =</span> x.opt[[<span class="dv">1</span>]],</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">yend =</span> x.opt[[<span class="dv">2</span>]]</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">lty =</span> <span class="dv">2</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x.opt[[<span class="dv">1</span>]],</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> x.opt[[<span class="dv">2</span>]]</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"red"</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="10_Index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="10_Index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -792,105 +860,143 @@ average_GC average_GC 0.0000000   -0.5465637</code></pre>
 <h2 class="anchored" data-anchor-id="merit">Merit</h2>
 <p>To show the differences between the two approaches, we will use the same coefficients but following the Merit function. Therefore we will obtain the maximized response and from there the coefficients</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>merit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">Variable</span>(t)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>constraints <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">quad_form</span>(x, Q) <span class="sc">&lt;=</span> intensity<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">matrix</span>(merit, <span class="at">nrow =</span> <span class="dv">1</span>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>objective <span class="ot">&lt;-</span> <span class="fu">Maximize</span>(v <span class="sc">%*%</span> x)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>problem <span class="ot">&lt;-</span> <span class="fu">Problem</span>(objective, constraints)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">solve</span>(problem)</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(result<span class="sc">$</span><span class="fu">getValue</span>(x))</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> (<span class="fu">solve</span>(Gamma) <span class="sc">%*%</span> H <span class="sc">%*%</span> x) <span class="sc">/</span> intensity</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> b <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(b<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>merit_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">traits =</span> traits,</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> x,</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">coefficients =</span> b</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>merit_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>merit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">Variable</span>(t)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>constraints <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">quad_form</span>(x, Q) <span class="sc">&lt;=</span> intensity<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">matrix</span>(merit, <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>objective <span class="ot">&lt;-</span> <span class="fu">Maximize</span>(v <span class="sc">%*%</span> x)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>problem <span class="ot">&lt;-</span> <span class="fu">Problem</span>(objective, constraints)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">solve</span>(problem)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(result<span class="sc">$</span><span class="fu">getValue</span>(x))</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> (<span class="fu">solve</span>(Gamma) <span class="sc">%*%</span> H <span class="sc">%*%</span> x) <span class="sc">/</span> intensity</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>b_merit <span class="ot">&lt;-</span> b <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(b<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>merit_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">traits =</span> traits,</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> x,</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">coefficients =</span> b_merit</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>merit_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               traits  response  coefficients
 yield           yield 0.7923197  1.000000e+00
-average_GC average_GC 0.6962239 -1.924258e-15</code></pre>
+average_GC average_GC 0.6962239 -3.848515e-15</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> merit <span class="sc">*</span> intensity <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">as.numeric</span>(<span class="fu">crossprod</span>(merit, Q <span class="sc">%*%</span> merit)))</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ellipse</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">a =</span> lens[<span class="dv">2</span>], <span class="at">b =</span> lens[<span class="dv">1</span>], <span class="at">angle =</span> angle)) <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(traits[<span class="dv">1</span>]) <span class="sc">+</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(traits[<span class="dv">2</span>]) <span class="sc">+</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> x2[[<span class="dv">1</span>]], <span class="at">yend =</span> x2[[<span class="dv">2</span>]]),</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"red"</span>,</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">lty =</span> <span class="dv">2</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x2[[<span class="dv">1</span>]], <span class="at">y =</span> x2[[<span class="dv">2</span>]]), <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> x[[<span class="dv">1</span>]], <span class="at">yend =</span> x[[<span class="dv">2</span>]]),</span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"blue"</span></span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x[[<span class="dv">1</span>]], <span class="at">y =</span> x[[<span class="dv">2</span>]]), <span class="at">col =</span> <span class="st">"blue"</span>)</span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Visually, the dashed red line shows the direction of the merit vector, while the blue line segment is the projection of the point on the ellipsoid that maximizes genetic merit.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> merit <span class="sc">*</span> intensity <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">as.numeric</span>(<span class="fu">crossprod</span>(merit, Q <span class="sc">%*%</span> merit)))</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ellipse</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">a =</span> lens[<span class="dv">2</span>], <span class="at">b =</span> lens[<span class="dv">1</span>], <span class="at">angle =</span> angle)) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(traits[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(traits[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> x2[[<span class="dv">1</span>]], <span class="at">yend =</span> x2[[<span class="dv">2</span>]]),</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">lty =</span> <span class="dv">2</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x2[[<span class="dv">1</span>]], <span class="at">y =</span> x2[[<span class="dv">2</span>]]), <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> x[[<span class="dv">1</span>]], <span class="at">yend =</span> x[[<span class="dv">2</span>]]),</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"blue"</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x[[<span class="dv">1</span>]], <span class="at">y =</span> x[[<span class="dv">2</span>]]), <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="10_Index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="10_Index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+</section>
+<section id="werner-et-al-2025-bioarxive" class="level2">
+<h2 class="anchored" data-anchor-id="werner-et-al-2025-bioarxive">Werner et al 2025 (bioarxive)</h2>
+<p>In this article (<a href="https://www.biorxiv.org/content/10.1101/2024.07.21.603926v2">Werner et al 2025</a>), the authors proposed to compute the Index as <span class="math inline">\(I_{DGI} = \mathbf{d'\bar{V}^{-1}\hat{g}}\)</span>, where <span class="math inline">\(\mathbf{\bar{V}} = \sum_{i = 1}^v \mathbf{V}_{ii}/n\)</span> with <span class="math inline">\(\mathbf{V}_{ii}\)</span> representing the <span class="math inline">\(t \times t\)</span> marginal variance covariance matrix of individual <span class="math inline">\(i\)</span>. Conceptually, it represent an alternative to compute the population covariance by just averaging all the submatrices in the diagonal of <span class="math inline">\(\operatorname{var}(\hat{\mathbf{g}})\)</span> shown above. They state that ‘We have found that this provides a good approximation to the full selection index for balanced data’. However, the supplementary material in which they prove that is not available. So, let’s test that.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>V_w <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, t, t)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> ((i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> t <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(i <span class="sc">*</span> t)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  V_ii <span class="ot">&lt;-</span> var_uhat[idx, idx] <span class="sc">/</span> n</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  V_w <span class="ot">&lt;-</span> V_w <span class="sc">+</span> V_ii</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(V_w) <span class="ot">&lt;-</span> <span class="fu">list</span>(traits, traits)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(V_w, <span class="dv">3</span>); <span class="fu">round</span>(B, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           yield average_GC
+yield      0.293      0.317
+average_GC 0.317      0.486</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           yield average_GC
+yield      0.293      0.317
+average_GC 0.317      0.486</code></pre>
+</div>
+</div>
+<p>The matrices <span class="math inline">\(\mathbf{\bar{V}}\)</span> and <span class="math inline">\(\mathbf{B}\)</span> are identical. Let’s take a look at the index values, computed as</p>
+<p><span class="math display">\[
+\mathbf{I}_{DGI} = \mathbf{d'(\bar{V}^{-1} \otimes I_n)\hat{\mathbf{g}}}
+\]</span></p>
 </section>
 </section>
 <section id="selection" class="level1">
 <h1>Selection</h1>
-<p>Based on those estimates, we can extract the BLUPs, build the Indeces and perform truncation selection based on it. See how depending on the index the individuals selected vary.</p>
+<p>Based on those estimates, we can extract the BLUPs, build the Indeces and compare the selection of top 30% individuals.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>blups <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(ans[<span class="fu">grep</span>(<span class="st">'gen'</span>, <span class="fu">rownames</span>(ans), <span class="at">value =</span> T), ]) <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">'gen'</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">gen =</span> <span class="fu">gsub</span>(<span class="st">'^gen'</span>, <span class="st">''</span>, gen),</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gen =</span> <span class="fu">gsub</span>(<span class="st">'trait'</span>, <span class="st">''</span>, gen)) <span class="sc">|&gt;</span> </span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(gen, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'gen'</span>, <span class="st">'trait'</span>), <span class="at">sep =</span> <span class="st">':'</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(trait, gen) <span class="sc">|&gt;</span> </span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">blup =</span> V1)</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>I_desired <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(<span class="fu">unique</span>(blups<span class="sc">$</span>trait))){</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  trait_tmp <span class="ot">&lt;-</span> <span class="fu">unique</span>(blups<span class="sc">$</span>trait)[i]</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  b_tmp <span class="ot">&lt;-</span> desired_results <span class="sc">|&gt;</span> <span class="fu">filter</span>(traits <span class="sc">==</span> trait_tmp) <span class="sc">|&gt;</span>  <span class="fu">pull</span>(coefficients)</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  I_desired[[i]] <span class="ot">&lt;-</span> blups <span class="sc">|&gt;</span>  <span class="fu">filter</span>(trait <span class="sc">==</span> trait_tmp) <span class="sc">|&gt;</span> <span class="fu">pull</span>(blup) <span class="sc">*</span> b_tmp</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>I_desired <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="st">'+'</span>, I_desired)</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>I_merit <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(<span class="fu">unique</span>(blups<span class="sc">$</span>trait))){</span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  trait_tmp <span class="ot">&lt;-</span> <span class="fu">unique</span>(blups<span class="sc">$</span>trait)[i]</span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  b_tmp <span class="ot">&lt;-</span> merit_results <span class="sc">|&gt;</span> <span class="fu">filter</span>(traits <span class="sc">==</span> trait_tmp) <span class="sc">|&gt;</span>  <span class="fu">pull</span>(coefficients)</span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>  I_merit[[i]] <span class="ot">&lt;-</span> blups <span class="sc">|&gt;</span>  <span class="fu">filter</span>(trait <span class="sc">==</span> trait_tmp) <span class="sc">|&gt;</span> <span class="fu">pull</span>(blup) <span class="sc">*</span> b_tmp</span>
-<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>I_merit <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="st">'+'</span>, I_merit)</span>
-<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> blups <span class="sc">|&gt;</span> </span>
-<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> trait, <span class="at">values_from =</span> blup) </span>
-<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(plot_df, I_desired, I_merit) <span class="sc">|&gt;</span> </span>
-<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">col =</span> <span class="fu">c</span>(I_desired, I_merit), <span class="at">names_to =</span> <span class="st">'Index'</span>, <span class="at">values_to =</span> <span class="st">'value'</span>)</span>
-<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot_df, <span class="fu">aes</span>(<span class="at">x =</span> average_GC, <span class="at">y =</span> yield, <span class="at">color =</span> value)) <span class="sc">+</span> </span>
-<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"plasma"</span>) <span class="sc">+</span></span>
-<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(.<span class="sc">~</span>Index)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>blups <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(ans[<span class="fu">grep</span>(<span class="st">'gen'</span>, <span class="fu">rownames</span>(ans), <span class="at">value =</span> T), ]) <span class="sc">|&gt;</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">'gen'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">gen =</span> <span class="fu">gsub</span>(<span class="st">'^gen'</span>, <span class="st">''</span>, gen),</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gen =</span> <span class="fu">gsub</span>(<span class="st">'trait'</span>, <span class="st">''</span>, gen)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(gen, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'gen'</span>, <span class="st">'trait'</span>), <span class="at">sep =</span> <span class="st">':'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(gen, <span class="fu">desc</span>(trait)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">blup =</span> V1)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>I_desired <span class="ot">&lt;-</span> <span class="fu">kronecker</span>(<span class="fu">diag</span>(n), <span class="fu">t</span>(b_desired)) <span class="sc">%*%</span> <span class="fu">as.matrix</span>(blups[, <span class="st">'blup'</span>], <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>I_merit <span class="ot">&lt;-</span> <span class="fu">kronecker</span>(<span class="fu">diag</span>(n), <span class="fu">t</span>(b_merit)) <span class="sc">%*%</span> <span class="fu">as.matrix</span>(blups[, <span class="st">'blup'</span>], <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>I_w <span class="ot">&lt;-</span> (<span class="fu">t</span>(desired)<span class="sc">%*%</span><span class="fu">solve</span>(V_w) <span class="sc">%x%</span> <span class="fu">diag</span>(n)) <span class="sc">%*%</span> <span class="fu">as.matrix</span>(blups <span class="sc">|&gt;</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(trait)) <span class="sc">|&gt;</span> <span class="fu">select</span>(blup), <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(I_desired) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(I_merit) <span class="ot">&lt;-</span> <span class="fu">unique</span>(blups<span class="sc">$</span>gen)</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> blups <span class="sc">|&gt;</span> </span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> trait, <span class="at">values_from =</span> blup) </span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>df_desired <span class="ot">&lt;-</span> <span class="fu">cbind</span>(plot_df, I_desired) <span class="sc">|&gt;</span> </span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">selected =</span> <span class="fu">ifelse</span>(I_desired <span class="sc">&gt;</span> <span class="fu">quantile</span>(I_desired, <span class="fl">0.70</span>), <span class="st">'yes'</span>, <span class="st">'no'</span>))</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_desired, <span class="fu">aes</span>(<span class="at">x =</span> average_GC, <span class="at">y =</span> yield, <span class="at">color =</span> selected)) <span class="sc">+</span> </span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'yes'</span> <span class="ot">=</span> <span class="st">'red'</span>, <span class="st">'no'</span> <span class="ot">=</span> <span class="st">'grey'</span>)) <span class="sc">+</span></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>)</span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>df_merit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(plot_df, I_merit) <span class="sc">|&gt;</span> </span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">selected =</span> <span class="fu">ifelse</span>(I_merit <span class="sc">&gt;</span> <span class="fu">quantile</span>(I_merit, <span class="fl">0.70</span>), <span class="st">'yes'</span>, <span class="st">'no'</span>))</span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_merit, <span class="fu">aes</span>(<span class="at">x =</span> average_GC, <span class="at">y =</span> yield, <span class="at">color =</span> selected)) <span class="sc">+</span> </span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'yes'</span> <span class="ot">=</span> <span class="st">'red'</span>, <span class="st">'no'</span> <span class="ot">=</span> <span class="st">'grey'</span>)) <span class="sc">+</span></span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>)</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>df_werner <span class="ot">&lt;-</span> <span class="fu">cbind</span>(plot_df, I_w) <span class="sc">|&gt;</span> </span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">selected =</span> <span class="fu">ifelse</span>(I_w <span class="sc">&gt;</span> <span class="fu">quantile</span>(I_w, <span class="fl">0.70</span>), <span class="st">'yes'</span>, <span class="st">'no'</span>))</span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_werner, <span class="fu">aes</span>(<span class="at">x =</span> average_GC, <span class="at">y =</span> yield, <span class="at">color =</span> selected)) <span class="sc">+</span> </span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'yes'</span> <span class="ot">=</span> <span class="st">'red'</span>, <span class="st">'no'</span> <span class="ot">=</span> <span class="st">'grey'</span>)) <span class="sc">+</span></span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="10_Index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="10_Index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>More information about how to compute restricted index can be found in <a href="https://jendelman.github.io/StageWise/Vignette3.html">Vignette 3</a> of StageWise paper <a href="https://pubmed.ncbi.nlm.nih.gov/36949348/">Endelman 2023</a>. The code used for this workshop was derived from the <code>StageWise::gain()</code> function from the same package, which can be used to compute the coefficients of interest.</p>
 
 
 </section>
@@ -1296,6 +1402,18 @@ average_GC average_GC 0.6962239 -1.924258e-15</code></pre>
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../pages/08_Parametrizations.html" class="pagination-link" aria-label="Breeding vs Genotypic">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Breeding vs Genotypic</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../pages/99_404.html" class="pagination-link" aria-label="Genotype-by-environment">
+        <span class="nav-page-text">Genotype-by-environment</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
